@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perpustakaan SMAN 4 Manado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Header & Navigasi -->
+  <header class="bg-blue-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <h1 class="text-xl font-bold tracking-wide">Perpus SMAN 4 Manado</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="index.html" class="text-blue-200 font-bold">Beranda</a>
+        <a href="katalog.html" class="hover:text-blue-200 transition">Katalog Buku</a>
+        <a href="duta-literasi.html" class="hover:text-blue-200 transition">Duta Literasi</a>
+        <a href="login-siswa.html" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg font-semibold transition">Masuk Anggota</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Jembatan Pemberitahuan (Running Announcement) -->
+  <div class="bg-yellow-400 text-blue-950 px-4 py-2 text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-inner">
+    <span>📢 PEMBERITAHUAN:</span>
+    <marquee class="max-w-3xl">Peminjaman Buku Paket Kelas 10, 11, dan 12 Wajib Membawa Kartu Anggota Digital! Rencanakan Peminjaman Anda Melalui Menu Katalog.</marquee>
+  </div>
+
+  <!-- Hero Section -->
+  <main class="flex-grow max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div class="space-y-6">
+      <span class="bg-blue-100 text-blue-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Perpustakaan Digital</span>
+      <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+        Membaca Jendela Ilmu di <span class="text-blue-800">SMAN 4 Manado</span>
+      </h2>
+      <p class="text-slate-600 leading-relaxed">
+        Jelajahi koleksi buku terbaru, rencanakan peminjaman buku favoritmu secara daring, dan cetak Kartu Anggota Digital milikmu langsung dari perangkat apapun.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="katalog.html" class="bg-blue-800 hover:bg-blue-900 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition">
+          📚 Lihat Katalog Buku
+        </a>
+        <a href="login-siswa.html" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-6 py-3 rounded-xl transition">
+          🪪 Cetak Kartu Anggota
+        </a>
+      </div>
+    </div>
+
+    <!-- Ilustrasi / Banner -->
+    <div class="bg-gradient-to-tr from-blue-900 to-indigo-700 p-8 rounded-3xl text-white shadow-2xl text-center flex flex-col justify-center items-center h-80">
+      <div class="text-6xl mb-4">📖</div>
+      <h3 class="text-2xl font-bold">Gerakan Literasi Sekolah</h3>
+      <p class="text-blue-200 text-sm mt-2 max-w-xs">Datang dan temukan petualangan barumu di Perpustakaan SMAN 4 Manado!</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs border-t border-slate-800">
+    <p>© 2026 Perpustakaan SMAN 4 Manado. All Rights Reserved.</p>
+    <a href="admin/login.html" class="text-slate-600 hover:text-slate-400 mt-2 inline-block">Login Pengelola / Admin</a>
+  </footer>
+
+</body>
+</html>
