@@ -1,42 +1,258 @@
-<!-- Form Tambah Anggota / Siswa Baru -->
-<section class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 mt-6">
-  <h2 class="text-xl font-bold text-slate-900 mb-4">Pendaftaran Anggota (Siswa) & Petugas Baru</h2>
-  
-  <form id="addMemberForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-    <input type="text" id="newMemberId" placeholder="ID Anggota (ex: SMA4-202601)" required class="p-2 border rounded-lg text-sm">
-    <input type="text" id="newFullName" placeholder="Nama Lengkap Siswa/Petugas" required class="p-2 border rounded-lg text-sm">
-    <input type="text" id="newClassRole" placeholder="Kelas / Jabatan (ex: XI MIPA 2 / Petugas)" required class="p-2 border rounded-lg text-sm">
-    <input type="text" id="newPersonalId" placeholder="Personal ID / PIN" required class="p-2 border rounded-lg text-sm">
-    
-    <select id="userRole" class="p-2 border rounded-lg text-sm font-semibold">
-      <option value="Siswa">Siswa</option>
-      <option value="Petugas">Petugas Perpustakaan</option>
-    </select>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Perpustakaan SMAN 4 Manado</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
 
-    <button type="submit" class="md:col-span-5 bg-blue-800 text-white font-semibold rounded-lg p-2.5 hover:bg-blue-900 transition">
-      + Simpan Data Anggota / Petugas
-    </button>
-  </form>
-</section>
+  <!-- Sidebar Navigasi -->
+  <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between p-6 shadow-xl">
+    <div>
+      <!-- Brand & Status -->
+      <div class="flex items-center space-x-3 mb-8">
+        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
+          📚
+        </div>
+        <div>
+          <h1 class="font-bold text-base leading-tight">Admin Perpus</h1>
+          <p class="text-xs text-blue-400 font-medium">SMAN 4 Manado</p>
+        </div>
+      </div>
 
-<script type="module">
-  import { db } from '../js/firebase-config.js';
-  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+      <!-- Navigation Menu -->
+      <nav class="space-y-1">
+        <a href="#" class="flex items-center space-x-3 bg-blue-800 text-white px-4 py-3 rounded-xl text-sm font-semibold shadow">
+          <span>📊</span>
+          <span>Dashboard & Anggota</span>
+        </a>
+        <a href="../katalog.html" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
+          <span>📖</span>
+          <span>Katalog Buku</span>
+        </a>
+        <a href="../duta-literasi.html" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
+          <span>⭐</span>
+          <span>Duta Literasi</span>
+        </a>
+      </nav>
+    </div>
 
-  document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-      await addDoc(collection(db, "members"), {
-        memberId: document.getElementById('newMemberId').value.trim(),
-        nama: document.getElementById('newFullName').value.trim(),
-        kelas: document.getElementById('newClassRole').value.trim(),
-        personalId: document.getElementById('newPersonalId').value.trim(),
-        role: document.getElementById('userRole').value
-      });
-      alert('Data Anggota / Petugas Berhasil Disimpan!');
-      e.target.reset();
-    } catch (err) {
-      alert('Gagal menyimpan data.');
-    }
-  });
-</script>
+    <!-- User Profile & Logout -->
+    <div class="pt-6 border-t border-slate-800 mt-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-200">
+            ADM
+          </div>
+          <div class="text-xs">
+            <p class="font-bold text-slate-200">Petugas Perpus</p>
+            <p class="text-slate-500">Online</p>
+          </div>
+        </div>
+        <a href="../index.html" title="Keluar" class="text-slate-400 hover:text-red-400 p-2 rounded-lg transition text-sm">
+          🚪
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-6 md:p-10 space-y-8 overflow-y-auto">
+
+    <!-- Top Header Bar -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">Panel Kelola Perpustakaan</h2>
+        <p class="text-sm text-slate-500 mt-1">Kelola data anggota (siswa), petugas, dan sirkulasi peminjaman buku.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+          ● Sistem Aktif
+        </span>
+        <a href="../index.html" class="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl border border-blue-200 transition">
+          Lihat Situs Utama
+        </a>
+      </div>
+    </header>
+
+    <!-- Stats Summary Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="p-3 bg-blue-50 text-blue-700 rounded-xl text-xl">👥</div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Total Anggota</p>
+          <p class="text-2xl font-bold text-slate-800">1,240</p>
+        </div>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xl">📚</div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Total Koleksi Buku</p>
+          <p class="text-2xl font-bold text-slate-800">3,850</p>
+        </div>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="p-3 bg-amber-50 text-amber-700 rounded-xl text-xl">🔄</div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Peminjaman Aktif</p>
+          <p class="text-2xl font-bold text-slate-800">84</p>
+        </div>
+      </div>
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+        <div class="p-3 bg-purple-50 text-purple-700 rounded-xl text-xl">⭐</div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Duta Literasi</p>
+          <p class="text-2xl font-bold text-slate-800">12</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Pendaftaran Section -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="text-blue-600 text-lg">➕</span>
+          <h3 class="font-bold text-slate-800 text-base">Pendaftaran Anggota (Siswa) & Petugas Baru</h3>
+        </div>
+        <span class="text-xs text-slate-400 font-medium">Form Input Registrasi</span>
+      </div>
+
+      <div class="p-6">
+        <form class="space-y-4" onsubmit="event.preventDefault(); alert('Data berhasil disimpan!');">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            
+            <!-- ID Anggota -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">ID Anggota / NISN</label>
+              <input type="text" placeholder="ex: SMA4-202601" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+            </div>
+
+            <!-- Nama Lengkap -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap</label>
+              <input type="text" placeholder="ex: Gabriel Manopo" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+            </div>
+
+            <!-- Kelas / Jabatan -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Kelas / Jabatan</label>
+              <input type="text" placeholder="ex: XI MIPA 1 / Staf" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+            </div>
+
+            <!-- Personal ID / PIN -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Personal ID / PIN</label>
+              <input type="password" placeholder="••••••" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+            </div>
+
+            <!-- Peran / Role -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Peran Akses</label>
+              <select class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none bg-white transition">
+                <option value="Siswa">Siswa</option>
+                <option value="Petugas">Petugas Perpustakaan</option>
+                <option value="Guru">Guru / Staf</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Submit Button -->
+          <div class="flex justify-end pt-2">
+            <button type="submit" class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center space-x-2">
+              <span>+</span>
+              <span>Simpan Data Anggota / Petugas</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Data Table Section -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="px-6 py-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h3 class="font-bold text-slate-800 text-base">Daftar Anggota Terdaftar</h3>
+          <p class="text-xs text-slate-500">Menampilkan daftar siswa dan petugas perpustakaan terregistrasi.</p>
+        </div>
+        <div class="w-full md:w-64">
+          <input type="text" placeholder="🔍 Cari nama / ID..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 outline-none">
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-100">
+              <th class="py-3.5 px-6">ID Anggota</th>
+              <th class="py-3.5 px-6">Nama Lengkap</th>
+              <th class="py-3.5 px-6">Kelas / Jabatan</th>
+              <th class="py-3.5 px-6">Peran</th>
+              <th class="py-3.5 px-6 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+            <!-- Sample Row 1 -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-4 px-6 font-semibold text-blue-900">SMA4-202601</td>
+              <td class="py-4 px-6 font-medium">Gabriel Manopo</td>
+              <td class="py-4 px-6 text-slate-500">XI MIPA 1</td>
+              <td class="py-4 px-6">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                  Siswa
+                </span>
+              </td>
+              <td class="py-4 px-6 text-center space-x-2">
+                <button class="text-xs font-semibold text-slate-600 hover:text-blue-700 bg-slate-100 px-3 py-1.5 rounded-lg transition">Edit</button>
+                <button class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
+              </td>
+            </tr>
+
+            <!-- Sample Row 2 -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-4 px-6 font-semibold text-blue-900">SMA4-202602</td>
+              <td class="py-4 px-6 font-medium">Siti Rahmawati</td>
+              <td class="py-4 px-6 text-slate-500">XI IPS 2</td>
+              <td class="py-4 px-6">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                  Siswa
+                </span>
+              </td>
+              <td class="py-4 px-6 text-center space-x-2">
+                <button class="text-xs font-semibold text-slate-600 hover:text-blue-700 bg-slate-100 px-3 py-1.5 rounded-lg transition">Edit</button>
+                <button class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
+              </td>
+            </tr>
+
+            <!-- Sample Row 3 -->
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-4 px-6 font-semibold text-blue-900">STAFF-001</td>
+              <td class="py-4 px-6 font-medium">Drs. Fransiscus L.</td>
+              <td class="py-4 px-6 text-slate-500">Kepala Perpustakaan</td>
+              <td class="py-4 px-6">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Petugas
+                </span>
+              </td>
+              <td class="py-4 px-6 text-center space-x-2">
+                <button class="text-xs font-semibold text-slate-600 hover:text-blue-700 bg-slate-100 px-3 py-1.5 rounded-lg transition">Edit</button>
+                <button class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
