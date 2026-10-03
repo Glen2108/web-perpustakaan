@@ -1,0 +1,17 @@
+// Import Firebase SDK (v9+ Modular)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
+  authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
+  projectId: "web-perpustakaan-e3ae8",
+  storageBucket: "web-perpustakaan-e3ae8.firebasestorage.app",
+  messagingSenderId: "960845187515",
+  appId: "1:960845187515:web:9333b70d1052fc66435c9e"
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);

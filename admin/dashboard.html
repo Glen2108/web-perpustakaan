@@ -1,0 +1,42 @@
+<!-- Form Tambah Anggota / Siswa Baru -->
+<section class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 mt-6">
+  <h2 class="text-xl font-bold text-slate-900 mb-4">Pendaftaran Anggota (Siswa) & Petugas Baru</h2>
+  
+  <form id="addMemberForm" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <input type="text" id="newMemberId" placeholder="ID Anggota (ex: SMA4-202601)" required class="p-2 border rounded-lg text-sm">
+    <input type="text" id="newFullName" placeholder="Nama Lengkap Siswa/Petugas" required class="p-2 border rounded-lg text-sm">
+    <input type="text" id="newClassRole" placeholder="Kelas / Jabatan (ex: XI MIPA 2 / Petugas)" required class="p-2 border rounded-lg text-sm">
+    <input type="text" id="newPersonalId" placeholder="Personal ID / PIN" required class="p-2 border rounded-lg text-sm">
+    
+    <select id="userRole" class="p-2 border rounded-lg text-sm font-semibold">
+      <option value="Siswa">Siswa</option>
+      <option value="Petugas">Petugas Perpustakaan</option>
+    </select>
+
+    <button type="submit" class="md:col-span-5 bg-blue-800 text-white font-semibold rounded-lg p-2.5 hover:bg-blue-900 transition">
+      + Simpan Data Anggota / Petugas
+    </button>
+  </form>
+</section>
+
+<script type="module">
+  import { db } from '../js/firebase-config.js';
+  import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "members"), {
+        memberId: document.getElementById('newMemberId').value.trim(),
+        nama: document.getElementById('newFullName').value.trim(),
+        kelas: document.getElementById('newClassRole').value.trim(),
+        personalId: document.getElementById('newPersonalId').value.trim(),
+        role: document.getElementById('userRole').value
+      });
+      alert('Data Anggota / Petugas Berhasil Disimpan!');
+      e.target.reset();
+    } catch (err) {
+      alert('Gagal menyimpan data.');
+    }
+  });
+</script>

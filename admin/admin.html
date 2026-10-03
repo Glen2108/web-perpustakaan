@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin - Perpustakaan SMAN 4 Manado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <div class="text-center mb-6">
+      <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Panel Pengelola</span>
+      <h1 class="text-2xl font-bold text-slate-900 mt-2">Login Admin Perpustakaan</h1>
+      <p class="text-slate-500 text-sm mt-1">SMAN 4 Manado</p>
+    </div>
+
+    <form id="adminLoginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Email Admin</label>
+        <input type="email" id="adminEmail" placeholder="admin@sman4manado.sch.id" required
+          class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition">
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" required
+          class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition">
+      </div>
+
+      <button type="submit"
+        class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200">
+        Masuk Ke Panel Admin
+      </button>
+    </form>
+    
+    <div id="alertBox" class="mt-4 hidden p-3 rounded-lg text-sm text-center"></div>
+  </div>
+
+  <script type="module">
+    import { auth } from '../js/firebase-config.js';
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+      const alertBox = document.getElementById('alertBox');
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alertBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-green-100 text-green-700 block";
+        alertBox.innerText = "Login Admin Berhasil! Mengalihkan...";
+        setTimeout(() => window.location.href = 'dashboard.html', 1000);
+      } catch (error) {
+        alertBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-red-100 text-red-700 block";
+        alertBox.innerText = "Email atau Password Admin salah / tidak terdaftar.";
+      }
+    });
+  </script>
+</body>
+</html>

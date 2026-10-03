@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katalog Buku - SMAN 4 Manado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- Navigasi -->
+  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center shadow-md">
+    <a href="index.html" class="text-xl font-bold">Perpus SMAN 4 Manado</a>
+    <div class="space-x-4">
+      <a href="katalog.html" class="underline font-medium">Katalog</a>
+      <a href="profil.html" class="hover:text-blue-200">Profil Saya</a>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto p-6">
+    <h2 class="text-3xl font-extrabold text-slate-900 mb-6">Katalog Koleksi Buku</h2>
+
+    <!-- Grid Buku -->
+    <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Item Buku Contoh -->
+      <div class="bg-white rounded-xl shadow-md border border-slate-200 p-4 flex flex-col justify-between">
+        <div>
+          <span class="inline-block px-2.5 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full mb-2">Tersedia (3 Eksemplar)</span>
+          <h3 class="font-bold text-lg text-slate-900">Fisika Modern Kelas 12</h3>
+          <p class="text-sm text-slate-500 mb-4">Penulis: Prof. Bambang</p>
+        </div>
+        <button onclick="requestBorrow('B001', 'Fisika Modern Kelas 12')" 
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 rounded-lg transition">
+          Rencanakan Peminjaman
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const ADMIN_WA_NUMBER = "6281234567890"; // Ganti dengan nomor WA Admin
+
+    function requestBorrow(bookId, bookTitle) {
+      const session = JSON.parse(localStorage.getItem('userSession'));
+      
+      if (!session) {
+        alert('Anda harus Log In terlebih dahulu untuk merencanakan peminjaman!');
+        window.location.href = 'login-siswa.html';
+        return;
+      }
+
+      const confirmAction = confirm(`Rencanakan peminjaman buku: "${bookTitle}"?`);
+      if (confirmAction) {
+        // Format Pesan WhatsApp
+        const message = `Halo Admin Perpustakaan SMAN 4 Manado,%0A%0ASaya ingin mengajukan *RENCANA PEMINJAMAN BUKU*:%0A` +
+          `• *Nama*: ${encodeURIComponent(session.nama)}%0A` +
+          `• *ID Anggota*: ${encodeURIComponent(session.memberId)}%0A` +
+          `• *Judul Buku*: ${encodeURIComponent(bookTitle)}%0A` +
+          `• *Kode Buku*: ${encodeURIComponent(bookId)}%0A%0A` +
+          `Saya akan datang ke perpustakaan untuk mengambil buku fisik tersebut. Terima kasih.`;
+
+        // Direct Redirection ke WhatsApp Admin
+        window.open(`https://wa.me/${ADMIN_WA_NUMBER}?text=${message}`, '_blank');
+      }
+    }
+  </script>
+</body>
+</html>
