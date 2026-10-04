@@ -29,22 +29,26 @@
   </div>
 
   <script type="module">
-    import { auth } from '../js/firebase-config.js';
-    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { auth } from '../js/firebase-config.js';
+  import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    document.getElementById('formAdminLogin').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('emailVal').value;
-      const pass = document.getElementById('passVal').value;
+  document.getElementById('formAdminLogin').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('emailVal').value.trim();
+    const pass = document.getElementById('passVal').value;
 
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        alert("Login Admin Berhasil!");
-        window.location.href = "dashboard.html";
-      } catch (err) {
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      alert("Login Admin Berhasil!");
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      if (err.code === 'auth/invalid-credential') {
+        alert("Gagal Login: Email atau Password salah, atau akun belum dibuat di Firebase Console.");
+      } else {
         alert("Gagal Login Admin: " + err.message);
       }
-    });
-  </script>
+    }
+  });
+</script>
 </body>
 </html>
