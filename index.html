@@ -74,15 +74,25 @@
         <a href="#peminjam" class="text-blue-100 hover:text-amber-300 transition-colors">Status Peminjaman</a>
       </nav>
 
-      <!-- Connection Status & Action Button -->
-      <div class="hidden md:flex items-center gap-4">
+      <!-- Connection Status & Action Buttons (Termasuk Sesi Login) -->
+      <div class="hidden md:flex items-center gap-3">
         <div id="statusSync" class="flex items-center gap-2 bg-blue-950/80 px-3 py-1.5 rounded-full border border-blue-700/50 text-[11px] font-medium text-emerald-400">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>SQL Sync Active</span>
         </div>
-        <button onclick="openModalCard()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold text-xs px-5 py-2.5 rounded-xl shadow-md shadow-amber-400/10 hover:shadow-lg transition-all active:scale-95">
+        <button onclick="openModalCard()" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold text-xs px-4 py-2 rounded-xl shadow-md transition-all active:scale-95">
           <i class="fa-solid fa-id-card mr-1.5"></i> Kartu Digital
         </button>
+
+        <!-- Dynamic Session Area (Desktop) -->
+        <div id="navAuthSection" class="flex items-center gap-2 border-l border-blue-800/80 pl-3">
+          <a href="login-siswa.html" class="text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
+            <i class="fa-solid fa-right-to-bracket"></i> Login Siswa
+          </a>
+          <a href="login_2.html" class="text-xs font-bold text-slate-200 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+            <i class="fa-solid fa-user-shield"></i> Admin
+          </a>
+        </div>
       </div>
 
       <!-- Mobile Hamburger Button -->
@@ -98,7 +108,18 @@
       <a href="#katalog" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Katalog Buku</a>
       <a href="#duta" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Duta Literasi</a>
       <a href="#peminjam" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Status Peminjaman</a>
-      <button onclick="openModalCard(); toggleMobileNav();" class="w-full mt-2 bg-amber-400 text-slate-900 font-bold text-xs py-2.5 rounded-xl">
+      
+      <!-- Dynamic Session Area (Mobile) -->
+      <div id="mobileAuthSection" class="pt-2 border-t border-blue-800/60 space-y-2">
+        <a href="login-siswa.html" class="block text-center text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 py-2.5 rounded-xl">
+          <i class="fa-solid fa-right-to-bracket mr-1"></i> Login Siswa
+        </a>
+        <a href="login_2.html" class="block text-center text-xs font-bold text-slate-200 bg-slate-800 hover:bg-slate-700 py-2.5 rounded-xl">
+          <i class="fa-solid fa-user-shield mr-1"></i> Login Admin
+        </a>
+      </div>
+
+      <button onclick="openModalCard(); toggleMobileNav();" class="w-full bg-amber-400 text-slate-900 font-bold text-xs py-2.5 rounded-xl">
         <i class="fa-solid fa-id-card mr-1.5"></i> Cetak Kartu Anggota
       </button>
     </div>
@@ -106,12 +127,10 @@
 
   <!-- Hero Section -->
   <section id="beranda" class="relative bg-gradient-to-b from-brand-900 via-brand-800 to-slate-900 text-white pt-12 pb-24 overflow-hidden">
-    <!-- Decorative Glow Effects -->
     <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
       
-      <!-- Text Content -->
       <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
         <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-400/20 px-3.5 py-1.5 rounded-full text-xs font-semibold text-blue-200 backdrop-blur-md">
           <i class="fa-solid fa-sparkles text-amber-400"></i> Perpustakaan Digital Berbasis Cloud SQL
@@ -134,7 +153,6 @@
           </button>
         </div>
 
-        <!-- Quick Stats -->
         <div class="pt-8 border-t border-blue-700/40 grid grid-cols-3 gap-4 text-center lg:text-left">
           <div>
             <div id="statBuku" class="text-2xl font-black text-amber-300">...</div>
@@ -151,7 +169,6 @@
         </div>
       </div>
 
-      <!-- Feature Highlight Card -->
       <div class="lg:col-span-5">
         <div class="bg-gradient-to-br from-white/10 to-white/5 border border-white/15 rounded-3xl p-8 backdrop-blur-xl shadow-2xl space-y-6 relative overflow-hidden group hover:border-amber-400/40 transition-all duration-500">
           <div class="w-16 h-16 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center text-2xl font-extrabold shadow-lg shadow-amber-400/30">
@@ -200,7 +217,6 @@
         </div>
       </div>
 
-      <!-- Grid Cards Katalog -->
       <div id="gridKatalog" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="animate-pulse bg-slate-100 h-64 rounded-2xl"></div>
         <div class="animate-pulse bg-slate-100 h-64 rounded-2xl"></div>
@@ -223,7 +239,6 @@
         </button>
       </div>
 
-      <!-- Spotlight Duta Terpilih -->
       <div id="containerDutaTerpilih" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 p-6 sm:p-8 rounded-2xl backdrop-blur-md">
         <div class="lg:col-span-4 text-center">
           <div class="w-36 h-36 mx-auto rounded-2xl bg-slate-800 border-4 border-amber-400 shadow-2xl overflow-hidden flex items-center justify-center relative group">
@@ -246,7 +261,6 @@
         </div>
       </div>
 
-      <!-- Daftar Kandidat -->
       <div>
         <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">Kandidat & Calon Duta Literasi</h4>
         <div id="gridKandidat" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -299,7 +313,7 @@
 
   <!-- Modal Tambah Buku -->
   <div id="modalTambahBuku" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-200">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="text-lg font-black text-slate-900"><i class="fa-solid fa-book text-brand-600 mr-2"></i>Tambah Buku Fisik</h3>
         <button onclick="closeModal('modalTambahBuku')" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
@@ -402,7 +416,6 @@
         <input type="text" id="cardKelas" oninput="updateCardPreview()" placeholder="Kelas" class="w-full p-2.5 bg-slate-50 border rounded-xl" value="XI MIPA 3">
       </div>
 
-      <!-- Preview Kartu Digital -->
       <div id="printArea" class="bg-gradient-to-br from-brand-900 via-brand-800 to-slate-900 text-white rounded-2xl p-5 shadow-xl border border-blue-700/50 space-y-4 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div class="flex items-center gap-2">
@@ -441,7 +454,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 
-    // KONEKSI FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
       authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
@@ -456,6 +468,47 @@
     let allBooks = [];
     let photoBase64 = "";
 
+    // Pengecekan Sesi Login (Siswa / Admin)
+    function checkUserSession() {
+      const userSession = JSON.parse(localStorage.getItem('userSession'));
+      const adminSession = JSON.parse(localStorage.getItem('adminSession'));
+      const desktopNav = document.getElementById('navAuthSection');
+      const mobileNav = document.getElementById('mobileAuthSection');
+
+      if (userSession) {
+        const namaUser = userSession.nama || userSession.namaSiswa || 'Siswa';
+        if (desktopNav) {
+          desktopNav.innerHTML = `
+            <a href="profil_2.html" class="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+              <i class="fa-solid fa-circle-user"></i> ${namaUser}
+            </a>
+          `;
+        }
+        if (mobileNav) {
+          mobileNav.innerHTML = `
+            <a href="profil_2.html" class="block text-center text-xs font-bold text-white bg-emerald-600 py-2.5 rounded-xl">
+              <i class="fa-solid fa-circle-user mr-1"></i> Profil ${namaUser}
+            </a>
+          `;
+        }
+      } else if (adminSession) {
+        if (desktopNav) {
+          desktopNav.innerHTML = `
+            <a href="dashboard_3.html" class="text-xs font-bold text-white bg-purple-600 hover:bg-purple-500 px-3.5 py-2 rounded-xl transition flex items-center gap-2">
+              <i class="fa-solid fa-chart-line"></i> Dashboard Admin
+            </a>
+          `;
+        }
+        if (mobileNav) {
+          mobileNav.innerHTML = `
+            <a href="dashboard_3.html" class="block text-center text-xs font-bold text-white bg-purple-600 py-2.5 rounded-xl">
+              <i class="fa-solid fa-chart-line mr-1"></i> Dashboard Admin
+            </a>
+          `;
+        }
+      }
+    }
+
     // Global Modal Controllers
     window.openModalTambahBuku = () => document.getElementById("modalTambahBuku").classList.remove("hidden");
     window.openModalDuta = () => document.getElementById("modalDuta").classList.remove("hidden");
@@ -463,7 +516,6 @@
     window.closeModal = (id) => document.getElementById(id).classList.add("hidden");
     window.toggleMobileNav = () => document.getElementById("mobileMenu").classList.toggle("hidden");
 
-    // Helper untuk memanggil API GraphQL dan memvalidasi galat
     async function graphqlFetch(query, variables = {}) {
       const res = await fetch(ENDPOINT, {
         method: "POST",
@@ -746,7 +798,8 @@
       document.getElementById("prevNis").innerText = "NIS: " + (document.getElementById("cardNis").value || "-");
     };
 
-    // Initial Load
+    // Jalankan fungsi saat halaman dimuat
+    checkUserSession();
     fetchKatalog();
     fetchDuta();
     fetchPeminjam();
