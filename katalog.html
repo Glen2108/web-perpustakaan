@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Katalog Buku - Perpus SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-  <!-- Header Navigasi -->
   <header class="bg-blue-900 text-white shadow-md">
     <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-extrabold tracking-wide">Perpus SMAN 4 Manado</h1>
       <nav class="space-x-6 text-sm font-semibold">
+        <a href="index.html" class="hover:text-blue-200">Beranda</a>
         <a href="katalog.html" class="underline underline-offset-4 text-blue-200">Katalog</a>
         <a href="duta-literasi.html" class="hover:text-blue-200">Duta Literasi</a>
         <a href="admin/dashboard.html" class="bg-blue-800 hover:bg-blue-700 px-3 py-1.5 rounded-lg">Admin Panel</a>
@@ -23,132 +21,23 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-10 space-y-10">
-    
-    <!-- Judul & Tombol Aksi -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h2 class="text-3xl font-black text-slate-900">Katalog Koleksi Buku</h2>
-        <p class="text-sm text-slate-500 mt-1">Cari dan rencanakan peminjaman buku fisik perpustakaan secara mandiri.</p>
-      </div>
-      <div class="flex gap-3">
-        <button id="btnOpenTambahBuku" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition">
-          + Tambah Buku Fisik
-        </button>
-        <button id="btnOpenPeminjam" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition">
-          📋 Siswa Sedang Meminjam
-        </button>
+        <p class="text-sm text-slate-500 mt-1">Cari dan rencanakan peminjaman buku secara mandiri.</p>
       </div>
     </div>
 
-    <!-- Grid Katalog Buku -->
     <div id="gridKatalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <p class="col-span-full text-center text-slate-400 py-10">Memuat data katalog buku...</p>
     </div>
-
   </main>
 
-  <!-- Modal Tambah Buku -->
-  <div id="modalTambahBuku" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-lg font-bold text-slate-900">Tambah Koleksi Buku Fisik</h3>
-        <button id="btnCloseTambahBuku" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
-      </div>
-      <form id="formBuku" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Judul Buku</label>
-          <input type="text" id="inputJudul" placeholder="Contoh: Fisika Modern Kelas 12" class="w-full px-3 py-2 border rounded-xl text-sm" required>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Penulis / Pengarang</label>
-          <input type="text" id="inputPenulis" placeholder="Contoh: Prof. Bambang" class="w-full px-3 py-2 border rounded-xl text-sm" required>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Jumlah Total Eksemplar</label>
-          <input type="number" id="inputTotal" placeholder="3" class="w-full px-3 py-2 border rounded-xl text-sm" min="1" required>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">URL Foto Sampul (Opsional)</label>
-          <input type="url" id="inputCover" placeholder="https://..." class="w-full px-3 py-2 border rounded-xl text-sm">
-        </div>
-        <div class="flex justify-end gap-2 pt-3 border-t">
-          <button type="button" id="btnBatalTambahBuku" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Batal</button>
-          <button type="submit" id="btnSubmitBuku" class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl">Simpan Buku</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal Daftar Peminjam -->
-  <div id="modalPeminjam" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-    <div class="bg-white w-full max-w-2xl rounded-2xl p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-lg font-bold text-slate-900">Daftar Siswa Sedang Meminjam Buku</h3>
-        <button id="btnClosePeminjam" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
-      </div>
-      <div class="overflow-x-auto max-h-80">
-        <table class="w-full text-left text-xs">
-          <thead class="bg-slate-100 text-slate-600 font-bold uppercase">
-            <tr>
-              <th class="p-3">Nama Siswa</th>
-              <th class="p-3">ID Buku</th>
-              <th class="p-3">Tgl Pinjam</th>
-              <th class="p-3">Status</th>
-            </tr>
-          </thead>
-          <tbody id="tabelPeminjam" class="divide-y divide-slate-100">
-            <tr>
-              <td colspan="4" class="p-4 text-center text-slate-400">Memuat data peminjaman...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { ENDPOINT } from './js/firebase-config.js';
 
-    // Konfigurasi Firebase Project
-    const firebaseConfig = {
-      apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
-      authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
-      projectId: "web-perpustakaan-e3ae8",
-      storageBucket: "web-perpustakaan-e3ae8.firebasestorage.app",
-      appId: "1:960845187515:web:9333b70d1052fc66435c9e"
-    };
-
-    initializeApp(firebaseConfig);
-    const ENDPOINT = "https://us-central1-web-perpustakaan-e3ae8.cloudfunctions.net/dataConnect";
-
-    // Fungsi Pengendali Modal
-    const modalTambahBuku = document.getElementById("modalTambahBuku");
-    const modalPeminjam = document.getElementById("modalPeminjam");
-
-    const openModal = (el) => el.classList.remove("hidden");
-    const closeModal = (el) => el.classList.add("hidden");
-
-    // Event Listener Tombol Tambah Buku Fisik
-    document.getElementById("btnOpenTambahBuku").addEventListener("click", () => openModal(modalTambahBuku));
-    document.getElementById("btnCloseTambahBuku").addEventListener("click", () => closeModal(modalTambahBuku));
-    document.getElementById("btnBatalTambahBuku").addEventListener("click", () => closeModal(modalTambahBuku));
-
-    // Event Listener Tombol Siswa Sedang Meminjam
-    document.getElementById("btnOpenPeminjam").addEventListener("click", () => {
-      openModal(modalPeminjam);
-      fetchPeminjam();
-    });
-    document.getElementById("btnClosePeminjam").addEventListener("click", () => closeModal(modalPeminjam));
-
-    // Menutup modal jika area luar diklik
-    window.addEventListener("click", (e) => {
-      if (e.target === modalTambahBuku) closeModal(modalTambahBuku);
-      if (e.target === modalPeminjam) closeModal(modalPeminjam);
-    });
-
-    // 1. Fetch & Render Katalog Buku
     async function fetchKatalog() {
-      const query = `query { books { id title author totalCopies availableCopies coverImageUrl } }`;
+      const query = `query { books { id title author availableCopies } }`;
       const grid = document.getElementById("gridKatalog");
       try {
         const res = await fetch(ENDPOINT, {
@@ -160,142 +49,26 @@
         const books = data?.books || [];
 
         if (!books.length) {
-          grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-10">Belum ada koleksi buku fisik di database.</p>`;
+          grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-10">Belum ada koleksi buku di database.</p>`;
           return;
         }
 
         grid.innerHTML = books.map(b => `
-          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
             <div>
               <span class="inline-block px-2.5 py-1 text-[11px] font-bold rounded-full ${b.availableCopies > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
-                ${b.availableCopies > 0 ? `Tersedia (${b.availableCopies} Eksemplar)` : 'Habis Dipinjam'}
+                ${b.availableCopies > 0 ? `Tersedia (${b.availableCopies})` : 'Habis Dipinjam'}
               </span>
               <h3 class="font-bold text-slate-900 text-base mt-3 leading-snug">${b.title}</h3>
               <p class="text-xs text-slate-500 mt-1">Penulis: ${b.author}</p>
             </div>
-            <button data-id="${b.id}" data-title="${b.title}" data-copies="${b.availableCopies}" 
-                    class="btn-pinjam mt-5 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white text-xs font-bold py-2.5 rounded-xl transition"
-                    ${b.availableCopies <= 0 ? 'disabled' : ''}>
-              ${b.availableCopies > 0 ? 'Rencanakan Peminjaman' : 'Stok Habis'}
-            </button>
           </div>
         `).join('');
-
-        // Bind eventListener tombol pinjam
-        document.querySelectorAll(".btn-pinjam").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-id");
-            const title = btn.getAttribute("data-title");
-            const copies = parseInt(btn.getAttribute("data-copies"));
-            pinjamBuku(id, title, copies);
-          });
-        });
-
       } catch (err) {
         console.error("Gagal memuat katalog:", err);
-        grid.innerHTML = `<p class="col-span-full text-center text-red-500 py-10">Gagal terhubung ke database. Periksa konfigurasi Firebase Anda.</p>`;
       }
     }
 
-    // 2. Tambah Buku Baru
-    document.getElementById("formBuku").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btnSubmit = document.getElementById("btnSubmitBuku");
-      btnSubmit.disabled = true;
-      btnSubmit.innerText = "Menyimpan...";
-
-      try {
-        const title = document.getElementById("inputJudul").value.trim();
-        const author = document.getElementById("inputPenulis").value.trim();
-        const total = parseInt(document.getElementById("inputTotal").value);
-        const cover = document.getElementById("inputCover").value.trim();
-
-        const mutation = `
-          mutation {
-            book_insert(data: {
-              title: "${title}",
-              author: "${author}",
-              totalCopies: ${total},
-              availableCopies: ${total},
-              coverImageUrl: "${cover}"
-            })
-          }
-        `;
-
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: mutation })
-        });
-
-        const result = await res.json();
-        if (result.errors) throw new Error(result.errors[0].message);
-
-        alert(`Buku "${title}" berhasil ditambahkan!`);
-        closeModal(modalTambahBuku);
-        e.target.reset();
-        fetchKatalog();
-
-      } catch (err) {
-        alert("Gagal menambah buku: " + err.message);
-      } finally {
-        btnSubmit.disabled = false;
-        btnSubmit.innerText = "Simpan Buku";
-      }
-    });
-
-    // 3. Proses Peminjaman Buku
-    async function pinjamBuku(bookId, title, currentCopies) {
-      const namaSiswa = prompt(`Masukkan Nama Siswa yang meminjam "${title}":`);
-      if (!namaSiswa) return;
-
-      try {
-        const updatedCopies = currentCopies - 1;
-        const mutationUpdate = `mutation { book_update(id: "${bookId}", data: { availableCopies: ${updatedCopies} }) }`;
-        const mutationLoan = `mutation { loan_insert(data: { bookId: "${bookId}", studentName: "${namaSiswa}", borrowDate: "${new Date().toISOString().split('T')[0]}", status: "Dipinjam" }) }`;
-
-        await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mutationUpdate }) });
-        await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mutationLoan }) });
-
-        alert(`Peminjaman buku "${title}" berhasil dicatat untuk ${namaSiswa}!`);
-        fetchKatalog();
-      } catch (err) {
-        alert("Gagal mencatat peminjaman: " + err.message);
-      }
-    }
-
-    // 4. Load Daftar Peminjam
-    async function fetchPeminjam() {
-      const query = `query { loans { id studentName borrowDate status bookId } }`;
-      const tbody = document.getElementById("tabelPeminjam");
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query })
-        });
-        const { data } = await res.json();
-        const loans = data?.loans || [];
-
-        if (!loans.length) {
-          tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Belum ada siswa yang meminjam buku.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = loans.map(l => `
-          <tr>
-            <td class="p-3 font-semibold text-slate-800">${l.studentName}</td>
-            <td class="p-3 text-slate-600">${l.bookId || '-'}</td>
-            <td class="p-3 text-slate-600">${l.borrowDate}</td>
-            <td class="p-3"><span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded-md font-bold">${l.status}</span></td>
-          </tr>
-        `).join('');
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Gagal memuat data peminjam.</td></tr>`;
-      }
-    }
-
-    // Jalankan awal
     fetchKatalog();
   </script>
 </body>
