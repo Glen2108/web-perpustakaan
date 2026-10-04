@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
   authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
   projectId: "web-perpustakaan-e3ae8",
-  storageBucket: "web-perpustakaan-e3ae8.appspot.com",
+  storageBucket: "web-perpustakaan-e3ae8.firebasestorage.app",
   messagingSenderId: "960845187515",
   appId: "1:960845187515:web:9333b70d1052fc66435c9e"
 };
