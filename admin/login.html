@@ -5,50 +5,174 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Admin - Perpustakaan SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: { brand: { 800: '#1e3a8a', 900: '#0f172a', 600: '#2563eb', 500: '#3b82f6' } }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4">
-  <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md space-y-6">
-    <div class="text-center">
-      <h2 class="text-2xl font-black text-slate-900">Portal Admin & Petugas</h2>
-      <p class="text-xs text-slate-500 mt-1">Autentikasi Pengelola Perpustakaan</p>
-    </div>
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4 font-sans text-slate-800">
 
-    <form id="formAdminLogin" class="space-y-4">
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">Email / Username Admin</label>
-        <input type="email" id="emailVal" required class="w-full px-4 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-indigo-600 outline-none">
+  <!-- Pengecekan Sesi Login (Otomatis Alihkan ke Dashboard Jika Sudah Login) -->
+  <script>
+    if (localStorage.getItem('adminSession')) {
+      window.location.href = "dashboard.html";
+    }
+  </script>
+
+  <div class="w-full max-w-md space-y-4">
+    <!-- Tombol Kembali ke Beranda Utama -->
+    <a href="../index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-amber-400 transition">
+      <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda Utama Perpustakaan
+    </a>
+
+    <!-- Kartu Form Login Admin -->
+    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl border border-slate-100 space-y-6">
+      
+      <!-- Header Logo & Judul -->
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 bg-gradient-to-tr from-indigo-600 to-blue-500 text-white rounded-2xl flex items-center justify-center font-black text-2xl mx-auto shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Portal Pengelola</h2>
+        <p class="text-xs text-slate-500 max-w-xs mx-auto">
+          Masuk ke sistem administrator & petugas perpustakaan SMAN 4 Manado.
+        </p>
       </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-        <input type="password" id="passVal" required class="w-full px-4 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-indigo-600 outline-none">
+
+      <!-- Alert Pesan Kesalahan -->
+      <div id="alertBox" class="hidden p-3.5 rounded-xl text-xs font-bold bg-rose-50 border border-rose-200 text-rose-700 items-center gap-2">
+        <i class="fa-solid fa-circle-exclamation shrink-0 text-base"></i>
+        <span id="alertMsg">Email atau Password tidak cocok!</span>
       </div>
-      <button type="submit" class="w-full bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 rounded-xl text-xs shadow-md">
-        Masuk Dashboard Admin
-      </button>
-    </form>
+
+      <!-- Form Login Admin -->
+      <form id="formAdminLogin" class="space-y-4">
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wider">
+            Email Admin / Petugas
+          </label>
+          <div class="relative">
+            <input type="email" id="emailVal" required placeholder="admin@sman4manado.sch.id" 
+                   class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-xs font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 outline-none transition">
+            <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wider">
+            Password
+          </label>
+          <div class="relative">
+            <input type="password" id="passVal" required placeholder="••••••••" 
+                   class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 text-xs font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 outline-none transition">
+            <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+            <button type="button" id="togglePass" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 text-xs">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl text-xs shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition active:scale-[0.99]">
+          <span id="btnText">Masuk Dashboard Admin</span>
+          <i id="btnIcon" class="fa-solid fa-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <!-- Footer Info -->
+      <div class="pt-4 border-t border-slate-100 text-center text-[11px] text-slate-500">
+        Hak akses khusus untuk Petugas & Admin resmi Perpustakaan SMAN 4 Manado.
+      </div>
+
+    </div>
   </div>
 
   <script type="module">
-  import { auth } from '../js/firebase-config.js';
-  import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+    import { auth } from '../js/firebase-config.js';
+    import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-  document.getElementById('formAdminLogin').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('emailVal').value.trim();
-    const pass = document.getElementById('passVal').value;
+    const form = document.getElementById('formAdminLogin');
+    const alertBox = document.getElementById('alertBox');
+    const alertMsg = document.getElementById('alertMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const togglePass = document.getElementById('togglePass');
+    const passVal = document.getElementById('passVal');
 
-    try {
-      await signInWithEmailAndPassword(auth, email, pass);
-      alert("Login Admin Berhasil!");
-      window.location.href = "dashboard.html";
-    } catch (err) {
-      if (err.code === 'auth/invalid-credential') {
-        alert("Gagal Login: Email atau Password salah, atau akun belum dibuat di Firebase Console.");
-      } else {
-        alert("Gagal Login Admin: " + err.message);
+    // Listener otomatis sesi Firebase Auth
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem('adminSession', JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          loginTime: new Date().toISOString()
+        }));
+        window.location.href = "dashboard.html";
       }
+    });
+
+    // Toggle Tampilkan Password
+    togglePass.addEventListener('click', () => {
+      const isPass = passVal.type === 'password';
+      passVal.type = isPass ? 'text' : 'password';
+      togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.classList.add('hidden');
+      
+      const email = document.getElementById('emailVal').value.trim();
+      const pass = passVal.value;
+
+      submitBtn.disabled = true;
+      btnText.innerText = "Memverifikasi...";
+      btnIcon.className = "fa-solid fa-spinner fa-spin";
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+        const user = userCredential.user;
+        
+        localStorage.setItem('adminSession', JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          loginTime: new Date().toISOString()
+        }));
+
+        btnText.innerText = "Login Berhasil!";
+        btnIcon.className = "fa-solid fa-circle-check";
+        
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 500);
+
+      } catch (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+        btnText.innerText = "Masuk Dashboard Admin";
+        btnIcon.className = "fa-solid fa-right-to-bracket";
+
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+          showError("Email atau Password salah!");
+        } else {
+          showError("Gagal Login Admin: " + err.message);
+        }
+      }
+    });
+
+    function showError(msg) {
+      alertMsg.innerText = msg;
+      alertBox.classList.remove('hidden');
+      alertBox.classList.add('flex');
     }
-  });
-</script>
+  </script>
 </body>
 </html>

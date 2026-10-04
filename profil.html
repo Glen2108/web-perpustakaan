@@ -1,47 +1,293 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil Anggota - SMAN 4 Manado</title>
+  <title>Dashboard Profil Siswa - SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-100 p-6">
-  <div class="max-w-lg mx-auto bg-white rounded-3xl p-6 shadow-xl space-y-6">
-    <div class="flex justify-between items-center border-b pb-4">
-      <h3 class="font-black text-xl text-slate-900">Profil Anggota Perpustakaan</h3>
-      <button onclick="logout()" class="text-xs bg-rose-600 text-white font-bold px-3 py-1.5 rounded-lg">Logout</button>
-    </div>
-
-    <div class="space-y-3 text-xs">
-      <div class="flex justify-between py-1 border-b"><span class="text-slate-500">Nama Lengkap:</span><strong id="pNama">-</strong></div>
-      <div class="flex justify-between py-1 border-b"><span class="text-slate-500">Kelas:</span><strong id="pKelas">-</strong></div>
-      <div class="flex justify-between py-1 border-b"><span class="text-slate-500">Alamat:</span><strong id="pAlamat">-</strong></div>
-      <div class="flex justify-between py-1 border-b"><span class="text-slate-500">Nomor Telepon:</span><strong id="pTelp">-</strong></div>
-      <div class="flex justify-between py-1 border-b"><span class="text-slate-500">ID Anggota:</span><strong id="pID" class="font-mono text-blue-700">-</strong></div>
-      <div class="flex justify-between py-1 border-b"><span class="text-slate-500">Personal ID:</span><strong id="pPersonal" class="font-mono text-slate-800">-</strong></div>
-    </div>
-
-    <a href="katalog.html" class="block text-center w-full bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs">Menuju Katalog Buku</a>
-  </div>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
-    const user = JSON.parse(localStorage.getItem('userSession'));
-    if (!user) {
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: { brand: { 800: '#1e3a8a', 900: '#0f172a', 600: '#2563eb', 500: '#3b82f6' } }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
+
+  <!-- Validasi Sesi Login Terlebih Dahulu -->
+  <script>
+    const sessionData = localStorage.getItem('userSession');
+    if (!sessionData) {
       window.location.href = "login-siswa.html";
-    } else {
-      document.getElementById('pNama').innerText = user.nama || '-';
-      document.getElementById('pKelas').innerText = user.kelas || '-';
-      document.getElementById('pAlamat').innerText = user.alamat || '-';
-      document.getElementById('pTelp').innerText = user.noTelp || '-';
-      document.getElementById('pID').innerText = user.memberId || '-';
-      document.getElementById('pPersonal').innerText = user.personalId || '-';
+    }
+    const currentUser = JSON.parse(sessionData);
+  </script>
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-40 bg-brand-900/95 backdrop-blur-md text-white border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-200 text-brand-900 flex items-center justify-center font-black text-xl shadow-lg">
+          <i class="fa-solid fa-book-bookmark"></i>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-none">PERPUSTAKAAN DIGITAL</h1>
+          <p class="text-[11px] text-blue-300 font-medium tracking-wider">SMA NEGERI 4 MANADO</p>
+        </div>
+      </a>
+
+      <!-- Menu Navigasi Desktop -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+        <a href="index.html" class="hover:text-amber-300 transition">Beranda</a>
+        <a href="katalog.html" class="hover:text-amber-300 transition">Katalog Buku</a>
+        <a href="duta-literasi.html" class="hover:text-amber-300 transition">Duta Literasi</a>
+      </nav>
+
+      <!-- Profil Ringkas & Logout Header -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-3 bg-slate-800/80 px-3.5 py-1.5 rounded-2xl border border-slate-700">
+          <div class="w-7 h-7 rounded-lg bg-amber-400 text-brand-900 font-black flex items-center justify-center text-xs" id="navAvatar">
+            S
+          </div>
+          <div class="text-left">
+            <p class="text-xs font-bold leading-tight text-white" id="navUserName">Nama Siswa</p>
+            <p class="text-[10px] text-amber-300 font-medium" id="navUserClass">Kelas</p>
+          </div>
+        </div>
+
+        <!-- Tombol Logout -->
+        <button onclick="handleLogout()" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span class="hidden sm:inline">Keluar</span>
+        </button>
+
+        <!-- Tombol Hamburger Mobile -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dropdown Menu Mobile -->
+    <div id="mobileMenu" class="hidden md:hidden bg-brand-900 border-t border-slate-800 px-4 pt-3 pb-4 space-y-2 text-sm font-semibold">
+      <a href="index.html" class="block px-3 py-2 rounded-lg hover:bg-brand-800 text-slate-200">
+        <i class="fa-solid fa-house mr-2"></i>Beranda
+      </a>
+      <a href="katalog.html" class="block px-3 py-2 rounded-lg hover:bg-brand-800 text-slate-200">
+        <i class="fa-solid fa-book mr-2"></i>Katalog Buku
+      </a>
+      <a href="duta-literasi.html" class="block px-3 py-2 rounded-lg hover:bg-brand-800 text-slate-200">
+        <i class="fa-solid fa-award mr-2"></i>Duta Literasi
+      </a>
+      <button onclick="handleLogout()" class="w-full text-left px-3 py-2 rounded-lg bg-rose-600/20 text-rose-300 font-bold border border-rose-500/30 mt-2">
+        <i class="fa-solid fa-right-from-bracket mr-2"></i>Keluar Sesi
+      </button>
+    </div>
+  </header>
+
+  <!-- Content Body -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Hero Card Banner Siswa -->
+    <div class="relative overflow-hidden bg-gradient-to-r from-brand-900 via-slate-900 to-brand-800 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-slate-800">
+      <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        
+        <div class="flex items-center gap-4 sm:gap-6">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-200 text-brand-900 flex items-center justify-center font-black text-2xl sm:text-3xl shadow-xl shrink-0" id="heroAvatar">
+            S
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span id="badgeStatus" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
+                • Anggota Aktif
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                Siswa SMAN 4 Manado
+              </span>
+            </div>
+            <h2 class="text-xl sm:text-3xl font-black tracking-tight" id="profileNama">
+              Memuat Nama...
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1 flex flex-wrap gap-x-4 gap-y-1">
+              <span><i class="fa-solid fa-id-card text-amber-400 mr-1.5"></i> ID / NIS: <strong id="profileID" class="text-white">-</strong></span>
+              <span><i class="fa-solid fa-graduation-cap text-amber-400 mr-1.5"></i> Kelas: <strong id="profileKelas" class="text-white">-</strong></span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Shortcut Peminjaman Mandiri -->
+        <a href="katalog.html" class="w-full md:w-auto text-center bg-amber-400 hover:bg-amber-300 text-brand-900 font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95">
+          <i class="fa-solid fa-magnifying-glass mr-1.5"></i> Cari & Pinjam Buku
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Ringkasan Stat & Kartu Digital -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Kartu Profil Detail & Kartu Anggota Digital (Col 7) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Informasi Rincian Akun -->
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-4">
+          <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <i class="fa-solid fa-user-gear text-brand-600"></i> Detail Keanggotaan Siswa
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+              <p class="text-[10px] font-bold text-slate-400 uppercase">Nama Lengkap</p>
+              <p class="font-extrabold text-slate-800 text-sm mt-0.5" id="detailNama">-</p>
+            </div>
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+              <p class="text-[10px] font-bold text-slate-400 uppercase">ID Anggota / NIS</p>
+              <p class="font-extrabold text-brand-600 font-mono text-sm mt-0.5" id="detailMemberId">-</p>
+            </div>
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+              <p class="text-[10px] font-bold text-slate-400 uppercase">Kelas & Jurusan</p>
+              <p class="font-extrabold text-slate-800 text-sm mt-0.5" id="detailKelas">-</p>
+            </div>
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
+              <p class="text-[10px] font-bold text-slate-400 uppercase">Instansi / Sekolah</p>
+              <p class="font-extrabold text-slate-800 text-sm mt-0.5" id="detailInstansi">SMA Negeri 4 Manado</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital Library Card (Kartu Perpustakaan Digital) -->
+        <div class="bg-gradient-to-tr from-brand-900 to-slate-900 rounded-3xl p-6 text-white shadow-xl border border-slate-800 space-y-4 relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-book-bookmark text-amber-400 text-lg"></i>
+              <span class="font-extrabold text-xs tracking-wider uppercase">Kartu Anggota Digital</span>
+            </div>
+            <span class="text-[10px] font-mono text-slate-400">SMAN 4 MANADO</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <div class="space-y-1">
+              <p class="text-[10px] text-slate-400 font-semibold uppercase">Nama Anggota</p>
+              <p class="text-base font-black text-amber-300" id="cardNama">-</p>
+              <p class="text-xs font-mono text-slate-300" id="cardNIS">NIS: -</p>
+            </div>
+            <!-- Simulation Barcode Icon -->
+            <div class="text-right bg-white p-2 rounded-xl text-slate-900">
+              <i class="fa-solid fa-barcode text-3xl"></i>
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-400 text-center pt-2 italic">
+            Tunjukkan kartu digital ini saat melakukan peminjaman buku fisik di perpustakaan.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Riwayat Peminjaman Buku (Col 5) -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Peminjaman Buku
+            </h3>
+            <span class="text-[11px] font-bold bg-amber-50 text-amber-700 px-2.5 py-1 rounded-lg">Realtime</span>
+          </div>
+
+          <!-- List Peminjaman Buku -->
+          <div id="listPeminjaman" class="space-y-3">
+            <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+              <i class="fa-solid fa-book-open text-2xl mb-1 text-slate-300 block"></i>
+              Belum ada riwayat peminjaman buku aktif.
+            </div>
+          </div>
+
+          <a href="katalog.html" class="block text-center text-xs font-extrabold text-brand-600 hover:text-brand-500 pt-2">
+            Lihat Koleksi Lengkap Katalog <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center space-y-1">
+      <p class="font-bold text-slate-300">Perpustakaan Digital SMAN 4 Manado</p>
+      <p class="text-[11px] text-slate-500">© 2026 SMAN 4 Manado. Seluruh hak cipta dilindungi.</p>
+    </div>
+  </footer>
+
+  <!-- Script Penanganan Sesi & Tampilan Data -->
+  <script>
+    // Toggle Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     }
 
-    function logout() {
-      localStorage.removeItem('userSession');
-      window.location.href = "index.html";
+    // Tampilkan Data Pengguna dari LocalStorage
+    function renderUserData() {
+      if (!currentUser) return;
+
+      const nama = currentUser.nama || currentUser.username || 'Siswa';
+      const initial = nama.charAt(0).toUpperCase();
+      const nis = currentUser.memberId || currentUser.username || '-';
+      const kelas = currentUser.kelas || 'Siswa Aktif';
+      const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
+      const status = currentUser.status || 'Aktif';
+
+      // Header Navigasi
+      document.getElementById('navAvatar').innerText = initial;
+      document.getElementById('navUserName').innerText = nama;
+      document.getElementById('navUserClass').innerText = kelas;
+
+      // Hero Card
+      document.getElementById('heroAvatar').innerText = initial;
+      document.getElementById('profileNama').innerText = nama;
+      document.getElementById('profileID').innerText = nis;
+      document.getElementById('profileKelas').innerText = kelas;
+
+      // Detail Kartu
+      document.getElementById('detailNama').innerText = nama;
+      document.getElementById('detailMemberId').innerText = nis;
+      document.getElementById('detailKelas').innerText = kelas;
+      document.getElementById('detailInstansi').innerText = instansi;
+
+      // Card Digital
+      document.getElementById('cardNama').innerText = nama;
+      document.getElementById('cardNIS').innerText = "ID: " + nis;
+
+      // Badge Status
+      const badgeStatus = document.getElementById('badgeStatus');
+      if (status === 'Aktif') {
+        badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+        badgeStatus.innerText = "• Anggota Aktif";
+      } else {
+        badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-400/20 text-rose-300 border border-rose-400/30";
+        badgeStatus.innerText = "• " + status;
+      }
     }
+
+    // Fungsi Logout Aman (Menghapus Sesi LocalStorage)
+    function handleLogout() {
+      if (confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?")) {
+        localStorage.removeItem('userSession');
+        window.location.href = "login-siswa.html";
+      }
+    }
+
+    renderUserData();
   </script>
 </body>
 </html>
