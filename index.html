@@ -56,7 +56,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-3 group">
+      <a href="#beranda" class="flex items-center gap-3 group">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-200 text-brand-900 flex items-center justify-center font-extrabold text-xl shadow-lg shadow-amber-400/20 group-hover:scale-105 transition-transform">
           <i class="fa-solid fa-book-bookmark"></i>
         </div>
@@ -71,7 +71,7 @@
         <a href="#beranda" class="text-white hover:text-amber-300 transition-colors">Beranda</a>
         <a href="#katalog" class="text-blue-100 hover:text-amber-300 transition-colors">Katalog Buku</a>
         <a href="#duta" class="text-blue-100 hover:text-amber-300 transition-colors">Duta Literasi</a>
-        <a href="#peminjam" class="text-blue-100 hover:text-amber-300 transition-colors">Peminjaman</a>
+        <a href="#peminjam" class="text-blue-100 hover:text-amber-300 transition-colors">Status Peminjaman</a>
       </nav>
 
       <!-- Connection Status & Action Button -->
@@ -97,7 +97,7 @@
       <a href="#beranda" onclick="toggleMobileNav()" class="block text-white hover:text-amber-300 py-1">Beranda</a>
       <a href="#katalog" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Katalog Buku</a>
       <a href="#duta" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Duta Literasi</a>
-      <a href="#peminjam" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Peminjaman</a>
+      <a href="#peminjam" onclick="toggleMobileNav()" class="block text-blue-100 hover:text-amber-300 py-1">Status Peminjaman</a>
       <button onclick="openModalCard(); toggleMobileNav();" class="w-full mt-2 bg-amber-400 text-slate-900 font-bold text-xs py-2.5 rounded-xl">
         <i class="fa-solid fa-id-card mr-1.5"></i> Cetak Kartu Anggota
       </button>
@@ -202,7 +202,6 @@
 
       <!-- Grid Cards Katalog -->
       <div id="gridKatalog" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Skeleton Loading State -->
         <div class="animate-pulse bg-slate-100 h-64 rounded-2xl"></div>
         <div class="animate-pulse bg-slate-100 h-64 rounded-2xl"></div>
         <div class="animate-pulse bg-slate-100 h-64 rounded-2xl"></div>
@@ -228,7 +227,7 @@
       <div id="containerDutaTerpilih" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 p-6 sm:p-8 rounded-2xl backdrop-blur-md">
         <div class="lg:col-span-4 text-center">
           <div class="w-36 h-36 mx-auto rounded-2xl bg-slate-800 border-4 border-amber-400 shadow-2xl overflow-hidden flex items-center justify-center relative group">
-            <img id="imgDuta" src="" class="w-full h-full object-cover hidden">
+            <img id="imgDuta" src="" alt="Foto Duta Literasi" class="w-full h-full object-cover hidden">
             <i id="iconDuta" class="fa-solid fa-user-graduate text-4xl text-slate-600"></i>
           </div>
         </div>
@@ -296,7 +295,7 @@
     </div>
   </footer>
 
-  <!-- ==================== MODALS ==================== -->
+  <!-- MODALS -->
 
   <!-- Modal Tambah Buku -->
   <div id="modalTambahBuku" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
@@ -464,16 +463,25 @@
     window.closeModal = (id) => document.getElementById(id).classList.add("hidden");
     window.toggleMobileNav = () => document.getElementById("mobileMenu").classList.toggle("hidden");
 
+    // Helper untuk memanggil API GraphQL dan memvalidasi galat
+    async function graphqlFetch(query, variables = {}) {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, variables })
+      });
+      const result = await res.json();
+      if (result.errors && result.errors.length > 0) {
+        throw new Error(result.errors[0].message);
+      }
+      return result.data;
+    }
+
     // 1. Fetch & Render Katalog Buku
     async function fetchKatalog() {
       const query = `query { books { id title author totalCopies availableCopies coverImageUrl } }`;
       try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query })
-        });
-        const { data } = await res.json();
+        const data = await graphqlFetch(query);
         allBooks = data?.books || [];
         
         document.getElementById("statBuku").innerText = allBooks.length;
@@ -505,7 +513,7 @@
             <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-pen-nib text-[10px] mr-1"></i>${b.author}</p>
           </div>
 
-          <button onclick="pinjamBuku('${b.id}', '${b.title}', ${b.availableCopies})" 
+          <button onclick="pinjamBuku('${b.id}', '${b.title.replace(/'/g, "\\'")}', ${b.availableCopies})" 
                   class="mt-5 w-full bg-brand-600 hover:bg-brand-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-xs font-bold py-2.5 rounded-xl shadow-md transition-all active:scale-95"
                   ${b.availableCopies <= 0 ? 'disabled' : ''}>
             ${b.availableCopies > 0 ? '<i class="fa-solid fa-hand-holding-hand mr-1"></i> Pinjam Buku' : 'Stok Habis'}
@@ -534,24 +542,25 @@
         const cover = document.getElementById("inputCover").value.trim();
 
         const mutation = `
-          mutation {
+          mutation AddBook($title: String!, $author: String!, $total: Int!, $cover: String!) {
             book_insert(data: {
-              title: "${title}",
-              author: "${author}",
-              totalCopies: ${total},
-              availableCopies: ${total},
-              coverImageUrl: "${cover}"
+              title: $title,
+              author: $author,
+              totalCopies: $total,
+              availableCopies: $total,
+              coverImageUrl: $cover
             })
           }
         `;
 
-        await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mutation }) });
-        alert(`Buku "${title}" berhasil ditambahkan!`);
+        await graphqlFetch(mutation, { title, author, total, cover });
+
+        alert("Buku berhasil ditambahkan ke katalog!");
         closeModal("modalTambahBuku");
         e.target.reset();
         fetchKatalog();
       } catch (err) {
-        alert("Gagal menyimpan buku: " + err.message);
+        alert("Gagal menambahkan buku: " + err.message);
       } finally {
         btn.disabled = false;
         btn.innerText = "Simpan Buku";
@@ -560,16 +569,31 @@
 
     // 3. Pinjam Buku
     window.pinjamBuku = async (bookId, title, currentCopies) => {
-      const namaSiswa = prompt(`Masukkan Nama Siswa Pemimjam buku "${title}":`);
+      const namaSiswa = prompt(`Masukkan Nama Siswa Peminjam buku "${title}":`);
       if (!namaSiswa) return;
 
       try {
         const newCopies = currentCopies - 1;
-        const mut1 = `mutation { book_update(id: "${bookId}", data: { availableCopies: ${newCopies} }) }`;
-        const mut2 = `mutation { loan_insert(data: { bookId: "${bookId}", studentName: "${namaSiswa}", borrowDate: "${new Date().toISOString().split('T')[0]}", status: "Dipinjam" }) }`;
+        
+        const mut1 = `
+          mutation UpdateCopies($bookId: String!, $newCopies: Int!) {
+            book_update(id: $bookId, data: { availableCopies: $newCopies })
+          }
+        `;
+        
+        const mut2 = `
+          mutation CreateLoan($bookId: String!, $studentName: String!, $borrowDate: String!, $status: String!) {
+            loan_insert(data: { bookId: $bookId, studentName: $studentName, borrowDate: $borrowDate, status: $status })
+          }
+        `;
 
-        await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mut1 }) });
-        await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mut2 }) });
+        await graphqlFetch(mut1, { bookId, newCopies });
+        await graphqlFetch(mut2, {
+          bookId,
+          studentName: namaSiswa,
+          borrowDate: new Date().toISOString().split('T')[0],
+          status: "Dipinjam"
+        });
 
         alert(`Peminjaman dicatat untuk ${namaSiswa}!`);
         fetchKatalog();
@@ -597,6 +621,7 @@
       e.preventDefault();
       const btn = document.getElementById("btnSubmitDuta");
       btn.disabled = true;
+      btn.innerText = "Menyimpan...";
 
       try {
         const nama = document.getElementById("inputNamaDuta").value.trim();
@@ -611,21 +636,41 @@
         t2.setMonth(t2.getMonth() + 2);
         const akhirStr = t2.toISOString().split('T')[0];
 
+        const studentId = `${nama} (${kelas})`;
+        const cleanPhoto = photoBase64 ? photoBase64.replace(/[\r\n]/g, "") : "";
+
         const mutation = `
-          mutation {
+          mutation AddAmbassador(
+            $studentId: String!,
+            $termPeriod: String!,
+            $inaugurationDate: String!,
+            $endDate: String!,
+            $isSelected: Boolean!,
+            $photoUrl: String!,
+            $slogan: String!
+          ) {
             literacyAmbassador_insert(data: {
-              studentId: "${nama} (${kelas})",
-              termPeriod: "${periode}",
-              inaugurationDate: "${pelantikanStr}",
-              endDate: "${akhirStr}",
-              isSelected: ${isSelected},
-              photoUrl: "${photoBase64.replace(/[\r\n]/g, "")}",
-              slogan: "${slogan}"
+              studentId: $studentId,
+              termPeriod: $termPeriod,
+              inaugurationDate: $inaugurationDate,
+              endDate: $endDate,
+              isSelected: $isSelected,
+              photoUrl: $photoUrl,
+              slogan: $slogan
             })
           }
         `;
 
-        await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mutation }) });
+        await graphqlFetch(mutation, {
+          studentId,
+          termPeriod: periode,
+          inaugurationDate: pelantikanStr,
+          endDate: akhirStr,
+          isSelected,
+          photoUrl: cleanPhoto,
+          slogan
+        });
+
         alert("Data Duta Literasi berhasil diperbarui!");
         closeModal("modalDuta");
         e.target.reset();
@@ -635,14 +680,14 @@
         alert("Gagal menyimpan Duta Literasi: " + err.message);
       } finally {
         btn.disabled = false;
+        btn.innerText = "Simpan Data";
       }
     });
 
     async function fetchDuta() {
       const query = `query { literacyAmbassadors { id studentId termPeriod inaugurationDate endDate isSelected photoUrl slogan } }`;
       try {
-        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }) });
-        const { data } = await res.json();
+        const data = await graphqlFetch(query);
         const list = data?.literacyAmbassadors || [];
 
         const terpilih = list.find(d => d.isSelected);
@@ -677,8 +722,7 @@
     async function fetchPeminjam() {
       const query = `query { loans { id studentName borrowDate status bookId } }`;
       try {
-        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }) });
-        const { data } = await res.json();
+        const data = await graphqlFetch(query);
         const loans = data?.loans || [];
 
         document.getElementById("statPeminjam").innerText = loans.length;

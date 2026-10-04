@@ -11,23 +11,25 @@
   <style>
     /* CSS Khusus untuk Cetak (Print Stylesheet) */
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #printArea, #printArea * {
-        visibility: visible;
-      }
-      #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        display: flex;
-        gap: 20px;
-        justify-content: center;
+      body {
+        background: transparent !important;
+        padding: 0 !important;
       }
       .no-print {
         display: none !important;
+      }
+      #printArea {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        gap: 20px !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+      }
+      .card-dimension {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        page-break-inside: avoid;
       }
     }
 
@@ -69,7 +71,7 @@
       <div id="printArea" class="flex flex-col md:flex-row items-center justify-center gap-6 py-4">
         
         <!-- ================= SISI DEPAN ================= -->
-        <div class="card-dimension relative rounded-xl overflow-hidden shadow-xl border border-slate-300 bg-cover bg-center text-white p-4 flex flex-col justify-between"
+        <div class="card-dimension relative rounded-xl overflow-hidden shadow-xl border border-slate-300 bg-cover bg-center text-white p-4 flex flex-col justify-between bg-blue-900"
           style="background-image: url('assets/kartu-depan.png');">
           
           <!-- Header Kartu -->
@@ -104,7 +106,7 @@
         </div>
 
         <!-- ================= SISI BELAKANG ================= -->
-        <div class="card-dimension relative rounded-xl overflow-hidden shadow-xl border border-slate-300 bg-cover bg-center text-white p-4 flex flex-col justify-between"
+        <div class="card-dimension relative rounded-xl overflow-hidden shadow-xl border border-slate-300 bg-cover bg-center text-white p-4 flex flex-col justify-between bg-blue-950"
           style="background-image: url('assets/kartu-belakang.png');">
           
           <!-- Header Belakang -->
@@ -113,11 +115,11 @@
             <span class="text-[9px] bg-slate-900/60 backdrop-blur px-2 py-0.5 rounded text-slate-200 font-mono">BELAKANG</span>
           </div>
 
-          <!-- Informasi / Peraturan Sisi Belakang (Jika tidak ada di gambar Canva) -->
+          <!-- Informasi / Peraturan Sisi Belakang -->
           <div class="text-[9px] leading-tight space-y-1 text-slate-100 bg-slate-900/40 p-2.5 rounded-lg backdrop-blur-sm border border-white/10 my-auto">
             <p>1. Kartu ini wajib dibawa saat berkunjung ke perpustakaan.</p>
             <p>2. Peminjaman buku wajib menyertakan scan QR Code kartu ini.</p>
-            <p>3. Dilarang merusak, mencoret, atau meminjamkan kartu ke orang lain.</p>
+            <p>3. Dilarang merusak, mencoret, atau meminjamkan kartu me orang lain.</p>
           </div>
 
           <!-- Footer Belakang -->
@@ -150,40 +152,65 @@
   </div>
 
   <script>
-    const ADMIN_WA_NUMBER = "6281234567890"; // Ganti dengan nomor WA Admin Perpustakaan
-    const session = JSON.parse(localStorage.getItem('userSession'));
+    const ADMIN_WA_NUMBER = "6281234567890";
 
-    if (!session) {
-      // Jika belum login, alihkan ke halaman login
-      window.location.href = 'login-siswa.html';
-    } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      let session = null;
+      try {
+        session = JSON.parse(localStorage.getItem('userSession'));
+      } catch (e) {
+        console.error("Gagal membaca data sesi:", e);
+      }
+
+      if (!session) {
+        window.location.href = 'login-siswa.html';
+        return;
+      }
+
+      const nama = session.nama || 'Siswa';
+      const kelas = session.kelas || '-';
+      const memberId = session.memberId || '-';
+      const role = session.role || 'Siswa';
+
       // 1. Tampilkan Data di Profil
-      document.getElementById('userName').innerText = session.nama;
-      document.getElementById('userClassRole').innerText = `Kelas / Jabatan: ${session.kelas}`;
-      document.getElementById('userBadge').innerText = session.role || 'Siswa';
+      document.getElementById('userName').innerText = nama;
+      document.getElementById('userClassRole').innerText = `Kelas / Jabatan: ${kelas}`;
+      document.getElementById('userBadge').innerText = role;
 
       // 2. Render Data ke Kartu Anggota Sisi Depan & Belakang
-      document.getElementById('cardNameFront').innerText = session.nama;
-      document.getElementById('cardIdFront').innerText = session.memberId;
-      document.getElementById('cardClassFront').innerText = session.kelas;
-      document.getElementById('cardIdBack').innerText = session.memberId;
+      document.getElementById('cardNameFront').innerText = nama;
+      document.getElementById('cardIdFront').innerText = memberId;
+      document.getElementById('cardClassFront').innerText = kelas;
+      document.getElementById('cardIdBack').innerText = memberId;
 
       // 3. Generate QR Code ID Anggota
-      new QRCode(document.getElementById("qrcode"), {
-        text: session.memberId,
-        width: 50,
-        height: 50,
-        colorDark : "#0f172a",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-      });
-    }
+      const qrContainer = document.getElementById("qrcode");
+      if (qrContainer) {
+        qrContainer.innerHTML = '';
+        new QRCode(qrContainer, {
+          text: memberId,
+          width: 50,
+          height: 50,
+          colorDark : "#0f172a",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
+      }
+    });
 
     // Fungsi Pengajuan Perpanjangan Buku ke WA Admin
     function extendBook(bookTitle, dueDate) {
+      let session = null;
+      try {
+        session = JSON.parse(localStorage.getItem('userSession'));
+      } catch (e) {}
+
+      const namaUser = session?.nama || 'Siswa';
+      const memberIdUser = session?.memberId || '-';
+
       const message = `Halo Admin Perpustakaan SMAN 4 Manado,%0A%0ASaya ingin mengajukan *PERPANJANGAN PEMINJAMAN BUKU*:%0A` +
-        `• *Nama*: ${encodeURIComponent(session.nama)}%0A` +
-        `• *ID Anggota*: ${encodeURIComponent(session.memberId)}%0A` +
+        `• *Nama*: ${encodeURIComponent(namaUser)}%0A` +
+        `• *ID Anggota*: ${encodeURIComponent(memberIdUser)}%0A` +
         `• *Judul Buku*: ${encodeURIComponent(bookTitle)}%0A` +
         `• *Jatuh Tempo Saat Ini*: ${encodeURIComponent(dueDate)}%0A%0A` +
         `Mohon persetujuan perpanjangannya. Terima kasih.`;

@@ -53,13 +53,13 @@
             ADM
           </div>
           <div class="text-xs">
-            <p class="font-bold text-slate-200">Petugas Perpus</p>
+            <p id="adminNameDisplay" class="font-bold text-slate-200">Petugas Perpus</p>
             <p class="text-slate-500">Online</p>
           </div>
         </div>
-        <a href="../index.html" title="Keluar" class="text-slate-400 hover:text-red-400 p-2 rounded-lg transition text-sm">
+        <button id="logoutBtn" title="Keluar" class="text-slate-400 hover:text-red-400 p-2 rounded-lg transition text-sm">
           🚪
-        </a>
+        </button>
       </div>
     </div>
   </aside>
@@ -71,7 +71,7 @@
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
       <div>
         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">Panel Kelola Perpustakaan</h2>
-        <p class="text-sm text-slate-500 mt-1">Kelola data anggota (siswa), petugas, dan sirkulasi peminjaman buku.</p>
+        <p class="text-sm text-slate-500 mt-1">Kelola data anggota, petugas, dan sirkulasi peminjaman buku.</p>
       </div>
       <div class="flex items-center gap-3">
         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
@@ -89,21 +89,21 @@
         <div class="p-3 bg-blue-50 text-blue-700 rounded-xl text-xl">👥</div>
         <div>
           <p class="text-xs font-medium text-slate-500">Total Anggota</p>
-          <p class="text-2xl font-bold text-slate-800">1,240</p>
+          <p id="total-anggota" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
         <div class="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xl">📚</div>
         <div>
           <p class="text-xs font-medium text-slate-500">Total Koleksi Buku</p>
-          <p class="text-2xl font-bold text-slate-800">3,850</p>
+          <p id="total-buku" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
         <div class="p-3 bg-amber-50 text-amber-700 rounded-xl text-xl">🔄</div>
         <div>
           <p class="text-xs font-medium text-slate-500">Peminjaman Aktif</p>
-          <p class="text-2xl font-bold text-slate-800">84</p>
+          <p id="total-sirkulasi" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
@@ -115,7 +115,7 @@
       </div>
     </section>
 
-    <!-- Form Pendaftaran Section (Disesuaikan dengan Kartu Anggota) -->
+    <!-- Form Pendaftaran Section -->
     <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
         <div class="flex items-center space-x-2">
@@ -126,49 +126,41 @@
       </div>
 
       <div class="p-6">
-        <form class="space-y-4" onsubmit="event.preventDefault(); alert('Data Anggota Berhasil Disimpan!');">
-          <!-- Grid 6 Kolom Input -->
+        <form id="memberForm" class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             
-            <!-- 1. ID Anggota -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">1. ID Anggota / NISN</label>
-              <input type="text" placeholder="ex: SMA4-202601" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+              <label for="memberId" class="block text-xs font-bold text-slate-700 mb-1">1. ID Anggota / NISN</label>
+              <input type="text" id="memberId" placeholder="ex: SMA4-202601" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
             </div>
 
-            <!-- 2. Nama -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">2. Nama Lengkap</label>
-              <input type="text" placeholder="ex: Gabriel Manopo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+              <label for="memberName" class="block text-xs font-bold text-slate-700 mb-1">2. Nama Lengkap</label>
+              <input type="text" id="memberName" placeholder="ex: Gabriel Manopo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
             </div>
 
-            <!-- 3. Kelas -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">3. Kelas / Jabatan</label>
-              <input type="text" placeholder="ex: XI MIPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+              <label for="memberClass" class="block text-xs font-bold text-slate-700 mb-1">3. Kelas / Jabatan</label>
+              <input type="text" id="memberClass" placeholder="ex: XI MIPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
             </div>
 
-            <!-- 4. Alamat -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">4. Alamat</label>
-              <input type="text" placeholder="ex: Jl. Sam Ratulangi No. 45, Manado" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+              <label for="memberAddress" class="block text-xs font-bold text-slate-700 mb-1">4. Alamat</label>
+              <input type="text" id="memberAddress" placeholder="ex: Jl. Sam Ratulangi No. 45, Manado" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
             </div>
 
-            <!-- 5. Personal ID -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">5. Personal ID / PIN</label>
-              <input type="password" placeholder="••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+              <label for="memberPin" class="block text-xs font-bold text-slate-700 mb-1">5. Personal ID / PIN</label>
+              <input type="password" id="memberPin" placeholder="••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
             </div>
 
-            <!-- 6. Email -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">6. Email</label>
-              <input type="email" placeholder="ex: gabriel@siswa.sman4manado.sch.id" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
+              <label for="memberEmail" class="block text-xs font-bold text-slate-700 mb-1">6. Email</label>
+              <input type="email" id="memberEmail" placeholder="ex: gabriel@siswa.sman4manado.sch.id" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
             </div>
 
           </div>
 
-          <!-- Submit Button -->
           <div class="flex justify-end pt-3 border-t border-slate-100">
             <button type="submit" class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center space-x-2">
               <span>+</span>
@@ -179,7 +171,7 @@
       </div>
     </section>
 
-    <!-- Data Table Section (Menampilkan 6 Field) -->
+    <!-- Data Table Section -->
     <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div class="px-6 py-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -187,7 +179,7 @@
           <p class="text-xs text-slate-500">Data terintegrasi langsung dengan Kartu Anggota Digital.</p>
         </div>
         <div class="w-full md:w-64">
-          <input type="text" placeholder="🔍 Cari nama / ID / email..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 outline-none">
+          <input type="text" id="searchInput" placeholder="🔍 Cari nama / ID / email..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 outline-none">
         </div>
       </div>
 
@@ -203,32 +195,8 @@
               <th class="py-3.5 px-6 text-center">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
-            <!-- Sample Row 1 -->
-            <tr class="hover:bg-slate-50/80 transition">
-              <td class="py-4 px-6 font-semibold text-blue-900">SMA4-202601</td>
-              <td class="py-4 px-6 font-medium">Gabriel Manopo</td>
-              <td class="py-4 px-6 text-slate-500">XI MIPA 1</td>
-              <td class="py-4 px-6 text-slate-500 text-xs">Jl. Sam Ratulangi No. 45</td>
-              <td class="py-4 px-6 text-slate-500 text-xs">gabriel@siswa.sman4.sch.id</td>
-              <td class="py-4 px-6 text-center space-x-2 whitespace-nowrap">
-                <button class="text-xs font-semibold text-slate-600 hover:text-blue-700 bg-slate-100 px-3 py-1.5 rounded-lg transition">Edit</button>
-                <button class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
-              </td>
-            </tr>
-
-            <!-- Sample Row 2 -->
-            <tr class="hover:bg-slate-50/80 transition">
-              <td class="py-4 px-6 font-semibold text-blue-900">SMA4-202602</td>
-              <td class="py-4 px-6 font-medium">Siti Rahmawati</td>
-              <td class="py-4 px-6 text-slate-500">XI IPS 2</td>
-              <td class="py-4 px-6 text-slate-500 text-xs">Jl. Malalayang I No. 12</td>
-              <td class="py-4 px-6 text-slate-500 text-xs">siti.rahma@siswa.sman4.sch.id</td>
-              <td class="py-4 px-6 text-center space-x-2 whitespace-nowrap">
-                <button class="text-xs font-semibold text-slate-600 hover:text-blue-700 bg-slate-100 px-3 py-1.5 rounded-lg transition">Edit</button>
-                <button class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
-              </td>
-            </tr>
+          <tbody id="memberTableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+            <!-- Data dirrender secara dinamis oleh JavaScript -->
           </tbody>
         </table>
       </div>
@@ -236,5 +204,158 @@
 
   </main>
 
+  <script type="module">
+    import { fetchGraphQL } from "../js/firebase-config.js";
+
+    const INITIAL_MEMBERS = [
+      { id: 'SMA4-202601', name: 'Gabriel Manopo', class: 'XI MIPA 1', address: 'Jl. Sam Ratulangi No. 45', email: 'gabriel@siswa.sman4.sch.id' },
+      { id: 'SMA4-202602', name: 'Siti Rahmawati', class: 'XI IPS 2', address: 'Jl. Malalayang I No. 12', email: 'siti.rahma@siswa.sman4.sch.id' }
+    ];
+
+    function getStoredMembers() {
+      const data = localStorage.getItem('membersList');
+      if (!data) {
+        localStorage.setItem('membersList', JSON.stringify(INITIAL_MEMBERS));
+        return INITIAL_MEMBERS;
+      }
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return INITIAL_MEMBERS;
+      }
+    }
+
+    function saveMembers(members) {
+      localStorage.setItem('membersList', JSON.stringify(members));
+      renderMembersTable();
+    }
+
+    function renderMembersTable(filterKeyword = '') {
+      const tableBody = document.getElementById('memberTableBody');
+      const totalCountElem = document.getElementById('total-anggota');
+      const members = getStoredMembers();
+
+      if (totalCountElem) {
+        totalCountElem.textContent = members.length;
+      }
+
+      const filtered = members.filter(m => {
+        const kw = filterKeyword.toLowerCase();
+        return m.id.toLowerCase().includes(kw) ||
+               m.name.toLowerCase().includes(kw) ||
+               m.email.toLowerCase().includes(kw) ||
+               m.class.toLowerCase().includes(kw);
+      });
+
+      if (filtered.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-400 text-sm">Tidak ada data anggota ditemukan.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = filtered.map((member) => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="py-4 px-6 font-semibold text-blue-900">${escapeHtml(member.id)}</td>
+          <td class="py-4 px-6 font-medium">${escapeHtml(member.name)}</td>
+          <td class="py-4 px-6 text-slate-500">${escapeHtml(member.class)}</td>
+          <td class="py-4 px-6 text-slate-500 text-xs">${escapeHtml(member.address)}</td>
+          <td class="py-4 px-6 text-slate-500 text-xs">${escapeHtml(member.email)}</td>
+          <td class="py-4 px-6 text-center space-x-2 whitespace-nowrap">
+            <button onclick="deleteMember('${escapeHtml(member.id)}')" class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    window.deleteMember = function(memberId) {
+      if (confirm(`Apakah Anda yakin ingin menghapus anggota dengan ID ${memberId}?`)) {
+        const members = getStoredMembers().filter(m => m.id !== memberId);
+        saveMembers(members);
+      }
+    };
+
+    const GET_DASHBOARD_DATA = `
+      query GetDashboardData {
+        bukus {
+          id
+          judul
+        }
+        sirkulasis {
+          id
+          status
+        }
+      }
+    `;
+
+    async function loadAdminData() {
+      try {
+        const result = await fetchGraphQL(GET_DASHBOARD_DATA);
+        if (result && result.data) {
+          const totalBuku = result.data.bukus ? result.data.bukus.length : 0;
+          const totalSirkulasi = result.data.sirkulasis ? result.data.sirkulasis.length : 0;
+
+          const elBuku = document.getElementById('total-buku');
+          const elSirkulasi = document.getElementById('total-sirkulasi');
+
+          if (elBuku) elBuku.textContent = totalBuku;
+          if (elSirkulasi) elSirkulasi.textContent = totalSirkulasi;
+        }
+      } catch (err) {
+        console.warn("Gagal memuat data GraphQL di dashboard admin:", err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMembersTable();
+      loadAdminData();
+
+      const memberForm = document.getElementById('memberForm');
+      if (memberForm) {
+        memberForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const newMember = {
+            id: document.getElementById('memberId').value.trim(),
+            name: document.getElementById('memberName').value.trim(),
+            class: document.getElementById('memberClass').value.trim(),
+            address: document.getElementById('memberAddress').value.trim(),
+            email: document.getElementById('memberEmail').value.trim()
+          };
+
+          const members = getStoredMembers();
+          if (members.some(m => m.id === newMember.id)) {
+            alert('ID Anggota sudah terdaftar!');
+            return;
+          }
+
+          members.push(newMember);
+          saveMembers(members);
+          memberForm.reset();
+          alert('Data Anggota Berhasil Disimpan!');
+        });
+      }
+
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          renderMembersTable(e.target.value);
+        });
+      }
+
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('adminSession');
+          window.location.href = '../index.html';
+        });
+      }
+    });
+  </script>
 </body>
 </html>
