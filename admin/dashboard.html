@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +10,15 @@
 <body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
   <div class="min-h-screen flex flex-col md:flex-row">
-    <!-- Sidebar -->
-    <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 text-white p-6 space-y-6 flex-shrink-0">
+    <!-- Sticky & Flexible Sidebar -->
+    <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 text-white p-6 space-y-6 flex-shrink-0 md:sticky md:top-0 md:h-screen md:overflow-y-auto z-40">
       <div>
         <h2 class="font-black text-lg tracking-tight text-white">PORTAL ADMIN</h2>
         <p class="text-[11px] text-slate-400">Perpustakaan SMAN 4 Manado</p>
       </div>
 
       <nav class="space-y-2 text-xs font-bold">
-        <a href="#secPetugas" class="block px-4 py-2.5 bg-slate-800 text-indigo-300 rounded-xl border border-slate-700">1. Kelola Petugas</a>
+        <a href="#secPetugas" class="block px-4 py-2.5 bg-slate-800/80 hover:bg-slate-800 text-indigo-300 rounded-xl border border-slate-700/50 transition">1. Kelola Petugas</a>
         <a href="#secSiswa" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">2. Kelola Siswa/Anggota</a>
         <a href="#secKatalog" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">3. Kelola Katalog Buku</a>
         <a href="#secDuta" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">4. Kelola Duta Literasi</a>
@@ -32,27 +32,21 @@
 
       <!-- 1. Petugas Section -->
       <section id="secPetugas" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-400"></i>Kelola Petugas</h3>
-          <span id="pFormTitle" class="text-xs text-indigo-400 font-semibold">Mode: Tambah Data</span>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2">
+            <i class="fa-solid fa-user-shield text-indigo-400"></i>Kelola Petugas
+          </h3>
+          <button id="pOpenAddModal" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Tambah Petugas
+          </button>
         </div>
 
-        <form id="formPetugas" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <input type="hidden" id="pId">
-          <input type="text" id="pNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
-          <input type="text" id="pJabatan" placeholder="Jabatan" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
-          <input type="text" id="pUser" placeholder="Username" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
-          <input type="password" id="pPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
-          <div class="sm:col-span-2 flex gap-2">
-            <button type="submit" id="pSubmitBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Petugas</button>
-            <button type="button" id="pCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
-          </div>
-        </form>
-
-        <div class="space-y-3 pt-4 border-t border-slate-800">
+        <div class="space-y-3">
           <div class="flex justify-between items-center">
             <h4 class="text-xs font-bold text-slate-300">Daftar Petugas</h4>
-            <button id="pSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-indigo-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+            <button id="pSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-indigo-300 hover:bg-slate-700">
+              <i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z
+            </button>
           </div>
           <div class="overflow-x-auto rounded-xl border border-slate-800">
             <table class="w-full text-left text-xs">
@@ -73,42 +67,21 @@
 
       <!-- 2. Siswa / Anggota Section -->
       <section id="secSiswa" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-blue-400"></i>Kelola Siswa / Anggota Perpustakaan</h3>
-          <span id="sFormTitle" class="text-xs text-blue-400 font-semibold">Mode: Tambah Data</span>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap text-blue-400"></i>Kelola Siswa / Anggota Perpustakaan
+          </h3>
+          <button id="sOpenAddModal" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Tambah Siswa
+          </button>
         </div>
 
-        <form id="formSiswa" class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <input type="hidden" id="sId">
-          <input type="text" id="sNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="text" id="sUser" placeholder="Username (dikirim via WA)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="text" id="sPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <select id="sJK" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
-            <option value="Laki-Laki">Laki-Laki</option>
-            <option value="Perempuan">Perempuan</option>
-          </select>
-          <input type="text" id="sKelas" placeholder="Kelas (misal: XI MIPA 1)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="text" id="sTelp" placeholder="Nomor Telepon (WhatsApp)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="text" id="sAlamat" placeholder="Alamat" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500 sm:col-span-2">
-          <select id="sStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
-            <option value="Standar">Status: Standar</option>
-            <option value="Istimewa">Status: Istimewa</option>
-          </select>
-          <input type="text" id="sMemberID" placeholder="ID Anggota" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="text" id="sPersonalID" placeholder="Personal ID" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="text" id="sInstansi" value="SMA Negeri 4 Manado" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
-          <input type="date" id="sRegis" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
-          <input type="date" id="sExp" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
-          <div class="sm:col-span-3 flex gap-2">
-            <button type="submit" id="sSubmitBtn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Data Siswa</button>
-            <button type="button" id="sCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
-          </div>
-        </form>
-
-        <div class="space-y-3 pt-4 border-t border-slate-800">
+        <div class="space-y-3">
           <div class="flex justify-between items-center">
             <h4 class="text-xs font-bold text-slate-300">Daftar Siswa/Anggota</h4>
-            <button id="sSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-blue-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+            <button id="sSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-blue-300 hover:bg-slate-700">
+              <i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z
+            </button>
           </div>
           <div class="overflow-x-auto rounded-xl border border-slate-800">
             <table class="w-full text-left text-xs">
@@ -131,28 +104,21 @@
 
       <!-- 3. Katalog Buku Section -->
       <section id="secKatalog" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-book text-emerald-400"></i>Kelola Katalog Buku</h3>
-          <span id="bFormTitle" class="text-xs text-emerald-400 font-semibold">Mode: Tambah Data</span>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2">
+            <i class="fa-solid fa-book text-emerald-400"></i>Kelola Katalog Buku
+          </h3>
+          <button id="bOpenAddModal" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Tambah Buku
+          </button>
         </div>
 
-        <form id="formKatalog" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <input type="hidden" id="bId">
-          <input type="text" id="bJudul" placeholder="Judul Buku" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <input type="text" id="bPengarang" placeholder="Pengarang" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <input type="text" id="bPenerbit" placeholder="Penerbit" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <input type="number" id="bEkslempar" placeholder="Jumlah Eksemplar" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <input type="url" id="bCover" placeholder="Link Cover Buku (URL / Direct Link)" required class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <div class="sm:col-span-2 flex gap-2">
-            <button type="submit" id="bSubmitBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Tambah Ke Katalog</button>
-            <button type="button" id="bCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
-          </div>
-        </form>
-
-        <div class="space-y-3 pt-4 border-t border-slate-800">
+        <div class="space-y-3">
           <div class="flex justify-between items-center">
             <h4 class="text-xs font-bold text-slate-300">Daftar Katalog Buku</h4>
-            <button id="bSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-emerald-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+            <button id="bSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-emerald-300 hover:bg-slate-700">
+              <i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z
+            </button>
           </div>
           <div class="overflow-x-auto rounded-xl border border-slate-800">
             <table class="w-full text-left text-xs">
@@ -175,33 +141,21 @@
 
       <!-- 4. Duta Literasi Section -->
       <section id="secDuta" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-crown text-amber-400"></i>Kelola Duta Literasi</h3>
-          <span id="dFormTitle" class="text-xs text-amber-400 font-semibold">Mode: Tambah Data</span>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2">
+            <i class="fa-solid fa-crown text-amber-400"></i>Kelola Duta Literasi
+          </h3>
+          <button id="dOpenAddModal" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-4 py-2.5 rounded-xl transition shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Tambah Duta
+          </button>
         </div>
 
-        <form id="formDuta" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <input type="hidden" id="dId">
-          <input type="text" id="dNama" placeholder="Nama Siswa" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
-          <input type="text" id="dKelas" placeholder="Kelas" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
-          <textarea id="dVisi" placeholder="Visi-Misi Calon" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500 h-24"></textarea>
-          <select id="dStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-amber-500">
-            <option value="calon">Status: Calon Duta</option>
-            <option value="terpilih">Status: Duta Terpilih</option>
-            <option value="alumni">Status: Alumni Duta Literasi</option>
-          </select>
-          <input type="text" id="dPeriode" placeholder="Periode (misal: 2026)" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
-          <input type="url" id="dFoto" placeholder="URL Foto Duta Direct Link" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
-          <div class="sm:col-span-2 flex gap-2">
-            <button type="submit" id="dSubmitBtn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg">Simpan Data Duta</button>
-            <button type="button" id="dCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
-          </div>
-        </form>
-
-        <div class="space-y-3 pt-4 border-t border-slate-800">
+        <div class="space-y-3">
           <div class="flex justify-between items-center">
             <h4 class="text-xs font-bold text-slate-300">Daftar Duta Literasi</h4>
-            <button id="dSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-amber-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+            <button id="dSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-amber-300 hover:bg-slate-700">
+              <i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z
+            </button>
           </div>
           <div class="overflow-x-auto rounded-xl border border-slate-800">
             <table class="w-full text-left text-xs">
@@ -225,11 +179,157 @@
     </main>
   </div>
 
+  <!-- MODAL 1: PETUGAS -->
+  <div id="modalPetugas" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 shadow-2xl relative space-y-5">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-extrabold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-indigo-400"></i>
+          <span id="pFormTitle">Mode: Tambah Data</span>
+        </h3>
+        <button type="button" class="closeModalBtn text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="formPetugas" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <input type="hidden" id="pId">
+        <input type="text" id="pNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+        <input type="text" id="pJabatan" placeholder="Jabatan" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+        <input type="text" id="pUser" placeholder="Username" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+        <input type="password" id="pPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+        <div class="sm:col-span-2 flex gap-2 pt-2">
+          <button type="submit" id="pSubmitBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Petugas</button>
+          <button type="button" class="closeModalBtn bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-5 py-3 rounded-xl transition">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: SISWA -->
+  <div id="modalSiswa" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl p-6 shadow-2xl relative space-y-5 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-extrabold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-graduation-cap text-blue-400"></i>
+          <span id="sFormTitle">Mode: Tambah Data</span>
+        </h3>
+        <button type="button" class="closeModalBtn text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="formSiswa" class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <input type="hidden" id="sId">
+        <input type="text" id="sNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="text" id="sUser" placeholder="Username (dikirim via WA)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="text" id="sPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <select id="sJK" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
+          <option value="Laki-Laki">Laki-Laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+        <input type="text" id="sKelas" placeholder="Kelas (misal: XI MIPA 1)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="text" id="sTelp" placeholder="Nomor Telepon (WhatsApp)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="text" id="sAlamat" placeholder="Alamat" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500 sm:col-span-2">
+        <select id="sStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
+          <option value="Standar">Status: Standar</option>
+          <option value="Istimewa">Status: Istimewa</option>
+        </select>
+        <input type="text" id="sMemberID" placeholder="ID Anggota" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="text" id="sPersonalID" placeholder="Personal ID" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="text" id="sInstansi" value="SMA Negeri 4 Manado" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+        <input type="date" id="sRegis" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
+        <input type="date" id="sExp" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
+        <div class="sm:col-span-3 flex gap-2 pt-2">
+          <button type="submit" id="sSubmitBtn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Data Siswa</button>
+          <button type="button" class="closeModalBtn bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-5 py-3 rounded-xl transition">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: KATALOG BUKU -->
+  <div id="modalKatalog" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 shadow-2xl relative space-y-5">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-extrabold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-book text-emerald-400"></i>
+          <span id="bFormTitle">Mode: Tambah Data</span>
+        </h3>
+        <button type="button" class="closeModalBtn text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="formKatalog" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <input type="hidden" id="bId">
+        <input type="text" id="bJudul" placeholder="Judul Buku" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+        <input type="text" id="bPengarang" placeholder="Pengarang" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+        <input type="text" id="bPenerbit" placeholder="Penerbit" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+        <input type="number" id="bEkslempar" placeholder="Jumlah Eksemplar" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+        <input type="url" id="bCover" placeholder="Link Cover Buku (URL / Direct Link)" required class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+        <div class="sm:col-span-2 flex gap-2 pt-2">
+          <button type="submit" id="bSubmitBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Tambah Ke Katalog</button>
+          <button type="button" class="closeModalBtn bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-5 py-3 rounded-xl transition">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: DUTA LITERASI -->
+  <div id="modalDuta" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 shadow-2xl relative space-y-5">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-extrabold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-crown text-amber-400"></i>
+          <span id="dFormTitle">Mode: Tambah Data</span>
+        </h3>
+        <button type="button" class="closeModalBtn text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="formDuta" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <input type="hidden" id="dId">
+        <input type="text" id="dNama" placeholder="Nama Siswa" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+        <input type="text" id="dKelas" placeholder="Kelas" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+        <textarea id="dVisi" placeholder="Visi-Misi Calon" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500 h-20"></textarea>
+        <select id="dStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-amber-500">
+          <option value="calon">Status: Calon Duta</option>
+          <option value="terpilih">Status: Duta Terpilih</option>
+          <option value="alumni">Status: Alumni Duta Literasi</option>
+        </select>
+        <input type="text" id="dPeriode" placeholder="Periode (misal: 2026)" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+        <input type="url" id="dFoto" placeholder="URL Foto Duta Direct Link" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+        <div class="sm:col-span-2 flex gap-2 pt-2">
+          <button type="submit" id="dSubmitBtn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg">Simpan Data Duta</button>
+          <button type="button" class="closeModalBtn bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-5 py-3 rounded-xl transition">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { db } from '../js/firebase-config.js';
     import { collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     const PAGE_SIZE = 5;
+
+    // Helper Modal Controls
+    function openModal(modalId) {
+      document.getElementById(modalId)?.classList.remove('hidden');
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId)?.classList.add('hidden');
+    }
+
+    // Modal Close Listeners
+    document.querySelectorAll('.closeModalBtn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const modal = e.target.closest('[id^="modal"]');
+        if (modal) modal.classList.add('hidden');
+      });
+    });
+
+    // Close on backdrop click
+    ['modalPetugas', 'modalSiswa', 'modalKatalog', 'modalDuta'].forEach(id => {
+      const modal = document.getElementById(id);
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+      });
+    });
 
     // Helper Factory for Table Management
     function createTableManager(config) {
@@ -298,8 +398,8 @@
           <td class="p-3">${item.jabatan || '-'}</td>
           <td class="p-3 font-mono text-slate-400">${item.username || '-'}</td>
           <td class="p-3 text-center space-x-1">
-            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
-            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold transition" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold transition" data-id="${item.id}">Hapus</button>
           </td>
         </tr>`,
       onEdit: (id) => {
@@ -312,20 +412,23 @@
         document.getElementById('pPass').value = item.password;
         document.getElementById('pFormTitle').innerText = "Mode: Ubah Data";
         document.getElementById('pSubmitBtn').innerText = "Update Data Petugas";
-        document.getElementById('pCancelBtn').classList.remove('hidden');
+        openModal('modalPetugas');
       },
       onDelete: async (id) => {
         if (confirm("Yakin ingin menghapus data petugas ini?")) await deleteDoc(doc(db, "petugas", id));
       }
     });
 
-    document.getElementById('pCancelBtn').addEventListener('click', resetFormPetugas);
+    document.getElementById('pOpenAddModal').addEventListener('click', () => {
+      resetFormPetugas();
+      openModal('modalPetugas');
+    });
+
     function resetFormPetugas() {
       document.getElementById('formPetugas').reset();
       document.getElementById('pId').value = "";
       document.getElementById('pFormTitle').innerText = "Mode: Tambah Data";
       document.getElementById('pSubmitBtn').innerText = "Simpan Petugas";
-      document.getElementById('pCancelBtn').classList.add('hidden');
     }
 
     document.getElementById('formPetugas').addEventListener('submit', async (e) => {
@@ -345,6 +448,7 @@
         alert("Data Petugas Berhasil Disimpan!");
       }
       resetFormPetugas();
+      closeModal('modalPetugas');
     });
 
     // 2. Siswa Manager
@@ -358,8 +462,8 @@
           <td class="p-3 font-mono text-slate-400">${item.noTelp || '-'}</td>
           <td class="p-3"><span class="px-2 py-0.5 rounded-md text-[10px] ${item.status === 'Istimewa' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-700 text-slate-300'}">${item.status || 'Standar'}</span></td>
           <td class="p-3 text-center space-x-1">
-            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
-            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold transition" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold transition" data-id="${item.id}">Hapus</button>
           </td>
         </tr>`,
       onEdit: (id) => {
@@ -381,20 +485,23 @@
         document.getElementById('sExp').value = item.tglExp;
         document.getElementById('sFormTitle').innerText = "Mode: Ubah Data";
         document.getElementById('sSubmitBtn').innerText = "Update Data Siswa";
-        document.getElementById('sCancelBtn').classList.remove('hidden');
+        openModal('modalSiswa');
       },
       onDelete: async (id) => {
         if (confirm("Yakin ingin menghapus data siswa ini?")) await deleteDoc(doc(db, "siswa", id));
       }
     });
 
-    document.getElementById('sCancelBtn').addEventListener('click', resetFormSiswa);
+    document.getElementById('sOpenAddModal').addEventListener('click', () => {
+      resetFormSiswa();
+      openModal('modalSiswa');
+    });
+
     function resetFormSiswa() {
       document.getElementById('formSiswa').reset();
       document.getElementById('sId').value = "";
       document.getElementById('sFormTitle').innerText = "Mode: Tambah Data";
       document.getElementById('sSubmitBtn').innerText = "Simpan Data Siswa";
-      document.getElementById('sCancelBtn').classList.add('hidden');
     }
 
     document.getElementById('formSiswa').addEventListener('submit', async (e) => {
@@ -423,6 +530,7 @@
         alert("Data Siswa Berhasil Disimpan!");
       }
       resetFormSiswa();
+      closeModal('modalSiswa');
     });
 
     // 3. Katalog Buku Manager
@@ -436,8 +544,8 @@
           <td class="p-3 text-slate-400">${item.penerbit || '-'}</td>
           <td class="p-3 font-bold text-emerald-400">${item.ekslempar || 0}</td>
           <td class="p-3 text-center space-x-1">
-            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
-            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold transition" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold transition" data-id="${item.id}">Hapus</button>
           </td>
         </tr>`,
       onEdit: (id) => {
@@ -451,20 +559,23 @@
         document.getElementById('bCover').value = item.cover;
         document.getElementById('bFormTitle').innerText = "Mode: Ubah Data";
         document.getElementById('bSubmitBtn').innerText = "Update Buku";
-        document.getElementById('bCancelBtn').classList.remove('hidden');
+        openModal('modalKatalog');
       },
       onDelete: async (id) => {
         if (confirm("Yakin ingin menghapus buku ini dari katalog?")) await deleteDoc(doc(db, "katalog", id));
       }
     });
 
-    document.getElementById('bCancelBtn').addEventListener('click', resetFormKatalog);
+    document.getElementById('bOpenAddModal').addEventListener('click', () => {
+      resetFormKatalog();
+      openModal('modalKatalog');
+    });
+
     function resetFormKatalog() {
       document.getElementById('formKatalog').reset();
       document.getElementById('bId').value = "";
       document.getElementById('bFormTitle').innerText = "Mode: Tambah Data";
       document.getElementById('bSubmitBtn').innerText = "Tambah Ke Katalog";
-      document.getElementById('bCancelBtn').classList.add('hidden');
     }
 
     document.getElementById('formKatalog').addEventListener('submit', async (e) => {
@@ -485,6 +596,7 @@
         alert("Buku Berhasil Ditambahkan!");
       }
       resetFormKatalog();
+      closeModal('modalKatalog');
     });
 
     // 4. Duta Literasi Manager
@@ -498,8 +610,8 @@
           <td class="p-3 text-slate-400">${item.periode || '-'}</td>
           <td class="p-3"><span class="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold ${item.status === 'terpilih' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-700 text-slate-300'}">${item.status || 'calon'}</span></td>
           <td class="p-3 text-center space-x-1">
-            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
-            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold transition" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold transition" data-id="${item.id}">Hapus</button>
           </td>
         </tr>`,
       onEdit: (id) => {
@@ -514,20 +626,23 @@
         document.getElementById('dFoto').value = item.foto;
         document.getElementById('dFormTitle').innerText = "Mode: Ubah Data";
         document.getElementById('dSubmitBtn').innerText = "Update Duta Literasi";
-        document.getElementById('dCancelBtn').classList.remove('hidden');
+        openModal('modalDuta');
       },
       onDelete: async (id) => {
         if (confirm("Yakin ingin menghapus data Duta Literasi ini?")) await deleteDoc(doc(db, "duta_literasi", id));
       }
     });
 
-    document.getElementById('dCancelBtn').addEventListener('click', resetFormDuta);
+    document.getElementById('dOpenAddModal').addEventListener('click', () => {
+      resetFormDuta();
+      openModal('modalDuta');
+    });
+
     function resetFormDuta() {
       document.getElementById('formDuta').reset();
       document.getElementById('dId').value = "";
       document.getElementById('dFormTitle').innerText = "Mode: Tambah Data";
       document.getElementById('dSubmitBtn').innerText = "Simpan Data Duta";
-      document.getElementById('dCancelBtn').classList.add('hidden');
     }
 
     document.getElementById('formDuta').addEventListener('submit', async (e) => {
@@ -549,6 +664,7 @@
         alert("Data Duta Literasi Berhasil Disimpan!");
       }
       resetFormDuta();
+      closeModal('modalDuta');
     });
   </script>
 </body>

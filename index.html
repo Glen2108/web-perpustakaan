@@ -33,28 +33,49 @@
         </div>
       </a>
 
+      <!-- Menu Navigasi Desktop -->
       <nav class="hidden md:flex items-center gap-8 text-sm font-semibold">
         <a href="index.html" class="text-amber-400 font-bold">Beranda</a>
         <a href="katalog.html" class="hover:text-amber-300 transition">Katalog Buku</a>
         <a href="duta-literasi.html" class="hover:text-amber-300 transition">Duta Literasi</a>
       </nav>
 
-      <!-- Dropdown Multi Login -->
-      <div class="relative inline-block text-left group">
-        <button class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition">
-          <i class="fa-solid fa-right-to-bracket"></i>
-          <span>Portal Masuk</span>
-          <i class="fa-solid fa-chevron-down text-[10px]"></i>
-        </button>
-        <div class="hidden group-hover:block absolute right-0 w-48 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-50 text-slate-800">
-          <a href="login-siswa.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700">
-            <i class="fa-solid fa-graduation-cap text-blue-600"></i> Login Siswa
-          </a>
-          <a href="admin/login.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 border-t border-slate-100">
-            <i class="fa-solid fa-user-shield text-indigo-600"></i> Login Admin / Petugas
-          </a>
+      <div class="flex items-center gap-3">
+        <!-- Dropdown Multi Login -->
+        <div class="relative inline-block text-left group">
+          <button class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs px-4 sm:px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span class="hidden sm:inline">Portal Masuk</span>
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+          </button>
+          <div class="hidden group-hover:block absolute right-0 w-48 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-50 text-slate-800">
+            <a href="login-siswa.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700">
+              <i class="fa-solid fa-graduation-cap text-blue-600"></i> Login Siswa
+            </a>
+            <a href="admin/login.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold hover:bg-slate-50 text-slate-700 border-t border-slate-100">
+              <i class="fa-solid fa-user-shield text-indigo-600"></i> Login Admin / Petugas
+            </a>
+          </div>
         </div>
+
+        <!-- Tombol Hamburger (Tampil Khusus Smartphone) -->
+        <button id="mobileMenuBtn" aria-label="Toggle Navigation" class="md:hidden p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none border border-slate-700 transition">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
       </div>
+    </div>
+
+    <!-- Container Menu Seluler (Tampil Saat Tombol Hamburger Ditekan) -->
+    <div id="mobileMenu" class="hidden md:hidden bg-brand-900 border-t border-slate-800/80 px-4 pt-3 pb-4 space-y-2 text-sm font-semibold shadow-2xl">
+      <a href="index.html" class="block px-4 py-2.5 rounded-xl bg-brand-800 text-amber-400 font-bold border border-brand-600/30">
+        <i class="fa-solid fa-house mr-2"></i>Beranda
+      </a>
+      <a href="katalog.html" class="block px-4 py-2.5 rounded-xl text-slate-200 hover:bg-brand-800 hover:text-amber-300 transition">
+        <i class="fa-solid fa-book mr-2"></i>Katalog Buku
+      </a>
+      <a href="duta-literasi.html" class="block px-4 py-2.5 rounded-xl text-slate-200 hover:bg-brand-800 hover:text-amber-300 transition">
+        <i class="fa-solid fa-award mr-2"></i>Duta Literasi
+      </a>
     </div>
   </header>
 
@@ -63,9 +84,15 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       
       <div class="lg:col-span-7 space-y-5">
-        <span class="inline-block px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-full text-xs font-bold">
-          <i class="fa-solid fa-sparkles mr-1"></i> Layanan Literasi Modern & Terpadu
-        </span>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="inline-block px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-full text-xs font-bold">
+            <i class="fa-solid fa-sparkles mr-1"></i> Layanan Literasi Modern & Terpadu
+          </span>
+          <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full text-xs font-bold">
+            <i class="fa-solid fa-user-tie mr-1"></i> Kepala Perpustakaan: Glendy A. Taawoeda, S.Pd
+          </span>
+        </div>
+
         <h2 class="text-3xl sm:text-5xl font-black leading-tight tracking-tight">
           Selamat Datang di Portal <span class="text-amber-400">Literasi SMAN 4 Manado</span>
         </h2>
@@ -90,9 +117,12 @@
       <!-- Live Calendar & Jam Operasional -->
       <div class="lg:col-span-5 space-y-6">
         <div class="bg-white text-slate-800 p-6 rounded-3xl shadow-2xl border border-slate-100">
-          <h3 class="font-extrabold text-slate-900 text-base mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-clock text-brand-600"></i> Jam Operasional Layanan
-          </h3>
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+              <i class="fa-solid fa-clock text-brand-600"></i> Jam Operasional Layanan
+            </h3>
+          </div>
+          
           <ul class="text-xs space-y-2.5 font-medium divide-y divide-slate-100">
             <li class="pt-2 flex justify-between">
               <span class="text-slate-600 font-bold">Senin - Kamis</span>
@@ -112,8 +142,19 @@
             </li>
           </ul>
 
-          <!-- mini dynamic calendar -->
-          <div class="mt-5 pt-4 border-t border-slate-100">
+          <!-- Card Informasi Kepala Perpustakaan -->
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-3 bg-slate-50 p-3 rounded-2xl">
+            <div class="w-9 h-9 rounded-xl bg-brand-800 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div>
+              <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Kepala Perpustakaan</p>
+              <p class="text-xs font-extrabold text-slate-900">Glendy A. Taawoeda, S.Pd</p>
+            </div>
+          </div>
+
+          <!-- Mini Dynamic Calendar -->
+          <div class="mt-4 pt-3 border-t border-slate-100">
             <div id="calendarMonth" class="text-xs font-bold text-center text-brand-800 uppercase tracking-wider mb-2">Oktober 2026</div>
             <div id="calendarGrid" class="grid grid-cols-7 text-center text-[11px] gap-1 font-semibold text-slate-600"></div>
           </div>
@@ -124,27 +165,29 @@
   </section>
 
   <!-- Seksi Daftar Anggota & Petugas Perpustakaan -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xl space-y-6">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-6">
       
-      <!-- Header & Fitur Filter -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div>
           <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-users text-brand-600"></i> Daftar Anggota & Petugas
+            <i class="fa-solid fa-users text-brand-600"></i> Direktori Anggota & Petugas Perpustakaan
           </h3>
-          <p class="text-xs text-slate-500 mt-1">Direktori keanggotaan siswa serta petugas perpustakaan SMAN 4 Manado</p>
+          <p class="text-xs text-slate-500 mt-1">
+            Data resmi anggota siswa dan petugas perpustakaan SMAN 4 Manado (Status: Aktif, Alumni, Non-aktif).
+          </p>
         </div>
 
+        <!-- Filter & Pencarian -->
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <!-- Filter Tipe (Siswa / Petugas) -->
-          <select id="pubTypeSelect" class="bg-slate-100 text-slate-800 font-bold px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-brand-600 transition">
+          <select id="pubTypeSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20">
             <option value="siswa">Daftar Siswa / Anggota</option>
             <option value="petugas">Daftar Petugas</option>
           </select>
 
-          <!-- Filter Status (Aktif / Alumni / Non-aktif) -->
-          <select id="pubStatusSelect" class="bg-slate-100 text-slate-800 font-bold px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-brand-600 transition">
+          <!-- Filter Status -->
+          <select id="pubStatusSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20">
             <option value="semua">Semua Status</option>
             <option value="Aktif">Aktif</option>
             <option value="Alumni">Alumni</option>
@@ -152,9 +195,9 @@
           </select>
 
           <!-- Input Pencarian -->
-          <div class="relative min-w-[200px]">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-            <input type="text" id="pubSearchInput" placeholder="Cari Nama / ID..." class="w-full pl-8 pr-3 py-2 bg-slate-100 text-slate-800 rounded-xl border border-slate-200 text-xs outline-none focus:border-brand-600 placeholder-slate-400 transition">
+          <div class="relative">
+            <input type="text" id="pubSearchInput" placeholder="Cari nama / ID..." class="bg-slate-50 text-slate-800 text-xs px-3 py-2.5 pl-8 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20 w-44 sm:w-56">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400 text-xs"></i>
           </div>
         </div>
       </div>
@@ -164,12 +207,12 @@
         <table class="w-full text-left text-xs text-slate-700">
           <thead class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider">
             <tr id="pubTableHead">
-              <!-- Diisi secara dinamis oleh JavaScript -->
+              <!-- Header tabel diisi melalui JavaScript -->
             </tr>
           </thead>
-          <tbody id="pubTableBody" class="divide-y divide-slate-100">
+          <tbody id="pubTableBody" class="divide-y divide-slate-100 bg-white">
             <tr>
-              <td colspan="5" class="p-6 text-center text-slate-400 font-medium">Memuat data dari database...</td>
+              <td colspan="5" class="p-6 text-center text-slate-400">Memuat data...</td>
             </tr>
           </tbody>
         </table>
@@ -178,6 +221,129 @@
     </div>
   </section>
 
+  <!-- Script Firestore untuk Memuat Anggota & Petugas -->
+  <script type="module">
+    import { db } from './js/firebase-config.js';
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    let listSiswa = [];
+    let listPetugas = [];
+
+    const pubTypeSelect = document.getElementById('pubTypeSelect');
+    const pubStatusSelect = document.getElementById('pubStatusSelect');
+    const pubSearchInput = document.getElementById('pubSearchInput');
+    const pubTableHead = document.getElementById('pubTableHead');
+    const pubTableBody = document.getElementById('pubTableBody');
+
+    // Realtime listener koleksi siswa
+    onSnapshot(collection(db, "siswa"), (snap) => {
+      listSiswa = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPublicTable();
+    }, (err) => {
+      console.warn("Gagal memuat data siswa:", err);
+      renderPublicTable();
+    });
+
+    // Realtime listener koleksi petugas
+    onSnapshot(collection(db, "petugas"), (snap) => {
+      listPetugas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPublicTable();
+    }, (err) => {
+      console.warn("Gagal memuat data petugas:", err);
+      renderPublicTable();
+    });
+
+    pubTypeSelect.addEventListener('change', renderPublicTable);
+    pubStatusSelect.addEventListener('change', renderPublicTable);
+    pubSearchInput.addEventListener('input', renderPublicTable);
+
+    function renderPublicTable() {
+      const tipe = pubTypeSelect.value;
+      const statusFilter = pubStatusSelect.value;
+      const keyword = pubSearchInput.value.toLowerCase().trim();
+
+      if (tipe === 'siswa') {
+        pubTableHead.innerHTML = `
+          <th class="p-3.5">ID Anggota</th>
+          <th class="p-3.5">Nama Lengkap</th>
+          <th class="p-3.5">Kelas</th>
+          <th class="p-3.5">Instansi</th>
+          <th class="p-3.5 text-center">Status Keanggotaan</th>
+        `;
+
+        let filtered = listSiswa.filter(item => {
+          const statusVal = item.status || 'Aktif';
+          const matchStatus = (statusFilter === 'semua') || (statusVal === statusFilter);
+          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || (item.memberId || '').toLowerCase().includes(keyword);
+          return matchStatus && matchKey;
+        });
+
+        if (!filtered.length) {
+          pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Tidak ada data anggota siswa yang ditemukan.</td></tr>`;
+          return;
+        }
+
+        pubTableBody.innerHTML = filtered.map(item => {
+          const st = item.status || 'Aktif';
+          let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+          if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+
+          return `
+            <tr class="hover:bg-slate-50 transition">
+              <td class="p-3.5 font-mono text-brand-600 font-bold">${item.memberId || '-'}</td>
+              <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+              <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
+              <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
+              <td class="p-3.5 text-center">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+      } else {
+        pubTableHead.innerHTML = `
+          <th class="p-3.5">Nama Petugas</th>
+          <th class="p-3.5">Jabatan</th>
+          <th class="p-3.5">Username</th>
+          <th class="p-3.5 text-center">Status</th>
+        `;
+
+        let filtered = listPetugas.filter(item => {
+          const statusVal = item.status || 'Aktif';
+          const matchStatus = (statusFilter === 'semua') || (statusVal === statusFilter);
+          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || (item.username || '').toLowerCase().includes(keyword);
+          return matchStatus && matchKey;
+        });
+
+        if (!filtered.length) {
+          pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Tidak ada data petugas yang ditemukan.</td></tr>`;
+          return;
+        }
+
+        pubTableBody.innerHTML = filtered.map(item => {
+          const st = item.status || 'Aktif';
+          let badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+          if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+          if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+
+          return `
+            <tr class="hover:bg-slate-50 transition">
+              <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+              <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
+              <td class="p-3.5 font-mono text-slate-500">${item.username || '-'}</td>
+              <td class="p-3.5 text-center">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+  </script>
+
+  <!-- Script Jam Realtime & Kalender -->
   <script>
     function updateClock() {
       const now = new Date();
@@ -186,7 +352,7 @@
       document.getElementById('realtimeDate').innerText = now.toLocaleDateString('id-ID', optionsDate);
 
       // Status Buka/Tutup
-      const day = now.getDay(); // 0: Sun, 1: Mon, ... 5: Fri, 6: Sat
+      const day = now.getDay();
       const hours = now.getHours();
       const minutes = now.getMinutes();
       const timeNum = hours * 100 + minutes;
@@ -233,126 +399,15 @@
     generateCalendar();
   </script>
 
-  <!-- Script Firestore Realtime untuk Direktori Anggota & Petugas -->
-  <script type="module">
-    import { db } from './js/firebase-config.js';
-    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  <!-- Script Toggle Mobile Menu Navigasi -->
+  <script>
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-    let listSiswa = [];
-    let listPetugas = [];
-
-    const pubTypeSelect = document.getElementById('pubTypeSelect');
-    const pubStatusSelect = document.getElementById('pubStatusSelect');
-    const pubSearchInput = document.getElementById('pubSearchInput');
-    const pubTableHead = document.getElementById('pubTableHead');
-    const pubTableBody = document.getElementById('pubTableBody');
-
-    // Mengambil data realtime Firestore
-    onSnapshot(collection(db, "siswa"), (snap) => {
-      listSiswa = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPublicTable();
-    }, (error) => {
-      console.error("Error loading siswa:", error);
-    });
-
-    onSnapshot(collection(db, "petugas"), (snap) => {
-      listPetugas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPublicTable();
-    }, (error) => {
-      console.error("Error loading petugas:", error);
-    });
-
-    pubTypeSelect.addEventListener('change', renderPublicTable);
-    pubStatusSelect.addEventListener('change', renderPublicTable);
-    pubSearchInput.addEventListener('input', renderPublicTable);
-
-    function renderPublicTable() {
-      const tipe = pubTypeSelect.value;
-      const statusFilter = pubStatusSelect.value;
-      const keyword = pubSearchInput.value.toLowerCase().trim();
-
-      if (tipe === 'siswa') {
-        pubTableHead.innerHTML = `
-          <th class="p-3.5">ID Anggota</th>
-          <th class="p-3.5">Nama Lengkap</th>
-          <th class="p-3.5">Kelas</th>
-          <th class="p-3.5">Instansi</th>
-          <th class="p-3.5 text-center">Status Keanggotaan</th>
-        `;
-
-        let filtered = listSiswa.filter(item => {
-          const st = item.status || 'Aktif';
-          const matchStatus = (statusFilter === 'semua') || (st === statusFilter);
-          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || 
-                          (item.memberId || '').toLowerCase().includes(keyword) || 
-                          (item.kelas || '').toLowerCase().includes(keyword);
-          return matchStatus && matchKey;
-        });
-
-        if (!filtered.length) {
-          pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-medium">Tidak ada data anggota siswa yang sesuai.</td></tr>`;
-          return;
-        }
-
-        pubTableBody.innerHTML = filtered.map(item => {
-          const st = item.status || 'Aktif';
-          let badgeStyle = 'bg-emerald-100 text-emerald-800 border-emerald-300';
-          if (st === 'Alumni') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300';
-          if (st === 'Non-aktif') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
-
-          return `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-              <td class="p-3.5 font-mono text-brand-600 font-bold">${item.memberId || item.id || '-'}</td>
-              <td class="p-3.5 font-semibold text-slate-900">${item.nama || '-'}</td>
-              <td class="p-3.5 font-medium text-slate-600">${item.kelas || '-'}</td>
-              <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeStyle}">${st}</span>
-              </td>
-            </tr>
-          `;
-        }).join('');
-
-      } else {
-        pubTableHead.innerHTML = `
-          <th class="p-3.5">Nama Petugas</th>
-          <th class="p-3.5">Jabatan</th>
-          <th class="p-3.5">Username</th>
-          <th class="p-3.5 text-center">Status</th>
-        `;
-
-        let filtered = listPetugas.filter(item => {
-          const st = item.status || 'Aktif';
-          const matchStatus = (statusFilter === 'semua') || (st === statusFilter);
-          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || 
-                          (item.jabatan || '').toLowerCase().includes(keyword) || 
-                          (item.username || '').toLowerCase().includes(keyword);
-          return matchStatus && matchKey;
-        });
-
-        if (!filtered.length) {
-          pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data petugas yang sesuai.</td></tr>`;
-          return;
-        }
-
-        pubTableBody.innerHTML = filtered.map(item => {
-          const st = item.status || 'Aktif';
-          let badgeStyle = 'bg-blue-100 text-blue-800 border-blue-300';
-          if (st === 'Alumni') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300';
-          if (st === 'Non-aktif') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
-
-          return `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-              <td class="p-3.5 font-semibold text-slate-900">${item.nama || '-'}</td>
-              <td class="p-3.5 font-medium text-slate-600">${item.jabatan || '-'}</td>
-              <td class="p-3.5 font-mono text-slate-500">${item.username || '-'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeStyle}">${st}</span>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      }
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
     }
   </script>
 </body>
