@@ -20,20 +20,19 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
-  <!-- Cek Keberadaan Sesi Admin -->
+  <!-- Verifikasi Sesi Admin -->
   <script>
     const adminSession = localStorage.getItem('adminSession');
     if (!adminSession) {
       window.location.href = "login.html";
     }
-    const currentAdmin = JSON.parse(adminSession);
+    const currentAdmin = JSON.parse(adminSession || '{}');
   </script>
 
   <!-- Header / Navigasi Admin -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Logo Brand -->
       <a href="../index.html" class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-lg">
           <i class="fa-solid fa-user-shield"></i>
@@ -44,14 +43,6 @@
         </div>
       </a>
 
-      <!-- Menu Navigasi Desktop -->
-      <nav class="hidden md:flex items-center gap-6 text-xs font-bold">
-        <a href="../index.html" class="text-slate-300 hover:text-amber-400 transition">
-          <i class="fa-solid fa-globe mr-1"></i> Lihat Website Utama
-        </a>
-      </nav>
-
-      <!-- Profile Ringkas & Logout -->
       <div class="flex items-center gap-3">
         <div class="hidden sm:flex items-center gap-3 bg-slate-800 px-3.5 py-1.5 rounded-2xl border border-slate-700">
           <div class="w-7 h-7 rounded-lg bg-indigo-500 text-white font-black flex items-center justify-center text-xs">
@@ -63,31 +54,15 @@
           </div>
         </div>
 
-        <!-- Tombol Logout (Kembali ke Beranda Utama) -->
         <button onclick="handleAdminLogout()" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2">
           <i class="fa-solid fa-right-from-bracket"></i>
           <span class="hidden sm:inline">Keluar</span>
         </button>
-
-        <!-- Tombol Hamburger Mobile -->
-        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">
-          <i class="fa-solid fa-bars text-lg"></i>
-        </button>
       </div>
-    </div>
-
-    <!-- Menu Dropdown Mobile -->
-    <div id="mobileMenu" class="hidden md:hidden bg-slate-900 border-t border-slate-800 px-4 pt-3 pb-4 space-y-2 text-sm font-semibold">
-      <a href="../index.html" class="block px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-200">
-        <i class="fa-solid fa-globe mr-2"></i>Lihat Website Utama
-      </a>
-      <button onclick="handleAdminLogout()" class="w-full text-left px-3 py-2 rounded-lg bg-rose-600/20 text-rose-300 font-bold border border-rose-500/30 mt-2">
-        <i class="fa-solid fa-right-from-bracket mr-2"></i>Keluar & Ke Beranda
-      </button>
     </div>
   </header>
 
-  <!-- Content Dashboard -->
+  <!-- Konten Utama Dashboard -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
     
     <!-- Banner Kartu Utama -->
@@ -100,7 +75,7 @@
           Selamat Datang, Admin Perpustakaan
         </h2>
         <p class="text-xs sm:text-sm text-slate-300" id="adminInfoEmail">
-          Email Terhubung: -
+          Email Admin: -
         </p>
       </div>
 
@@ -109,81 +84,253 @@
       </a>
     </div>
 
-    <!-- Modul Pintas Pengelolaan -->
+    <!-- Modul Utama dengan Tombol Aksi Tambah Data (Popup) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       
-      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition space-y-3">
-        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
-          <i class="fa-solid fa-users"></i>
+      <!-- Modul 1: Siswa -->
+      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
+        <div class="space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm">Kelola Anggota Siswa</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Tambah & atur status data siswa perpustakaan.</p>
+          </div>
         </div>
-        <div>
-          <h3 class="font-extrabold text-slate-900 text-sm">Kelola Anggota Siswa</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Tambah & atur status siswa aktif/alumni.</p>
-        </div>
-        <span class="inline-block text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">Aktif</span>
+        <button onclick="toggleModal('modalSiswa', true)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i> Tambah Siswa
+        </button>
       </div>
 
-      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition space-y-3">
-        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
-          <i class="fa-solid fa-user-shield"></i>
+      <!-- Modul 2: Petugas -->
+      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
+        <div class="space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm">Kelola Petugas</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Otorisasi & pendaftaran akun petugas baru.</p>
+          </div>
         </div>
-        <div>
-          <h3 class="font-extrabold text-slate-900 text-sm">Kelola Petugas</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Otorisasi hak akses staf perpustakaan.</p>
-        </div>
-        <span class="inline-block text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">Aktif</span>
+        <button onclick="toggleModal('modalPetugas', true)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i> Tambah Petugas
+        </button>
       </div>
 
-      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition space-y-3">
-        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
-          <i class="fa-solid fa-book"></i>
+      <!-- Modul 3: Buku -->
+      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
+        <div class="space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm">Katalog Buku</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Tambah koleksi judul & stok buku baru.</p>
+          </div>
         </div>
-        <div>
-          <h3 class="font-extrabold text-slate-900 text-sm">Katalog & Koleksi Buku</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Update inventaris koleksi buku cetak.</p>
-        </div>
-        <span class="inline-block text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg">Aktif</span>
+        <button onclick="toggleModal('modalBuku', true)" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i> Tambah Buku
+        </button>
       </div>
 
-      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition space-y-3">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
-          <i class="fa-solid fa-hand-holding-hand"></i>
+      <!-- Modul 4: Peminjaman -->
+      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
+        <div class="space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-hand-holding-hand"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm">Transaksi Pinjam</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Catat peminjaman buku oleh siswa.</p>
+          </div>
         </div>
-        <div>
-          <h3 class="font-extrabold text-slate-900 text-sm">Transaksi Peminjaman</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Catat sirkulasi pinjam dan kembali.</p>
-        </div>
-        <span class="inline-block text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">Aktif</span>
+        <button onclick="toggleModal('modalPinjam', true)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i> Catat Pinjam
+        </button>
       </div>
 
     </div>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 text-center space-y-1">
-      <p class="font-bold text-slate-300">Sistem Administrator Perpustakaan SMAN 4 Manado</p>
-      <p class="text-[11px] text-slate-500">© 2026 SMAN 4 Manado. All Rights Reserved.</p>
+  <!-- ================= POPUP MODAL SECTION ================= -->
+
+  <!-- Popup 1: Tambah Siswa -->
+  <div id="modalSiswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-200">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-blue-600"></i> Tambah Data Siswa
+        </h3>
+        <button onclick="toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="formTambahSiswa" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">NISN / NIS</label>
+          <input type="text" required placeholder="Contoh: 0051234567" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa</label>
+          <input type="text" required placeholder="Masukkan nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kelas</label>
+          <select required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+            <option value="">-- Pilih Kelas --</option>
+            <option value="X">Kelas X</option>
+            <option value="XI">Kelas XI</option>
+            <option value="XII">Kelas XII</option>
+          </select>
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalSiswa', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-md">Simpan Data</button>
+        </div>
+      </form>
     </div>
-  </footer>
+  </div>
+
+  <!-- Popup 2: Tambah Petugas -->
+  <div id="modalPetugas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas
+        </h3>
+        <button onclick="toggleModal('modalPetugas', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="formTambahPetugas" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Petugas</label>
+          <input type="text" required placeholder="Nama lengkap petugas" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Email Petugas</label>
+          <input type="email" required placeholder="petugas@sman4manado.sch.id" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Password Akses</label>
+          <input type="password" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalPetugas', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">Daftarkan Petugas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup 3: Tambah Buku -->
+  <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-book-medical text-amber-500"></i> Tambah Koleksi Buku
+        </h3>
+        <button onclick="toggleModal('modalBuku', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="formTambahBuku" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
+          <input type="text" required placeholder="Judul buku lengkap" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Pengarang / Penulis</label>
+          <input type="text" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kategori</label>
+            <input type="text" placeholder="Misal: Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Jumlah Stok</label>
+            <input type="number" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 hover:bg-amber-400 shadow-md">Simpan Buku</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup 4: Transaksi Pinjam -->
+  <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-hand-holding-hand text-emerald-600"></i> Catat Peminjaman
+        </h3>
+        <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="formTambahPinjam" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam (Siswa)</label>
+          <input type="text" required placeholder="Masukkan nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Judul Buku yang Dipinjam</label>
+          <input type="text" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tanggal Pengembalian</label>
+          <input type="date" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalPinjam', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-md">Simpan Peminjaman</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script type="module">
     import { auth } from '../js/firebase-config.js';
     import { signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-    // Toggle Navigasi Mobile
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenuBtn && mobileMenu) {
-      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    }
 
     // Menampilkan Informasi Admin
     if (currentAdmin) {
       document.getElementById('adminEmailText').innerText = currentAdmin.email || 'Admin';
       document.getElementById('adminInfoEmail').innerText = "Email Admin: " + (currentAdmin.email || '-');
     }
+
+    // Fungsi Buka / Tutup Modal
+    window.toggleModal = function(modalId, show) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        if (show) {
+          modal.classList.remove('hidden');
+        } else {
+          modal.classList.add('hidden');
+        }
+      }
+    };
+
+    // Handler Submit Form Demo
+    ['formTambahSiswa', 'formTambahPetugas', 'formTambahBuku', 'formTambahPinjam'].forEach(formId => {
+      const formEl = document.getElementById(formId);
+      if (formEl) {
+        formEl.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert("Data berhasil disimpan!");
+          formEl.reset();
+          const parentModal = formEl.closest('[id^="modal"]');
+          if (parentModal) parentModal.classList.add('hidden');
+        });
+      }
+    });
 
     // Logout dan Kembali ke Beranda Utama
     window.handleAdminLogout = async function() {
@@ -194,7 +341,7 @@
           console.warn("Proses signout Firebase:", err);
         }
         localStorage.removeItem('adminSession');
-        window.location.href = "../index.html"; // Kembali ke beranda utama
+        window.location.href = "../index.html";
       }
     };
   </script>
