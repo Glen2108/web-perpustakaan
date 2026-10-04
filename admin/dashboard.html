@@ -84,22 +84,22 @@
       </a>
     </div>
 
-    <!-- Modul Utama dengan Tombol Aksi Tambah Data (Popup) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Modul Utama dengan Tombol Aksi Tambah Data -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
       
-      <!-- Modul 1: Siswa -->
+      <!-- Modul 1: Siswa / Anggota -->
       <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
             <i class="fa-solid fa-users"></i>
           </div>
           <div>
-            <h3 class="font-extrabold text-slate-900 text-sm">Kelola Anggota Siswa</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Tambah & atur status data siswa perpustakaan.</p>
+            <h3 class="font-extrabold text-slate-900 text-sm">Kelola Anggota</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Tambah data profil anggota & status perpustakaan.</p>
           </div>
         </div>
         <button onclick="toggleModal('modalSiswa', true)" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-plus"></i> Tambah Siswa
+          <i class="fa-solid fa-plus"></i> Tambah Anggota
         </button>
       </div>
 
@@ -111,7 +111,7 @@
           </div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Kelola Petugas</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Otorisasi & pendaftaran akun petugas baru.</p>
+            <p class="text-xs text-slate-500 mt-0.5">Tambah akun & jabatan petugas perpustakaan.</p>
           </div>
         </div>
         <button onclick="toggleModal('modalPetugas', true)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
@@ -127,7 +127,7 @@
           </div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Katalog Buku</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Tambah koleksi judul & stok buku baru.</p>
+            <p class="text-xs text-slate-500 mt-0.5">Tambah koleksi, penerbit, stok, & cover buku.</p>
           </div>
         </div>
         <button onclick="toggleModal('modalBuku', true)" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
@@ -135,7 +135,23 @@
         </button>
       </div>
 
-      <!-- Modul 4: Peminjaman -->
+      <!-- Modul 4: Duta Literasi -->
+      <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
+        <div class="space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm">Duta Literasi</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Atur calon, periode jabatan, & alumni Duta.</p>
+          </div>
+        </div>
+        <button onclick="toggleModal('modalDuta', true)" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus"></i> Tambah Duta
+        </button>
+      </div>
+
+      <!-- Modul 5: Peminjaman -->
       <div class="bg-white p-5 rounded-3xl shadow-xl border border-slate-100 hover:shadow-2xl transition flex flex-col justify-between space-y-4">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
@@ -143,7 +159,7 @@
           </div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Transaksi Pinjam</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Catat peminjaman buku oleh siswa.</p>
+            <p class="text-xs text-slate-500 mt-0.5">Sirkulasi peminjaman & pengembalian.</p>
           </div>
         </div>
         <button onclick="toggleModal('modalPinjam', true)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
@@ -157,49 +173,12 @@
 
   <!-- ================= POPUP MODAL SECTION ================= -->
 
-  <!-- Popup 1: Tambah Siswa -->
-  <div id="modalSiswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-200">
-      <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-user-plus text-blue-600"></i> Tambah Data Siswa
-        </h3>
-        <button onclick="toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <form id="formTambahSiswa" class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">NISN / NIS</label>
-          <input type="text" required placeholder="Contoh: 0051234567" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa</label>
-          <input type="text" required placeholder="Masukkan nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-          <select required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
-            <option value="">-- Pilih Kelas --</option>
-            <option value="X">Kelas X</option>
-            <option value="XI">Kelas XI</option>
-            <option value="XII">Kelas XII</option>
-          </select>
-        </div>
-        <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalSiswa', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-md">Simpan Data</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Popup 2: Tambah Petugas -->
+  <!-- Popup 1: Tambah Petugas -->
   <div id="modalPetugas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas
+          <i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Data Petugas
         </h3>
         <button onclick="toggleModal('modalPetugas', false)" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -211,27 +190,136 @@
           <input type="text" required placeholder="Nama lengkap petugas" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Email Petugas</label>
-          <input type="email" required placeholder="petugas@sman4manado.sch.id" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Jabatan</label>
+          <select required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+            <option value="">-- Pilih Jabatan --</option>
+            <option value="Kepala Perpustakaan">Kepala Perpustakaan</option>
+            <option value="Pustakawan Utama">Pustakawan Utama</option>
+            <option value="Staf Administrasi">Staf Administrasi</option>
+            <option value="Petugas Sirkulasi">Petugas Sirkulasi</option>
+          </select>
         </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Password Akses</label>
-          <input type="password" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Username</label>
+            <input type="text" required placeholder="Username unik" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Password</label>
+            <input type="password" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="toggleModal('modalPetugas', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">Daftarkan Petugas</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">Simpan Petugas</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Popup 3: Tambah Buku -->
+  <!-- Popup 2: Tambah Siswa / Anggota Perpustakaan -->
+  <div id="modalSiswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-3 sticky top-0 bg-white z-10">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-blue-600"></i> Tambah Siswa / Anggota Perpustakaan
+        </h3>
+        <button onclick="toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formTambahSiswa" class="space-y-3 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ID Anggota</label>
+            <input type="text" required placeholder="Contoh: AGT-2026-001" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Personal ID (NISN / NIK)</label>
+            <input type="text" required placeholder="Contoh: 0051234567" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Lengkap</label>
+          <input type="text" required placeholder="Masukkan nama lengkap siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Username</label>
+            <input type="text" required placeholder="Username login" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Password</label>
+            <input type="password" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Jenis Kelamin</label>
+            <select required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="">-- Pilih --</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kelas</label>
+            <input type="text" required placeholder="Misal: X IPA 1" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Status Perpustakaan</label>
+            <select required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="Standar">Standar</option>
+              <option value="Istimewa">Istimewa</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nomor Telepon / WA</label>
+            <input type="tel" placeholder="0812xxxxxxxx" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Instansi</label>
+            <input type="text" value="SMAN 4 Manado" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Alamat Lengkap</label>
+          <textarea rows="2" placeholder="Masukkan alamat tinggal siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Tanggal Regis Anggota</label>
+            <input type="date" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Tanggal Kadaluarsa Anggota</label>
+            <input type="date" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalSiswa', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-md">Simpan Anggota</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup 3: Tambah Katalog Buku -->
   <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-book-medical text-amber-500"></i> Tambah Koleksi Buku
+          <i class="fa-solid fa-book-medical text-amber-500"></i> Tambah Katalog Buku
         </h3>
         <button onclick="toggleModal('modalBuku', false)" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
@@ -242,20 +330,44 @@
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
           <input type="text" required placeholder="Judul buku lengkap" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
         </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Pengarang / Penulis</label>
+            <input type="text" required placeholder="Nama pengarang" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Penerbit</label>
+            <input type="text" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+        </div>
+
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Pengarang / Penulis</label>
-          <input type="text" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Jumlah Eksemplar (Stok)</label>
+          <input type="number" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Kategori</label>
-            <input type="text" placeholder="Misal: Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+
+        <!-- Opsi Cover Buku: File Upload ATAU Link Google -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Sumber Cover Buku</label>
+          <div class="flex items-center gap-4 mb-2">
+            <label class="flex items-center gap-1.5 font-semibold text-slate-600 cursor-pointer">
+              <input type="radio" name="coverType" value="link" checked onclick="toggleCoverInput('link')" class="accent-amber-500"> Link / URL Google
+            </label>
+            <label class="flex items-center gap-1.5 font-semibold text-slate-600 cursor-pointer">
+              <input type="radio" name="coverType" value="file" onclick="toggleCoverInput('file')" class="accent-amber-500"> Upload File Cover
+            </label>
           </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Jumlah Stok</label>
-            <input type="number" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+
+          <div id="coverLinkBox">
+            <input type="url" id="coverUrlInput" placeholder="https://images.google.com/..." class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+
+          <div id="coverFileBox" class="hidden">
+            <input type="file" id="coverFileInput" accept="image/*" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none bg-slate-50">
           </div>
         </div>
+
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
           <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 hover:bg-amber-400 shadow-md">Simpan Buku</button>
@@ -264,7 +376,68 @@
     </div>
   </div>
 
-  <!-- Popup 4: Transaksi Pinjam -->
+  <!-- Popup 4: Tambah Duta Literasi / Calon Duta / Alumni -->
+  <div id="modalDuta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-award text-purple-600"></i> Kelola Duta Literasi
+        </h3>
+        <button onclick="toggleModal('modalDuta', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formTambahDuta" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Status Kategori Duta</label>
+          <select id="statusDutaSelect" required onchange="updateDutaStatusView()" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none font-bold text-purple-700 bg-purple-50">
+            <option value="Calon">Calon Duta Literasi</option>
+            <option value="Aktif" selected>Duta Literasi Aktif</option>
+            <option value="Alumni">Alumni Duta Literasi</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Duta / Calon</label>
+          <input type="text" required placeholder="Nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">NISN / NIS</label>
+            <input type="text" required placeholder="NISN siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kelas</label>
+            <input type="text" required placeholder="Misal: XI MIPA 2" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          </div>
+        </div>
+
+        <div id="periodeDutaBox" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Duta Literasi Periode Ke-</label>
+            <input type="text" id="periodeKeInput" placeholder="Contoh: Periode I (2025/2026)" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Masa Jabatan</label>
+            <input type="text" id="masaJabatanInput" placeholder="Contoh: 2025 - 2026" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          </div>
+        </div>
+
+        <p id="alumniNoteText" class="hidden text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+          <i class="fa-solid fa-circle-info mr-1"></i> Apabila masa jabatan selesai, status siswa secara otomatis tercatat sebagai <b>Alumni Duta Literasi Periode Tersebut</b>.
+        </p>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalDuta', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-purple-600 text-white hover:bg-purple-700 shadow-md">Simpan Data Duta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup 5: Transaksi Pinjam -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -277,8 +450,8 @@
       </div>
       <form id="formTambahPinjam" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam (Siswa)</label>
-          <input type="text" required placeholder="Masukkan nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">ID Anggota / Nama Siswa</label>
+          <input type="text" required placeholder="Masukkan ID atau nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku yang Dipinjam</label>
@@ -318,8 +491,32 @@
       }
     };
 
+    // Toggle Input Cover Buku (Link vs File)
+    window.toggleCoverInput = function(type) {
+      const linkBox = document.getElementById('coverLinkBox');
+      const fileBox = document.getElementById('coverFileBox');
+      if (type === 'link') {
+        linkBox.classList.remove('hidden');
+        fileBox.classList.add('hidden');
+      } else {
+        fileBox.classList.remove('hidden');
+        linkBox.classList.add('hidden');
+      }
+    };
+
+    // Update Tampilan Status Duta Literasi
+    window.updateDutaStatusView = function() {
+      const val = document.getElementById('statusDutaSelect').value;
+      const note = document.getElementById('alumniNoteText');
+      if (val === 'Alumni' || val === 'Aktif') {
+        note.classList.remove('hidden');
+      } else {
+        note.classList.add('hidden');
+      }
+    };
+
     // Handler Submit Form Demo
-    ['formTambahSiswa', 'formTambahPetugas', 'formTambahBuku', 'formTambahPinjam'].forEach(formId => {
+    ['formTambahSiswa', 'formTambahPetugas', 'formTambahBuku', 'formTambahDuta', 'formTambahPinjam'].forEach(formId => {
       const formEl = document.getElementById(formId);
       if (formEl) {
         formEl.addEventListener('submit', (e) => {
