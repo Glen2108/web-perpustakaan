@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin - Perpustakaan SMAN 4 Manado</title>
-  <!-- Tailwind CSS CDN -->
+  
+  <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
     body { font-family: 'Inter', sans-serif; }
   </style>
@@ -17,10 +19,9 @@
   <!-- Sidebar Navigasi -->
   <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between p-6 shadow-xl">
     <div>
-      <!-- Brand & Status -->
       <div class="flex items-center space-x-3 mb-8">
         <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
-          📚
+          <i class="fa-solid fa-book-bookmark"></i>
         </div>
         <div>
           <h1 class="font-bold text-base leading-tight">Admin Perpus</h1>
@@ -28,24 +29,26 @@
         </div>
       </div>
 
-      <!-- Navigation Menu -->
-      <nav class="space-y-1">
-        <a href="#" class="flex items-center space-x-3 bg-blue-800 text-white px-4 py-3 rounded-xl text-sm font-semibold shadow">
-          <span>📊</span>
-          <span>Dashboard & Anggota</span>
+      <nav class="space-y-2">
+        <a href="#panel-anggota" class="flex items-center space-x-3 bg-blue-800 text-white px-4 py-3 rounded-xl text-sm font-semibold shadow">
+          <i class="fa-solid fa-users"></i>
+          <span>Anggota & Statistik</span>
         </a>
-        <a href="../katalog.html" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
-          <span>📖</span>
+        <a href="#katalog-admin" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
+          <i class="fa-solid fa-book"></i>
           <span>Katalog Buku</span>
         </a>
-        <a href="../duta-literasi.html" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
-          <span>⭐</span>
+        <a href="#duta-admin" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
+          <i class="fa-solid fa-award"></i>
           <span>Duta Literasi</span>
+        </a>
+        <a href="#peminjam-admin" class="flex items-center space-x-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-xl text-sm font-medium transition">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Peminjaman</span>
         </a>
       </nav>
     </div>
 
-    <!-- User Profile & Logout -->
     <div class="pt-6 border-t border-slate-800 mt-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -54,31 +57,31 @@
           </div>
           <div class="text-xs">
             <p id="adminNameDisplay" class="font-bold text-slate-200">Petugas Perpus</p>
-            <p class="text-slate-500">Online</p>
+            <p class="text-emerald-400 font-medium">● Online</p>
           </div>
         </div>
         <button id="logoutBtn" title="Keluar" class="text-slate-400 hover:text-red-400 p-2 rounded-lg transition text-sm">
-          🚪
+          <i class="fa-solid fa-right-from-bracket"></i>
         </button>
       </div>
     </div>
   </aside>
 
   <!-- Main Content Area -->
-  <main class="flex-1 p-6 md:p-10 space-y-8 overflow-y-auto">
+  <main class="flex-1 p-6 md:p-10 space-y-10 overflow-y-auto">
 
     <!-- Top Header Bar -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
       <div>
         <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">Panel Kelola Perpustakaan</h2>
-        <p class="text-sm text-slate-500 mt-1">Kelola data anggota, petugas, dan sirkulasi peminjaman buku.</p>
+        <p class="text-sm text-slate-500 mt-1">Kelola data anggota, katalog buku, duta literasi, dan transaksi peminjaman.</p>
       </div>
       <div class="flex items-center gap-3">
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-          ● Sistem Aktif
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span> Cloud SQL Active
         </span>
-        <a href="../index.html" class="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl border border-blue-200 transition">
-          Lihat Situs Utama
+        <a href="../../index_4.html" class="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl border border-blue-200 transition">
+          <i class="fa-solid fa-globe mr-1"></i> Lihat Situs Utama
         </a>
       </div>
     </header>
@@ -86,117 +89,209 @@
     <!-- Stats Summary Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-        <div class="p-3 bg-blue-50 text-blue-700 rounded-xl text-xl">👥</div>
+        <div class="p-3 bg-blue-50 text-blue-700 rounded-xl text-xl"><i class="fa-solid fa-users"></i></div>
         <div>
           <p class="text-xs font-medium text-slate-500">Total Anggota</p>
           <p id="total-anggota" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-        <div class="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xl">📚</div>
+        <div class="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xl"><i class="fa-solid fa-book"></i></div>
         <div>
           <p class="text-xs font-medium text-slate-500">Total Koleksi Buku</p>
-          <p id="total-buku" class="text-2xl font-bold text-slate-800">0</p>
+          <p id="statBuku" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-        <div class="p-3 bg-amber-50 text-amber-700 rounded-xl text-xl">🔄</div>
+        <div class="p-3 bg-amber-50 text-amber-700 rounded-xl text-xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
         <div>
           <p class="text-xs font-medium text-slate-500">Peminjaman Aktif</p>
-          <p id="total-sirkulasi" class="text-2xl font-bold text-slate-800">0</p>
+          <p id="statPeminjam" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-        <div class="p-3 bg-purple-50 text-purple-700 rounded-xl text-xl">⭐</div>
+        <div class="p-3 bg-purple-50 text-purple-700 rounded-xl text-xl"><i class="fa-solid fa-award"></i></div>
         <div>
           <p class="text-xs font-medium text-slate-500">Duta Literasi</p>
-          <p class="text-2xl font-bold text-slate-800">12</p>
+          <p id="statDuta" class="text-2xl font-bold text-slate-800">0</p>
         </div>
       </div>
     </section>
 
-    <!-- Form Pendaftaran Section -->
-    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <span class="text-blue-600 text-lg">🪪</span>
-          <h3 class="font-bold text-slate-800 text-base">Simpan Anggota Perpustakaan Baru</h3>
+    <!-- SECTION 1: MANAJEMEN ANGGOTA PERPUSTAKAAN -->
+    <section id="panel-anggota" class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-id-card text-blue-600"></i>
+            <h3 class="font-bold text-slate-800 text-base">Simpan Anggota Perpustakaan Baru</h3>
+          </div>
+          <span class="text-xs text-slate-400 font-medium">Sesuai Format Kartu Anggota</span>
         </div>
-        <span class="text-xs text-slate-400 font-medium">Sesuai Format Kartu Anggota</span>
+
+        <div class="p-6">
+          <form id="memberForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label for="memberId" class="block text-xs font-bold text-slate-700 mb-1">1. ID Anggota / NISN</label>
+                <input type="text" id="memberId" placeholder="ex: SMA4-202601" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 outline-none" required>
+              </div>
+              <div>
+                <label for="memberName" class="block text-xs font-bold text-slate-700 mb-1">2. Nama Lengkap</label>
+                <input type="text" id="memberName" placeholder="ex: Gabriel Manopo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 outline-none" required>
+              </div>
+              <div>
+                <label for="memberClass" class="block text-xs font-bold text-slate-700 mb-1">3. Kelas / Jabatan</label>
+                <input type="text" id="memberClass" placeholder="ex: XI MIPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 outline-none" required>
+              </div>
+              <div>
+                <label for="memberAddress" class="block text-xs font-bold text-slate-700 mb-1">4. Alamat</label>
+                <input type="text" id="memberAddress" placeholder="ex: Jl. Sam Ratulangi No. 45" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 outline-none" required>
+              </div>
+              <div>
+                <label for="memberPin" class="block text-xs font-bold text-slate-700 mb-1">5. Personal ID / PIN</label>
+                <input type="password" id="memberPin" placeholder="••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 outline-none" required>
+              </div>
+              <div>
+                <label for="memberEmail" class="block text-xs font-bold text-slate-700 mb-1">6. Email</label>
+                <input type="email" id="memberEmail" placeholder="ex: gabriel@siswa.sman4.sch.id" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 outline-none" required>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-3 border-t border-slate-100">
+              <button type="submit" class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition flex items-center space-x-2">
+                <i class="fa-solid fa-plus"></i>
+                <span>Simpan Data Anggota</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div class="p-6">
-        <form id="memberForm" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            
-            <div>
-              <label for="memberId" class="block text-xs font-bold text-slate-700 mb-1">1. ID Anggota / NISN</label>
-              <input type="text" id="memberId" placeholder="ex: SMA4-202601" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
-            </div>
-
-            <div>
-              <label for="memberName" class="block text-xs font-bold text-slate-700 mb-1">2. Nama Lengkap</label>
-              <input type="text" id="memberName" placeholder="ex: Gabriel Manopo" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
-            </div>
-
-            <div>
-              <label for="memberClass" class="block text-xs font-bold text-slate-700 mb-1">3. Kelas / Jabatan</label>
-              <input type="text" id="memberClass" placeholder="ex: XI MIPA 1" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
-            </div>
-
-            <div>
-              <label for="memberAddress" class="block text-xs font-bold text-slate-700 mb-1">4. Alamat</label>
-              <input type="text" id="memberAddress" placeholder="ex: Jl. Sam Ratulangi No. 45, Manado" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
-            </div>
-
-            <div>
-              <label for="memberPin" class="block text-xs font-bold text-slate-700 mb-1">5. Personal ID / PIN</label>
-              <input type="password" id="memberPin" placeholder="••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
-            </div>
-
-            <div>
-              <label for="memberEmail" class="block text-xs font-bold text-slate-700 mb-1">6. Email</label>
-              <input type="email" id="memberEmail" placeholder="ex: gabriel@siswa.sman4manado.sch.id" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition" required>
-            </div>
-
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-slate-800 text-base">Daftar Anggota Terdaftar</h3>
+            <p class="text-xs text-slate-500">Data terintegrasi dengan Kartu Anggota Digital.</p>
           </div>
-
-          <div class="flex justify-end pt-3 border-t border-slate-100">
-            <button type="submit" class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md hover:shadow-lg transition flex items-center space-x-2">
-              <span>+</span>
-              <span>Simpan Data Anggota</span>
-            </button>
+          <div class="w-full md:w-64">
+            <input type="text" id="searchInput" placeholder="Cari nama / ID / email..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 outline-none">
           </div>
-        </form>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-100">
+                <th class="py-3.5 px-6">ID Anggota</th>
+                <th class="py-3.5 px-6">Nama Lengkap</th>
+                <th class="py-3.5 px-6">Kelas</th>
+                <th class="py-3.5 px-6">Alamat</th>
+                <th class="py-3.5 px-6">Email</th>
+                <th class="py-3.5 px-6 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="memberTableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+              <!-- Data dirrender secara dinamis -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- Data Table Section -->
-    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div class="px-6 py-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <!-- SECTION 2: KATALOG BUKU PERPUSTAKAAN (PINDAHAN) -->
+    <section id="katalog-admin" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div>
-          <h3 class="font-bold text-slate-800 text-base">Daftar Anggota Terdaftar</h3>
-          <p class="text-xs text-slate-500">Data terintegrasi langsung dengan Kartu Anggota Digital.</p>
+          <div class="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
+            <i class="fa-solid fa-layer-group"></i> INVENTARIS KOLEKSI FISIK
+          </div>
+          <h3 class="text-2xl font-black text-slate-900 mt-1">Katalog Buku Perpustakaan</h3>
         </div>
-        <div class="w-full md:w-64">
-          <input type="text" id="searchInput" placeholder="🔍 Cari nama / ID / email..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-600 outline-none">
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative flex-1 sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="searchBuku" oninput="filterKatalog()" placeholder="Cari judul atau penulis..." class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white outline-none focus:ring-2 focus:ring-blue-600 transition">
+          </div>
+          <button onclick="openModalTambahBuku()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5">
+            <i class="fa-solid fa-plus"></i> Tambah Buku
+          </button>
         </div>
+      </div>
+
+      <div id="gridKatalog" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="animate-pulse bg-slate-100 h-48 rounded-2xl"></div>
+        <div class="animate-pulse bg-slate-100 h-48 rounded-2xl"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: DUTA LITERASI SEKOLAH (PINDAHAN) -->
+    <section id="duta-admin" class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-slate-800 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <span class="text-amber-400 font-bold text-xs uppercase tracking-widest"><i class="fa-solid fa-award mr-1"></i> PROGRAM UNGGULAN</span>
+          <h3 class="text-2xl font-black mt-1">Duta Literasi Sekolah</h3>
+        </div>
+        <button onclick="openModalDuta()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5">
+          <i class="fa-solid fa-user-plus"></i> Kelola Duta Literasi
+        </button>
+      </div>
+
+      <div id="containerDutaTerpilih" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-md">
+        <div class="lg:col-span-4 text-center">
+          <div class="w-32 h-32 mx-auto rounded-2xl bg-slate-800 border-4 border-amber-400 shadow-2xl overflow-hidden flex items-center justify-center relative">
+            <img id="imgDuta" src="" alt="Foto Duta Literasi" class="w-full h-full object-cover hidden">
+            <i id="iconDuta" class="fa-solid fa-user-graduate text-4xl text-slate-600"></i>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 space-y-3 text-center lg:text-left">
+          <div class="inline-block bg-amber-400/20 text-amber-300 font-bold text-[11px] px-3 py-1 rounded-full border border-amber-400/30 uppercase tracking-wider">
+            <i class="fa-solid fa-star mr-1"></i> <span id="txtPeriode">Duta Terpilih</span>
+          </div>
+          <h4 id="txtNamaDuta" class="text-2xl font-black">Memuat Duta Literasi...</h4>
+          <p id="txtSloganDuta" class="text-xs text-blue-200 italic font-medium">"Membaca adalah kunci untuk membuka jendela dunia."</p>
+          
+          <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-slate-300">
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10"><i class="fa-solid fa-calendar-check text-emerald-400 mr-1"></i> <span id="txtMasaJabatan">Jabatan: 2 Bulan</span></span>
+            <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10"><i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i> Status: Active Ambassador</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">KANDIDAT & CALON DUTA LITERASI</h4>
+        <div id="gridKandidat" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <p class="text-xs text-slate-400 col-span-full">Memuat kandidat...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: STATUS PEMINJAMAN SISWA (PINDAHAN) -->
+    <section id="peminjam-admin" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+        <div>
+          <div class="text-blue-600 font-bold text-xs uppercase tracking-wider"><i class="fa-solid fa-clock-rotate-left mr-1"></i> TRANSAKSI REAL-TIME</div>
+          <h3 class="text-2xl font-black text-slate-900 mt-1">Status Peminjaman Siswa</h3>
+        </div>
+        <button onclick="fetchPeminjam()" class="text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 px-3 py-2 rounded-xl border border-blue-200 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-rotate"></i> Refresh Data
+        </button>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-slate-50 text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-100">
-              <th class="py-3.5 px-6">ID Anggota</th>
-              <th class="py-3.5 px-6">Nama Lengkap</th>
-              <th class="py-3.5 px-6">Kelas</th>
-              <th class="py-3.5 px-6">Alamat</th>
-              <th class="py-3.5 px-6">Email</th>
-              <th class="py-3.5 px-6 text-center">Aksi</th>
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 text-slate-700 uppercase font-bold tracking-wider">
+            <tr>
+              <th class="p-3.5 rounded-l-xl">Nama Siswa</th>
+              <th class="p-3.5">ID / Judul Buku</th>
+              <th class="p-3.5">Tgl Pinjam</th>
+              <th class="p-3.5 rounded-r-xl">Status</th>
             </tr>
           </thead>
-          <tbody id="memberTableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
-            <!-- Data dirrender secara dinamis oleh JavaScript -->
+          <tbody id="tabelPeminjam" class="divide-y divide-slate-100">
+            <tr><td colspan="4" class="p-4 text-center text-slate-400">Memuat transaksi peminjaman...</td></tr>
           </tbody>
         </table>
       </div>
@@ -204,9 +299,357 @@
 
   </main>
 
-  <script type="module">
-    import { fetchGraphQL } from "../js/firebase-config.js";
+  <!-- MODALS -->
 
+  <!-- Modal Tambah Buku -->
+  <div id="modalTambahBuku" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-black text-slate-900"><i class="fa-solid fa-book text-blue-600 mr-2"></i>Tambah Buku Fisik</h3>
+        <button onclick="closeModal('modalTambahBuku')" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <form id="formBuku" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
+          <input type="text" id="inputJudul" placeholder="ex: Fisika Modern Kelas 12" class="w-full p-3 bg-slate-50 border rounded-xl font-medium focus:bg-white outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Penulis</label>
+          <input type="text" id="inputPenulis" placeholder="ex: Prof. Bambang" class="w-full p-3 bg-slate-50 border rounded-xl font-medium focus:bg-white outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Jumlah Eksemplar</label>
+          <input type="number" id="inputTotal" min="1" placeholder="ex: 5" class="w-full p-3 bg-slate-50 border rounded-xl font-medium focus:bg-white outline-none focus:ring-2 focus:ring-blue-600" required>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">URL Cover Buku (Opsional)</label>
+          <input type="url" id="inputCover" placeholder="https://..." class="w-full p-3 bg-slate-50 border rounded-xl font-medium focus:bg-white outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+        
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeModal('modalTambahBuku')" class="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 rounded-xl">Batal</button>
+          <button type="submit" id="btnSubmitBuku" class="px-5 py-2.5 font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md">Simpan Buku</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Kelola Duta Literasi -->
+  <div id="modalDuta" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-black text-slate-900"><i class="fa-solid fa-user-graduate text-amber-500 mr-2"></i>Kelola Duta Literasi</h3>
+        <button onclick="closeModal('modalDuta')" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+
+      <form id="formDuta" class="space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nama Siswa</label>
+            <input type="text" id="inputNamaDuta" placeholder="Nama Lengkap" class="w-full p-2.5 bg-slate-50 border rounded-xl" required>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kelas</label>
+            <input type="text" id="inputKelasDuta" placeholder="ex: XI MIPA 1" class="w-full p-2.5 bg-slate-50 border rounded-xl" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Periode Ke / Tahun</label>
+            <input type="text" id="inputPeriodeDuta" placeholder="ex: Periode 2026/2027" class="w-full p-2.5 bg-slate-50 border rounded-xl" required>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Tgl Pelantikan</label>
+            <input type="date" id="inputPelantikanDuta" class="w-full p-2.5 bg-slate-50 border rounded-xl" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Foto Duta (Maksimum 1 MB)</label>
+          <input type="file" id="inputFotoDuta" accept="image/*" class="w-full p-2 bg-slate-50 border rounded-xl text-xs">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Status Penetapan</label>
+          <select id="inputStatusDuta" class="w-full p-2.5 bg-slate-50 border rounded-xl font-medium">
+            <option value="true">Terpilih Sebagai Duta Utama</option>
+            <option value="false">Kandidat Calon Duta</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Slogan / Visi Literasi</label>
+          <input type="text" id="inputSloganDuta" placeholder="Motto membaca..." class="w-full p-2.5 bg-slate-50 border rounded-xl">
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeModal('modalDuta')" class="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 rounded-xl">Batal</button>
+          <button type="submit" id="btnSubmitDuta" class="px-5 py-2.5 font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl shadow-md">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT & CLOUD INTEGRATION -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
+      authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
+      projectId: "web-perpustakaan-e3ae8",
+      storageBucket: "web-perpustakaan-e3ae8.firebasestorage.app",
+      appId: "1:960845187515:web:9333b70d1052fc66435c9e"
+    };
+
+    initializeApp(firebaseConfig);
+    const ENDPOINT = "https://us-central1-web-perpustakaan-e3ae8.cloudfunctions.net/dataConnect";
+
+    let allBooks = [];
+    let photoBase64 = "";
+
+    // Window Functions Modals
+    window.openModalTambahBuku = () => document.getElementById("modalTambahBuku").classList.remove("hidden");
+    window.openModalDuta = () => document.getElementById("modalDuta").classList.remove("hidden");
+    window.closeModal = (id) => document.getElementById(id).classList.add("hidden");
+
+    async function graphqlFetch(query, variables = {}) {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, variables })
+      });
+      const result = await res.json();
+      if (result.errors && result.errors.length > 0) {
+        throw new Error(result.errors[0].message);
+      }
+      return result.data;
+    }
+
+    // 1. KATALOG BUKU
+    async function fetchKatalog() {
+      const query = `query { books { id title author totalCopies availableCopies coverImageUrl } }`;
+      try {
+        const data = await graphqlFetch(query);
+        allBooks = data?.books || [];
+        
+        document.getElementById("statBuku").innerText = allBooks.length;
+        renderKatalog(allBooks);
+      } catch (err) {
+        console.error("Gagal memuat katalog:", err);
+        document.getElementById("gridKatalog").innerHTML = `<p class="col-span-full text-center text-red-500 text-xs py-8">Gagal terhubung ke database Cloud SQL.</p>`;
+      }
+    }
+
+    function renderKatalog(books) {
+      const grid = document.getElementById("gridKatalog");
+      if (!books.length) {
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 text-xs py-12">Belum ada koleksi buku di katalog.</p>`;
+        return;
+      }
+
+      grid.innerHTML = books.map(b => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="inline-block px-2.5 py-0.5 text-[10px] font-extrabold rounded-full ${b.availableCopies > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                ${b.availableCopies > 0 ? `Tersedia (${b.availableCopies})` : 'Dipinjam'}
+              </span>
+              <span class="text-[10px] text-slate-400 font-mono">ID: ${b.id.substring(0,6)}...</span>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mt-2">${b.title}</h4>
+            <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-pen-nib text-[10px] mr-1"></i>${b.author}</p>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-3 border-t pt-2">Total Stok: ${b.totalCopies} Eksemplar</p>
+        </div>
+      `).join('');
+    }
+
+    window.filterKatalog = () => {
+      const keyword = document.getElementById("searchBuku").value.toLowerCase();
+      const filtered = allBooks.filter(b => b.title.toLowerCase().includes(keyword) || b.author.toLowerCase().includes(keyword));
+      renderKatalog(filtered);
+    };
+
+    document.getElementById("formBuku").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmitBuku");
+      btn.disabled = true;
+      btn.innerText = "Menyimpan...";
+
+      try {
+        const title = document.getElementById("inputJudul").value.trim();
+        const author = document.getElementById("inputPenulis").value.trim();
+        const total = parseInt(document.getElementById("inputTotal").value);
+        const cover = document.getElementById("inputCover").value.trim();
+
+        const mutation = `
+          mutation AddBook($title: String!, $author: String!, $total: Int!, $cover: String!) {
+            book_insert(data: {
+              title: $title,
+              author: $author,
+              totalCopies: $total,
+              availableCopies: $total,
+              coverImageUrl: $cover
+            })
+          }
+        `;
+
+        await graphqlFetch(mutation, { title, author, total, cover });
+        alert("Buku berhasil ditambahkan ke katalog!");
+        closeModal("modalTambahBuku");
+        e.target.reset();
+        fetchKatalog();
+      } catch (err) {
+        alert("Gagal menambahkan buku: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Simpan Buku";
+      }
+    });
+
+    // 2. DUTA LITERASI
+    document.getElementById("inputFotoDuta").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file && file.size > 1024 * 1024) {
+        alert("Ukuran foto maksimal 1 MB!");
+        this.value = "";
+        photoBase64 = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => { photoBase64 = reader.result; };
+      if (file) reader.readAsDataURL(file);
+    });
+
+    document.getElementById("formDuta").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btnSubmitDuta");
+      btn.disabled = true;
+      btn.innerText = "Menyimpan...";
+
+      try {
+        const nama = document.getElementById("inputNamaDuta").value.trim();
+        const kelas = document.getElementById("inputKelasDuta").value.trim();
+        const periode = document.getElementById("inputPeriodeDuta").value.trim();
+        const pelantikanStr = document.getElementById("inputPelantikanDuta").value;
+        const isSelected = document.getElementById("inputStatusDuta").value === "true";
+        const slogan = document.getElementById("inputSloganDuta").value.trim();
+
+        const t1 = new Date(pelantikanStr);
+        const t2 = new Date(t1);
+        t2.setMonth(t2.getMonth() + 2);
+        const akhirStr = t2.toISOString().split('T')[0];
+
+        const studentId = `${nama} (${kelas})`;
+        const cleanPhoto = photoBase64 ? photoBase64.replace(/[\r\n]/g, "") : "";
+
+        const mutation = `
+          mutation AddAmbassador(
+            $studentId: String!,
+            $termPeriod: String!,
+            $inaugurationDate: String!,
+            $endDate: String!,
+            $isSelected: Boolean!,
+            $photoUrl: String!,
+            $slogan: String!
+          ) {
+            literacyAmbassador_insert(data: {
+              studentId: $studentId,
+              termPeriod: $termPeriod,
+              inaugurationDate: $inaugurationDate,
+              endDate: $endDate,
+              isSelected: $isSelected,
+              photoUrl: $photoUrl,
+              slogan: $slogan
+            })
+          }
+        `;
+
+        await graphqlFetch(mutation, {
+          studentId,
+          termPeriod: periode,
+          inaugurationDate: pelantikanStr,
+          endDate: akhirStr,
+          isSelected,
+          photoUrl: cleanPhoto,
+          slogan
+        });
+
+        alert("Data Duta Literasi berhasil diperbarui!");
+        closeModal("modalDuta");
+        e.target.reset();
+        photoBase64 = "";
+        fetchDuta();
+      } catch (err) {
+        alert("Gagal menyimpan Duta Literasi: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Simpan Data";
+      }
+    });
+
+    async function fetchDuta() {
+      const query = `query { literacyAmbassadors { id studentId termPeriod inaugurationDate endDate isSelected photoUrl slogan } }`;
+      try {
+        const data = await graphqlFetch(query);
+        const list = data?.literacyAmbassadors || [];
+
+        document.getElementById("statDuta").innerText = list.length;
+
+        const terpilih = list.find(d => d.isSelected);
+        if (terpilih) {
+          document.getElementById("txtNamaDuta").innerText = terpilih.studentId;
+          document.getElementById("txtPeriode").innerText = terpilih.termPeriod;
+          document.getElementById("txtSloganDuta").innerText = `"${terpilih.slogan || 'Membaca adalah jendela ilmu.'}"`;
+          document.getElementById("txtMasaJabatan").innerText = `Jabatan: ${terpilih.inaugurationDate} s.d ${terpilih.endDate} (2 Bulan)`;
+          if (terpilih.photoUrl) {
+            const img = document.getElementById("imgDuta");
+            img.src = terpilih.photoUrl;
+            img.classList.remove("hidden");
+            document.getElementById("iconDuta").classList.add("hidden");
+          }
+        }
+
+        const kandidat = list.filter(d => !d.isSelected);
+        document.getElementById("gridKandidat").innerHTML = kandidat.map(k => `
+          <div class="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+            <h5 class="font-bold text-white text-xs">${k.studentId}</h5>
+            <p class="text-[10px] text-amber-300 mt-0.5">${k.termPeriod}</p>
+            <p class="text-[11px] text-slate-300 italic mt-2">"${k.slogan || '-'}"</p>
+          </div>
+        `).join('') || `<p class="text-xs text-slate-400">Belum ada kandidat tambahan.</p>`;
+
+      } catch (err) {
+        console.error("Error Duta:", err);
+      }
+    }
+
+    // 3. STATUS PEMINJAMAN SISWA
+    async function fetchPeminjam() {
+      const query = `query { loans { id studentName borrowDate status bookId } }`;
+      try {
+        const data = await graphqlFetch(query);
+        const loans = data?.loans || [];
+
+        document.getElementById("statPeminjam").innerText = loans.length;
+        document.getElementById("tabelPeminjam").innerHTML = loans.map(l => `
+          <tr>
+            <td class="p-3.5 font-bold text-slate-800">${l.studentName}</td>
+            <td class="p-3.5 font-mono text-slate-500">${l.bookId || '-'}</td>
+            <td class="p-3.5 text-slate-600">${l.borrowDate}</td>
+            <td class="p-3.5"><span class="px-2.5 py-1 text-[10px] bg-amber-100 text-amber-800 rounded-full font-bold">${l.status}</span></td>
+          </tr>
+        `).join('') || `<tr><td colspan="4" class="p-4 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>`;
+      } catch (err) {
+        console.error("Error Loans:", err);
+      }
+    }
+    window.fetchPeminjam = fetchPeminjam;
+
+    // 4. MANAJEMEN ANGGOTA (LOCAL STORAGE)
     const INITIAL_MEMBERS = [
       { id: 'SMA4-202601', name: 'Gabriel Manopo', class: 'XI MIPA 1', address: 'Jl. Sam Ratulangi No. 45', email: 'gabriel@siswa.sman4.sch.id' },
       { id: 'SMA4-202602', name: 'Siti Rahmawati', class: 'XI IPS 2', address: 'Jl. Malalayang I No. 12', email: 'siti.rahma@siswa.sman4.sch.id' }
@@ -218,11 +661,7 @@
         localStorage.setItem('membersList', JSON.stringify(INITIAL_MEMBERS));
         return INITIAL_MEMBERS;
       }
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        return INITIAL_MEMBERS;
-      }
+      try { return JSON.parse(data); } catch (e) { return INITIAL_MEMBERS; }
     }
 
     function saveMembers(members) {
@@ -235,86 +674,45 @@
       const totalCountElem = document.getElementById('total-anggota');
       const members = getStoredMembers();
 
-      if (totalCountElem) {
-        totalCountElem.textContent = members.length;
-      }
+      if (totalCountElem) totalCountElem.textContent = members.length;
 
       const filtered = members.filter(m => {
         const kw = filterKeyword.toLowerCase();
-        return m.id.toLowerCase().includes(kw) ||
-               m.name.toLowerCase().includes(kw) ||
-               m.email.toLowerCase().includes(kw) ||
-               m.class.toLowerCase().includes(kw);
+        return m.id.toLowerCase().includes(kw) || m.name.toLowerCase().includes(kw) || m.email.toLowerCase().includes(kw) || m.class.toLowerCase().includes(kw);
       });
 
-      if (filtered.length === 0) {
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="6" class="py-8 text-center text-slate-400 text-sm">Tidak ada data anggota ditemukan.</td>
-          </tr>
-        `;
+      if (!filtered.length) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400 text-sm">Tidak ada data anggota ditemukan.</td></tr>`;
         return;
       }
 
-      tableBody.innerHTML = filtered.map((member) => `
-        <tr class="hover:bg-slate-50/80 transition">
-          <td class="py-4 px-6 font-semibold text-blue-900">${escapeHtml(member.id)}</td>
-          <td class="py-4 px-6 font-medium">${escapeHtml(member.name)}</td>
-          <td class="py-4 px-6 text-slate-500">${escapeHtml(member.class)}</td>
-          <td class="py-4 px-6 text-slate-500 text-xs">${escapeHtml(member.address)}</td>
-          <td class="py-4 px-6 text-slate-500 text-xs">${escapeHtml(member.email)}</td>
-          <td class="py-4 px-6 text-center space-x-2 whitespace-nowrap">
-            <button onclick="deleteMember('${escapeHtml(member.id)}')" class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
+      tableBody.innerHTML = filtered.map(m => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-4 px-6 font-semibold text-blue-900">${m.id}</td>
+          <td class="py-4 px-6 font-medium">${m.name}</td>
+          <td class="py-4 px-6 text-slate-500">${m.class}</td>
+          <td class="py-4 px-6 text-slate-500 text-xs">${m.address}</td>
+          <td class="py-4 px-6 text-slate-500 text-xs">${m.email}</td>
+          <td class="py-4 px-6 text-center">
+            <button onclick="deleteMember('${m.id}')" class="text-xs font-semibold text-red-600 hover:text-red-800 bg-red-50 px-3 py-1.5 rounded-lg transition">Hapus</button>
           </td>
         </tr>
       `).join('');
     }
 
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    }
-
     window.deleteMember = function(memberId) {
-      if (confirm(`Apakah Anda yakin ingin menghapus anggota dengan ID ${memberId}?`)) {
+      if (confirm(`Hapus anggota dengan ID ${memberId}?`)) {
         const members = getStoredMembers().filter(m => m.id !== memberId);
         saveMembers(members);
       }
     };
 
-    const GET_DASHBOARD_DATA = `
-      query GetDashboardData {
-        bukus {
-          id
-          judul
-        }
-        sirkulasis {
-          id
-          status
-        }
-      }
-    `;
-
-    async function loadAdminData() {
-      try {
-        const result = await fetchGraphQL(GET_DASHBOARD_DATA);
-        if (result && result.data) {
-          const totalBuku = result.data.bukus ? result.data.bukus.length : 0;
-          const totalSirkulasi = result.data.sirkulasis ? result.data.sirkulasis.length : 0;
-
-          const elBuku = document.getElementById('total-buku');
-          const elSirkulasi = document.getElementById('total-sirkulasi');
-
-          if (elBuku) elBuku.textContent = totalBuku;
-          if (elSirkulasi) elSirkulasi.textContent = totalSirkulasi;
-        }
-      } catch (err) {
-        console.warn("Gagal memuat data GraphQL di dashboard admin:", err);
-      }
-    }
-
+    // DOM Ready Initialization
     document.addEventListener('DOMContentLoaded', () => {
       renderMembersTable();
-      loadAdminData();
+      fetchKatalog();
+      fetchDuta();
+      fetchPeminjam();
 
       const memberForm = document.getElementById('memberForm');
       if (memberForm) {
@@ -341,20 +739,12 @@
         });
       }
 
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-          renderMembersTable(e.target.value);
-        });
-      }
+      document.getElementById('searchInput')?.addEventListener('input', (e) => renderMembersTable(e.target.value));
 
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-          localStorage.removeItem('adminSession');
-          window.location.href = '../index.html';
-        });
-      }
+      document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        localStorage.removeItem('adminSession');
+        window.location.href = '../login_2.html';
+      });
     });
   </script>
 </body>
