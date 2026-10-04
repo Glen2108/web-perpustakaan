@@ -18,9 +18,9 @@
       </div>
 
       <nav class="space-y-2 text-xs font-bold">
-        <a href="#secPetugas" class="block px-4 py-2.5 bg-slate-800 text-indigo-300 rounded-xl border border-slate-700">1. Tambah Petugas</a>
-        <a href="#secSiswa" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">2. Tambah Siswa/Anggota</a>
-        <a href="#secKatalog" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">3. Tambah Katalog Buku</a>
+        <a href="#secPetugas" class="block px-4 py-2.5 bg-slate-800 text-indigo-300 rounded-xl border border-slate-700">1. Kelola Petugas</a>
+        <a href="#secSiswa" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">2. Kelola Siswa/Anggota</a>
+        <a href="#secKatalog" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">3. Kelola Katalog Buku</a>
         <a href="#secDuta" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">4. Kelola Duta Literasi</a>
       </nav>
 
@@ -28,24 +28,58 @@
     </aside>
 
     <!-- Main Content Panel -->
-    <main class="flex-1 p-6 md:p-10 space-y-8">
+    <main class="flex-1 p-6 md:p-10 space-y-10">
 
-      <!-- 1. Form Tambah Petugas -->
-      <section id="secPetugas" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-400"></i>Tambah Petugas Baru</h3>
+      <!-- 1. Petugas Section -->
+      <section id="secPetugas" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-400"></i>Kelola Petugas</h3>
+          <span id="pFormTitle" class="text-xs text-indigo-400 font-semibold">Mode: Tambah Data</span>
+        </div>
+
         <form id="formPetugas" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <input type="hidden" id="pId">
           <input type="text" id="pNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
           <input type="text" id="pJabatan" placeholder="Jabatan" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
           <input type="text" id="pUser" placeholder="Username" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
           <input type="password" id="pPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
-          <button type="submit" class="sm:col-span-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Petugas</button>
+          <div class="sm:col-span-2 flex gap-2">
+            <button type="submit" id="pSubmitBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Petugas</button>
+            <button type="button" id="pCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
+          </div>
         </form>
+
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+          <div class="flex justify-between items-center">
+            <h4 class="text-xs font-bold text-slate-300">Daftar Petugas</h4>
+            <button id="pSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-indigo-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800/80 text-slate-300 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">Nama</th>
+                  <th class="p-3">Jabatan</th>
+                  <th class="p-3">Username</th>
+                  <th class="p-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblPetugas" class="divide-y divide-slate-800/60 text-slate-200"></tbody>
+            </table>
+          </div>
+          <div class="flex justify-between items-center text-xs text-slate-400 pt-2" id="pPagination"></div>
+        </div>
       </section>
 
-      <!-- 2. Form Tambah Siswa / Anggota -->
-      <section id="secSiswa" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-blue-400"></i>Tambah Siswa / Anggota Perpustakaan</h3>
+      <!-- 2. Siswa / Anggota Section -->
+      <section id="secSiswa" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-blue-400"></i>Kelola Siswa / Anggota Perpustakaan</h3>
+          <span id="sFormTitle" class="text-xs text-blue-400 font-semibold">Mode: Tambah Data</span>
+        </div>
+
         <form id="formSiswa" class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <input type="hidden" id="sId">
           <input type="text" id="sNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
           <input type="text" id="sUser" placeholder="Username (dikirim via WA)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
           <input type="text" id="sPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
@@ -65,39 +99,127 @@
           <input type="text" id="sInstansi" value="SMA Negeri 4 Manado" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
           <input type="date" id="sRegis" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
           <input type="date" id="sExp" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
-          <button type="submit" class="sm:col-span-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Data Siswa</button>
+          <div class="sm:col-span-3 flex gap-2">
+            <button type="submit" id="sSubmitBtn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Data Siswa</button>
+            <button type="button" id="sCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
+          </div>
         </form>
+
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+          <div class="flex justify-between items-center">
+            <h4 class="text-xs font-bold text-slate-300">Daftar Siswa/Anggota</h4>
+            <button id="sSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-blue-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800/80 text-slate-300 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">ID Anggota</th>
+                  <th class="p-3">Nama</th>
+                  <th class="p-3">Kelas</th>
+                  <th class="p-3">No. WA</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblSiswa" class="divide-y divide-slate-800/60 text-slate-200"></tbody>
+            </table>
+          </div>
+          <div class="flex justify-between items-center text-xs text-slate-400 pt-2" id="sPagination"></div>
+        </div>
       </section>
 
-      <!-- 3. Form Tambah Katalog Buku -->
-      <section id="secKatalog" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-book text-emerald-400"></i>Tambah Katalog Buku Physical</h3>
+      <!-- 3. Katalog Buku Section -->
+      <section id="secKatalog" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-book text-emerald-400"></i>Kelola Katalog Buku</h3>
+          <span id="bFormTitle" class="text-xs text-emerald-400 font-semibold">Mode: Tambah Data</span>
+        </div>
+
         <form id="formKatalog" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <input type="hidden" id="bId">
           <input type="text" id="bJudul" placeholder="Judul Buku" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
           <input type="text" id="bPengarang" placeholder="Pengarang" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
           <input type="text" id="bPenerbit" placeholder="Penerbit" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <input type="number" id="bEkslempar" placeholder="Jumlah Ekslempar" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <input type="url" id="bCover" placeholder="Link Cover Buku (URL / Google Drive Direct Link)" required class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
-          <button type="submit" class="sm:col-span-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Tambah Ke Katalog</button>
+          <input type="number" id="bEkslempar" placeholder="Jumlah Eksemplar" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <input type="url" id="bCover" placeholder="Link Cover Buku (URL / Direct Link)" required class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <div class="sm:col-span-2 flex gap-2">
+            <button type="submit" id="bSubmitBtn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Tambah Ke Katalog</button>
+            <button type="button" id="bCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
+          </div>
         </form>
+
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+          <div class="flex justify-between items-center">
+            <h4 class="text-xs font-bold text-slate-300">Daftar Katalog Buku</h4>
+            <button id="bSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-emerald-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800/80 text-slate-300 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">Cover</th>
+                  <th class="p-3">Judul Buku</th>
+                  <th class="p-3">Pengarang</th>
+                  <th class="p-3">Penerbit</th>
+                  <th class="p-3">Stok</th>
+                  <th class="p-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblKatalog" class="divide-y divide-slate-800/60 text-slate-200"></tbody>
+            </table>
+          </div>
+          <div class="flex justify-between items-center text-xs text-slate-400 pt-2" id="bPagination"></div>
+        </div>
       </section>
 
-      <!-- 4. Form Kelola Duta Literasi -->
-      <section id="secDuta" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
-        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-crown text-amber-400"></i>Kelola Duta Literasi & Masa Jabatan</h3>
+      <!-- 4. Duta Literasi Section -->
+      <section id="secDuta" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+          <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-crown text-amber-400"></i>Kelola Duta Literasi</h3>
+          <span id="dFormTitle" class="text-xs text-amber-400 font-semibold">Mode: Tambah Data</span>
+        </div>
+
         <form id="formDuta" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <input type="hidden" id="dId">
           <input type="text" id="dNama" placeholder="Nama Siswa" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
           <input type="text" id="dKelas" placeholder="Kelas" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
           <textarea id="dVisi" placeholder="Visi-Misi Calon" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500 h-24"></textarea>
           <select id="dStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-amber-500">
             <option value="calon">Status: Calon Duta</option>
-            <option value="terpilih">Status: Duta Terpilih (Min 2 Orang)</option>
+            <option value="terpilih">Status: Duta Terpilih</option>
             <option value="alumni">Status: Alumni Duta Literasi</option>
           </select>
-          <input type="text" id="dPeriode" placeholder="Periode Ke- (misal: Periode I - 2026)" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
-          <input type="url" id="dFoto" placeholder="URL Foto Duta (Min. 10MB Supported Direct Link)" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
-          <button type="submit" class="sm:col-span-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg">Simpan Data Duta</button>
+          <input type="text" id="dPeriode" placeholder="Periode (misal: 2026)" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+          <input type="url" id="dFoto" placeholder="URL Foto Duta Direct Link" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+          <div class="sm:col-span-2 flex gap-2">
+            <button type="submit" id="dSubmitBtn" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg">Simpan Data Duta</button>
+            <button type="button" id="dCancelBtn" class="hidden bg-slate-700 hover:bg-slate-600 text-white font-bold px-5 py-3 rounded-xl transition">Batal Edit</button>
+          </div>
         </form>
+
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+          <div class="flex justify-between items-center">
+            <h4 class="text-xs font-bold text-slate-300">Daftar Duta Literasi</h4>
+            <button id="dSortBtn" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-amber-300 hover:bg-slate-700"><i class="fa-solid fa-sort-alpha-down mr-1"></i> Urutkan A-Z</button>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800/80 text-slate-300 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">Foto</th>
+                  <th class="p-3">Nama</th>
+                  <th class="p-3">Kelas</th>
+                  <th class="p-3">Periode</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblDuta" class="divide-y divide-slate-800/60 text-slate-200"></tbody>
+            </table>
+          </div>
+          <div class="flex justify-between items-center text-xs text-slate-400 pt-2" id="dPagination"></div>
+        </div>
       </section>
 
     </main>
@@ -105,23 +227,180 @@
 
   <script type="module">
     import { db } from '../js/firebase-config.js';
-    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    const PAGE_SIZE = 5;
+
+    // Helper Factory for Table Management
+    function createTableManager(config) {
+      let items = [];
+      let currentPage = 1;
+      let sortAsc = true;
+
+      const render = () => {
+        let sorted = [...items].sort((a, b) => {
+          const valA = (a[config.sortField] || '').toString().toLowerCase();
+          const valB = (b[config.sortField] || '').toString().toLowerCase();
+          return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        });
+
+        const totalPages = Math.ceil(sorted.length / PAGE_SIZE) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIdx = (currentPage - 1) * PAGE_SIZE;
+        const pageItems = sorted.slice(startIdx, startIdx + PAGE_SIZE);
+
+        const tbody = document.getElementById(config.tableId);
+        tbody.innerHTML = pageItems.length ? pageItems.map(item => config.rowTemplate(item)).join('') : `<tr><td colspan="10" class="p-4 text-center text-slate-500">Belum ada data tersedia.</td></tr>`;
+
+        // Pagination HTML
+        const pagEl = document.getElementById(config.pagId);
+        pagEl.innerHTML = `
+          <span>Halaman ${currentPage} dari ${totalPages} (${sorted.length} total)</span>
+          <div class="flex gap-2">
+            <button ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white" id="${config.tableId}-prev">Prev</button>
+            <button ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white" id="${config.tableId}-next">Next</button>
+          </div>
+        `;
+
+        document.getElementById(`${config.tableId}-prev`)?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+        document.getElementById(`${config.tableId}-next`)?.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; render(); } });
+
+        // Attach action handlers
+        tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => config.onEdit(b.dataset.id)));
+        tbody.querySelectorAll('.btn-del').forEach(b => b.addEventListener('click', () => config.onDelete(b.dataset.id)));
+      };
+
+      // Listen Firestore realtime
+      onSnapshot(collection(db, config.colName), (snap) => {
+        items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        render();
+      });
+
+      document.getElementById(config.sortBtnId).addEventListener('click', () => {
+        sortAsc = !sortAsc;
+        document.getElementById(config.sortBtnId).innerHTML = `<i class="fa-solid fa-sort-alpha-${sortAsc ? 'down' : 'up'} mr-1"></i> Urutkan A-Z`;
+        render();
+      });
+
+      return {
+        getItems: () => items,
+        resetPage: () => { currentPage = 1; }
+      };
+    }
+
+    // 1. Petugas Manager
+    const mgrPetugas = createTableManager({
+      colName: 'petugas', tableId: 'tblPetugas', pagId: 'pPagination', sortBtnId: 'pSortBtn', sortField: 'nama',
+      rowTemplate: (item) => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3 font-semibold text-white">${item.nama || '-'}</td>
+          <td class="p-3">${item.jabatan || '-'}</td>
+          <td class="p-3 font-mono text-slate-400">${item.username || '-'}</td>
+          <td class="p-3 text-center space-x-1">
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+          </td>
+        </tr>`,
+      onEdit: (id) => {
+        const item = mgrPetugas.getItems().find(i => i.id === id);
+        if (!item) return;
+        document.getElementById('pId').value = item.id;
+        document.getElementById('pNama').value = item.nama;
+        document.getElementById('pJabatan').value = item.jabatan;
+        document.getElementById('pUser').value = item.username;
+        document.getElementById('pPass').value = item.password;
+        document.getElementById('pFormTitle').innerText = "Mode: Ubah Data";
+        document.getElementById('pSubmitBtn').innerText = "Update Data Petugas";
+        document.getElementById('pCancelBtn').classList.remove('hidden');
+      },
+      onDelete: async (id) => {
+        if (confirm("Yakin ingin menghapus data petugas ini?")) await deleteDoc(doc(db, "petugas", id));
+      }
+    });
+
+    document.getElementById('pCancelBtn').addEventListener('click', resetFormPetugas);
+    function resetFormPetugas() {
+      document.getElementById('formPetugas').reset();
+      document.getElementById('pId').value = "";
+      document.getElementById('pFormTitle').innerText = "Mode: Tambah Data";
+      document.getElementById('pSubmitBtn').innerText = "Simpan Petugas";
+      document.getElementById('pCancelBtn').classList.add('hidden');
+    }
 
     document.getElementById('formPetugas').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "petugas"), {
+      const id = document.getElementById('pId').value;
+      const data = {
         nama: document.getElementById('pNama').value,
         jabatan: document.getElementById('pJabatan').value,
         username: document.getElementById('pUser').value,
-        password: document.getElementById('pPass').value,
-      });
-      alert("Data Petugas Berhasil Disimpan!");
-      e.target.reset();
+        password: document.getElementById('pPass').value
+      };
+      if (id) {
+        await updateDoc(doc(db, "petugas", id), data);
+        alert("Data Petugas Berhasil Diperbarui!");
+      } else {
+        await addDoc(collection(db, "petugas"), data);
+        alert("Data Petugas Berhasil Disimpan!");
+      }
+      resetFormPetugas();
     });
+
+    // 2. Siswa Manager
+    const mgrSiswa = createTableManager({
+      colName: 'siswa', tableId: 'tblSiswa', pagId: 'sPagination', sortBtnId: 'sSortBtn', sortField: 'nama',
+      rowTemplate: (item) => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3 font-mono text-blue-300 font-bold">${item.memberId || '-'}</td>
+          <td class="p-3 font-semibold text-white">${item.nama || '-'}</td>
+          <td class="p-3">${item.kelas || '-'}</td>
+          <td class="p-3 font-mono text-slate-400">${item.noTelp || '-'}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-md text-[10px] ${item.status === 'Istimewa' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-700 text-slate-300'}">${item.status || 'Standar'}</span></td>
+          <td class="p-3 text-center space-x-1">
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+          </td>
+        </tr>`,
+      onEdit: (id) => {
+        const item = mgrSiswa.getItems().find(i => i.id === id);
+        if (!item) return;
+        document.getElementById('sId').value = item.id;
+        document.getElementById('sNama').value = item.nama;
+        document.getElementById('sUser').value = item.username;
+        document.getElementById('sPass').value = item.password;
+        document.getElementById('sJK').value = item.jk;
+        document.getElementById('sKelas').value = item.kelas;
+        document.getElementById('sTelp').value = item.noTelp;
+        document.getElementById('sAlamat').value = item.alamat;
+        document.getElementById('sStatus').value = item.status;
+        document.getElementById('sMemberID').value = item.memberId;
+        document.getElementById('sPersonalID').value = item.personalId;
+        document.getElementById('sInstansi').value = item.instansi;
+        document.getElementById('sRegis').value = item.tglRegis;
+        document.getElementById('sExp').value = item.tglExp;
+        document.getElementById('sFormTitle').innerText = "Mode: Ubah Data";
+        document.getElementById('sSubmitBtn').innerText = "Update Data Siswa";
+        document.getElementById('sCancelBtn').classList.remove('hidden');
+      },
+      onDelete: async (id) => {
+        if (confirm("Yakin ingin menghapus data siswa ini?")) await deleteDoc(doc(db, "siswa", id));
+      }
+    });
+
+    document.getElementById('sCancelBtn').addEventListener('click', resetFormSiswa);
+    function resetFormSiswa() {
+      document.getElementById('formSiswa').reset();
+      document.getElementById('sId').value = "";
+      document.getElementById('sFormTitle').innerText = "Mode: Tambah Data";
+      document.getElementById('sSubmitBtn').innerText = "Simpan Data Siswa";
+      document.getElementById('sCancelBtn').classList.add('hidden');
+    }
 
     document.getElementById('formSiswa').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "siswa"), {
+      const id = document.getElementById('sId').value;
+      const data = {
         nama: document.getElementById('sNama').value,
         username: document.getElementById('sUser').value,
         password: document.getElementById('sPass').value,
@@ -135,36 +414,141 @@
         instansi: document.getElementById('sInstansi').value,
         tglRegis: document.getElementById('sRegis').value,
         tglExp: document.getElementById('sExp').value,
-      });
-      alert("Data Siswa Berhasil Disimpan!");
-      e.target.reset();
+      };
+      if (id) {
+        await updateDoc(doc(db, "siswa", id), data);
+        alert("Data Siswa Berhasil Diperbarui!");
+      } else {
+        await addDoc(collection(db, "siswa"), data);
+        alert("Data Siswa Berhasil Disimpan!");
+      }
+      resetFormSiswa();
     });
+
+    // 3. Katalog Buku Manager
+    const mgrKatalog = createTableManager({
+      colName: 'katalog', tableId: 'tblKatalog', pagId: 'bPagination', sortBtnId: 'bSortBtn', sortField: 'judul',
+      rowTemplate: (item) => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3"><img src="${item.cover || 'https://via.placeholder.com/40'}" class="w-10 h-14 object-cover rounded-md border border-slate-700 bg-slate-800" alt="Cover"></td>
+          <td class="p-3 font-semibold text-white">${item.judul || '-'}</td>
+          <td class="p-3">${item.pengarang || '-'}</td>
+          <td class="p-3 text-slate-400">${item.penerbit || '-'}</td>
+          <td class="p-3 font-bold text-emerald-400">${item.ekslempar || 0}</td>
+          <td class="p-3 text-center space-x-1">
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+          </td>
+        </tr>`,
+      onEdit: (id) => {
+        const item = mgrKatalog.getItems().find(i => i.id === id);
+        if (!item) return;
+        document.getElementById('bId').value = item.id;
+        document.getElementById('bJudul').value = item.judul;
+        document.getElementById('bPengarang').value = item.pengarang;
+        document.getElementById('bPenerbit').value = item.penerbit;
+        document.getElementById('bEkslempar').value = item.ekslempar;
+        document.getElementById('bCover').value = item.cover;
+        document.getElementById('bFormTitle').innerText = "Mode: Ubah Data";
+        document.getElementById('bSubmitBtn').innerText = "Update Buku";
+        document.getElementById('bCancelBtn').classList.remove('hidden');
+      },
+      onDelete: async (id) => {
+        if (confirm("Yakin ingin menghapus buku ini dari katalog?")) await deleteDoc(doc(db, "katalog", id));
+      }
+    });
+
+    document.getElementById('bCancelBtn').addEventListener('click', resetFormKatalog);
+    function resetFormKatalog() {
+      document.getElementById('formKatalog').reset();
+      document.getElementById('bId').value = "";
+      document.getElementById('bFormTitle').innerText = "Mode: Tambah Data";
+      document.getElementById('bSubmitBtn').innerText = "Tambah Ke Katalog";
+      document.getElementById('bCancelBtn').classList.add('hidden');
+    }
 
     document.getElementById('formKatalog').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "katalog"), {
+      const id = document.getElementById('bId').value;
+      const data = {
         judul: document.getElementById('bJudul').value,
         pengarang: document.getElementById('bPengarang').value,
         penerbit: document.getElementById('bPenerbit').value,
         ekslempar: Number(document.getElementById('bEkslempar').value),
         cover: document.getElementById('bCover').value
-      });
-      alert("Buku Berhasil Ditambahkan ke Katalog!");
-      e.target.reset();
+      };
+      if (id) {
+        await updateDoc(doc(db, "katalog", id), data);
+        alert("Katalog Buku Berhasil Diperbarui!");
+      } else {
+        await addDoc(collection(db, "katalog"), data);
+        alert("Buku Berhasil Ditambahkan!");
+      }
+      resetFormKatalog();
     });
+
+    // 4. Duta Literasi Manager
+    const mgrDuta = createTableManager({
+      colName: 'duta_literasi', tableId: 'tblDuta', pagId: 'dPagination', sortBtnId: 'dSortBtn', sortField: 'nama',
+      rowTemplate: (item) => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3"><img src="${item.foto || 'https://via.placeholder.com/40'}" class="w-9 h-9 object-cover rounded-full border border-slate-700 bg-slate-800" alt="Foto"></td>
+          <td class="p-3 font-semibold text-white">${item.nama || '-'}</td>
+          <td class="p-3">${item.kelas || '-'}</td>
+          <td class="p-3 text-slate-400">${item.periode || '-'}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-md text-[10px] uppercase font-bold ${item.status === 'terpilih' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-700 text-slate-300'}">${item.status || 'calon'}</span></td>
+          <td class="p-3 text-center space-x-1">
+            <button class="btn-edit px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500 hover:text-slate-900 font-semibold" data-id="${item.id}">Ubah</button>
+            <button class="btn-del px-2.5 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg hover:bg-rose-600 hover:text-white font-semibold" data-id="${item.id}">Hapus</button>
+          </td>
+        </tr>`,
+      onEdit: (id) => {
+        const item = mgrDuta.getItems().find(i => i.id === id);
+        if (!item) return;
+        document.getElementById('dId').value = item.id;
+        document.getElementById('dNama').value = item.nama;
+        document.getElementById('dKelas').value = item.kelas;
+        document.getElementById('dVisi').value = item.visiMisi;
+        document.getElementById('dStatus').value = item.status;
+        document.getElementById('dPeriode').value = item.periode;
+        document.getElementById('dFoto').value = item.foto;
+        document.getElementById('dFormTitle').innerText = "Mode: Ubah Data";
+        document.getElementById('dSubmitBtn').innerText = "Update Duta Literasi";
+        document.getElementById('dCancelBtn').classList.remove('hidden');
+      },
+      onDelete: async (id) => {
+        if (confirm("Yakin ingin menghapus data Duta Literasi ini?")) await deleteDoc(doc(db, "duta_literasi", id));
+      }
+    });
+
+    document.getElementById('dCancelBtn').addEventListener('click', resetFormDuta);
+    function resetFormDuta() {
+      document.getElementById('formDuta').reset();
+      document.getElementById('dId').value = "";
+      document.getElementById('dFormTitle').innerText = "Mode: Tambah Data";
+      document.getElementById('dSubmitBtn').innerText = "Simpan Data Duta";
+      document.getElementById('dCancelBtn').classList.add('hidden');
+    }
 
     document.getElementById('formDuta').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "duta_literasi"), {
+      const id = document.getElementById('dId').value;
+      const data = {
         nama: document.getElementById('dNama').value,
         kelas: document.getElementById('dKelas').value,
         visiMisi: document.getElementById('dVisi').value,
         status: document.getElementById('dStatus').value,
         periode: document.getElementById('dPeriode').value,
         foto: document.getElementById('dFoto').value
-      });
-      alert("Data Duta Literasi Berhasil Diperbarui!");
-      e.target.reset();
+      };
+      if (id) {
+        await updateDoc(doc(db, "duta_literasi", id), data);
+        alert("Data Duta Literasi Berhasil Diperbarui!");
+      } else {
+        await addDoc(collection(db, "duta_literasi"), data);
+        alert("Data Duta Literasi Berhasil Disimpan!");
+      }
+      resetFormDuta();
     });
   </script>
 </body>

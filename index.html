@@ -123,6 +123,61 @@
     </div>
   </section>
 
+  <!-- Seksi Daftar Anggota & Petugas Perpustakaan -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xl space-y-6">
+      
+      <!-- Header & Fitur Filter -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-users text-brand-600"></i> Daftar Anggota & Petugas
+          </h3>
+          <p class="text-xs text-slate-500 mt-1">Direktori keanggotaan siswa serta petugas perpustakaan SMAN 4 Manado</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <!-- Filter Tipe (Siswa / Petugas) -->
+          <select id="pubTypeSelect" class="bg-slate-100 text-slate-800 font-bold px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-brand-600 transition">
+            <option value="siswa">Daftar Siswa / Anggota</option>
+            <option value="petugas">Daftar Petugas</option>
+          </select>
+
+          <!-- Filter Status (Aktif / Alumni / Non-aktif) -->
+          <select id="pubStatusSelect" class="bg-slate-100 text-slate-800 font-bold px-3 py-2 rounded-xl border border-slate-200 outline-none focus:border-brand-600 transition">
+            <option value="semua">Semua Status</option>
+            <option value="Aktif">Aktif</option>
+            <option value="Alumni">Alumni</option>
+            <option value="Non-aktif">Non-aktif</option>
+          </select>
+
+          <!-- Input Pencarian -->
+          <div class="relative min-w-[200px]">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+            <input type="text" id="pubSearchInput" placeholder="Cari Nama / ID..." class="w-full pl-8 pr-3 py-2 bg-slate-100 text-slate-800 rounded-xl border border-slate-200 text-xs outline-none focus:border-brand-600 placeholder-slate-400 transition">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabel Data -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-left text-xs text-slate-700">
+          <thead class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider">
+            <tr id="pubTableHead">
+              <!-- Diisi secara dinamis oleh JavaScript -->
+            </tr>
+          </thead>
+          <tbody id="pubTableBody" class="divide-y divide-slate-100">
+            <tr>
+              <td colspan="5" class="p-6 text-center text-slate-400 font-medium">Memuat data dari database...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
   <script>
     function updateClock() {
       const now = new Date();
@@ -176,6 +231,129 @@
     setInterval(updateClock, 1000);
     updateClock();
     generateCalendar();
+  </script>
+
+  <!-- Script Firestore Realtime untuk Direktori Anggota & Petugas -->
+  <script type="module">
+    import { db } from './js/firebase-config.js';
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    let listSiswa = [];
+    let listPetugas = [];
+
+    const pubTypeSelect = document.getElementById('pubTypeSelect');
+    const pubStatusSelect = document.getElementById('pubStatusSelect');
+    const pubSearchInput = document.getElementById('pubSearchInput');
+    const pubTableHead = document.getElementById('pubTableHead');
+    const pubTableBody = document.getElementById('pubTableBody');
+
+    // Mengambil data realtime Firestore
+    onSnapshot(collection(db, "siswa"), (snap) => {
+      listSiswa = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPublicTable();
+    }, (error) => {
+      console.error("Error loading siswa:", error);
+    });
+
+    onSnapshot(collection(db, "petugas"), (snap) => {
+      listPetugas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPublicTable();
+    }, (error) => {
+      console.error("Error loading petugas:", error);
+    });
+
+    pubTypeSelect.addEventListener('change', renderPublicTable);
+    pubStatusSelect.addEventListener('change', renderPublicTable);
+    pubSearchInput.addEventListener('input', renderPublicTable);
+
+    function renderPublicTable() {
+      const tipe = pubTypeSelect.value;
+      const statusFilter = pubStatusSelect.value;
+      const keyword = pubSearchInput.value.toLowerCase().trim();
+
+      if (tipe === 'siswa') {
+        pubTableHead.innerHTML = `
+          <th class="p-3.5">ID Anggota</th>
+          <th class="p-3.5">Nama Lengkap</th>
+          <th class="p-3.5">Kelas</th>
+          <th class="p-3.5">Instansi</th>
+          <th class="p-3.5 text-center">Status Keanggotaan</th>
+        `;
+
+        let filtered = listSiswa.filter(item => {
+          const st = item.status || 'Aktif';
+          const matchStatus = (statusFilter === 'semua') || (st === statusFilter);
+          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || 
+                          (item.memberId || '').toLowerCase().includes(keyword) || 
+                          (item.kelas || '').toLowerCase().includes(keyword);
+          return matchStatus && matchKey;
+        });
+
+        if (!filtered.length) {
+          pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400 font-medium">Tidak ada data anggota siswa yang sesuai.</td></tr>`;
+          return;
+        }
+
+        pubTableBody.innerHTML = filtered.map(item => {
+          const st = item.status || 'Aktif';
+          let badgeStyle = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+          if (st === 'Alumni') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300';
+          if (st === 'Non-aktif') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
+
+          return `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-mono text-brand-600 font-bold">${item.memberId || item.id || '-'}</td>
+              <td class="p-3.5 font-semibold text-slate-900">${item.nama || '-'}</td>
+              <td class="p-3.5 font-medium text-slate-600">${item.kelas || '-'}</td>
+              <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
+              <td class="p-3.5 text-center">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeStyle}">${st}</span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+      } else {
+        pubTableHead.innerHTML = `
+          <th class="p-3.5">Nama Petugas</th>
+          <th class="p-3.5">Jabatan</th>
+          <th class="p-3.5">Username</th>
+          <th class="p-3.5 text-center">Status</th>
+        `;
+
+        let filtered = listPetugas.filter(item => {
+          const st = item.status || 'Aktif';
+          const matchStatus = (statusFilter === 'semua') || (st === statusFilter);
+          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || 
+                          (item.jabatan || '').toLowerCase().includes(keyword) || 
+                          (item.username || '').toLowerCase().includes(keyword);
+          return matchStatus && matchKey;
+        });
+
+        if (!filtered.length) {
+          pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 font-medium">Tidak ada data petugas yang sesuai.</td></tr>`;
+          return;
+        }
+
+        pubTableBody.innerHTML = filtered.map(item => {
+          const st = item.status || 'Aktif';
+          let badgeStyle = 'bg-blue-100 text-blue-800 border-blue-300';
+          if (st === 'Alumni') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300';
+          if (st === 'Non-aktif') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
+
+          return `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-semibold text-slate-900">${item.nama || '-'}</td>
+              <td class="p-3.5 font-medium text-slate-600">${item.jabatan || '-'}</td>
+              <td class="p-3.5 font-mono text-slate-500">${item.username || '-'}</td>
+              <td class="p-3.5 text-center">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeStyle}">${st}</span>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
   </script>
 </body>
 </html>
