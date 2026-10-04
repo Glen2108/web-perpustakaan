@@ -7,96 +7,96 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-100 text-slate-800">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
   <div class="min-h-screen flex flex-col md:flex-row">
     <!-- Sidebar -->
-    <aside class="w-full md:w-64 bg-slate-900 text-white p-6 space-y-6 flex-shrink-0">
+    <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 text-white p-6 space-y-6 flex-shrink-0">
       <div>
-        <h2 class="font-black text-lg">PORTAL ADMIN</h2>
+        <h2 class="font-black text-lg tracking-tight text-white">PORTAL ADMIN</h2>
         <p class="text-[11px] text-slate-400">Perpustakaan SMAN 4 Manado</p>
       </div>
 
       <nav class="space-y-2 text-xs font-bold">
-        <a href="#secPetugas" class="block px-4 py-2.5 bg-slate-800 rounded-xl">1. Tambah Petugas</a>
-        <a href="#secSiswa" class="block px-4 py-2.5 hover:bg-slate-800 rounded-xl">2. Tambah Siswa/Anggota</a>
-        <a href="#secKatalog" class="block px-4 py-2.5 hover:bg-slate-800 rounded-xl">3. Tambah Katalog Buku</a>
-        <a href="#secDuta" class="block px-4 py-2.5 hover:bg-slate-800 rounded-xl">4. Kelola Duta Literasi</a>
+        <a href="#secPetugas" class="block px-4 py-2.5 bg-slate-800 text-indigo-300 rounded-xl border border-slate-700">1. Tambah Petugas</a>
+        <a href="#secSiswa" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">2. Tambah Siswa/Anggota</a>
+        <a href="#secKatalog" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">3. Tambah Katalog Buku</a>
+        <a href="#secDuta" class="block px-4 py-2.5 text-slate-300 hover:bg-slate-800 rounded-xl transition">4. Kelola Duta Literasi</a>
       </nav>
 
-      <a href="../index.html" class="block text-center bg-rose-600 text-white py-2 rounded-xl text-xs font-bold">Kembali ke Beranda</a>
+      <a href="../index.html" class="block text-center bg-rose-600/20 hover:bg-rose-600 border border-rose-500/30 text-rose-200 hover:text-white py-2.5 rounded-xl text-xs font-bold transition">Kembali ke Beranda</a>
     </aside>
 
     <!-- Main Content Panel -->
-    <main class="flex-1 p-6 md:p-10 space-y-10">
+    <main class="flex-1 p-6 md:p-10 space-y-8">
 
       <!-- 1. Form Tambah Petugas -->
-      <section id="secPetugas" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
-        <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-user-shield text-indigo-600 mr-2"></i>Tambah Petugas Baru</h3>
+      <section id="secPetugas" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
+        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-400"></i>Tambah Petugas Baru</h3>
         <form id="formPetugas" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <input type="text" id="pNama" placeholder="Nama Lengkap" required class="p-2.5 border rounded-xl">
-          <input type="text" id="pJabatan" placeholder="Jabatan" required class="p-2.5 border rounded-xl">
-          <input type="text" id="pUser" placeholder="Username" required class="p-2.5 border rounded-xl">
-          <input type="password" id="pPass" placeholder="Password" required class="p-2.5 border rounded-xl">
-          <button type="submit" class="sm:col-span-2 bg-indigo-600 text-white font-bold py-2.5 rounded-xl">Simpan Petugas</button>
+          <input type="text" id="pNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+          <input type="text" id="pJabatan" placeholder="Jabatan" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+          <input type="text" id="pUser" placeholder="Username" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+          <input type="password" id="pPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-indigo-500">
+          <button type="submit" class="sm:col-span-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Petugas</button>
         </form>
       </section>
 
       <!-- 2. Form Tambah Siswa / Anggota -->
-      <section id="secSiswa" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
-        <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-graduation-cap text-blue-600 mr-2"></i>Tambah Siswa / Anggota Perpustakaan</h3>
+      <section id="secSiswa" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
+        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-blue-400"></i>Tambah Siswa / Anggota Perpustakaan</h3>
         <form id="formSiswa" class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <input type="text" id="sNama" placeholder="Nama Lengkap" required class="p-2.5 border rounded-xl">
-          <input type="text" id="sUser" placeholder="Username (dikirim via WA)" required class="p-2.5 border rounded-xl">
-          <input type="text" id="sPass" placeholder="Password" required class="p-2.5 border rounded-xl">
-          <select id="sJK" class="p-2.5 border rounded-xl">
+          <input type="text" id="sNama" placeholder="Nama Lengkap" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="text" id="sUser" placeholder="Username (dikirim via WA)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="text" id="sPass" placeholder="Password" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <select id="sJK" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
             <option value="Laki-Laki">Laki-Laki</option>
             <option value="Perempuan">Perempuan</option>
           </select>
-          <input type="text" id="sKelas" placeholder="Kelas (misal: XI MIPA 1)" required class="p-2.5 border rounded-xl">
-          <input type="text" id="sTelp" placeholder="Nomor Telepon (WhatsApp)" required class="p-2.5 border rounded-xl">
-          <input type="text" id="sAlamat" placeholder="Alamat" required class="p-2.5 border rounded-xl sm:col-span-2">
-          <select id="sStatus" class="p-2.5 border rounded-xl">
+          <input type="text" id="sKelas" placeholder="Kelas (misal: XI MIPA 1)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="text" id="sTelp" placeholder="Nomor Telepon (WhatsApp)" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="text" id="sAlamat" placeholder="Alamat" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500 sm:col-span-2">
+          <select id="sStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
             <option value="Standar">Status: Standar</option>
             <option value="Istimewa">Status: Istimewa</option>
           </select>
-          <input type="text" id="sMemberID" placeholder="ID Anggota" required class="p-2.5 border rounded-xl">
-          <input type="text" id="sPersonalID" placeholder="Personal ID" required class="p-2.5 border rounded-xl">
-          <input type="text" id="sInstansi" value="SMA Negeri 4 Manado" class="p-2.5 border rounded-xl">
-          <input type="date" id="sRegis" required class="p-2.5 border rounded-xl">
-          <input type="date" id="sExp" required class="p-2.5 border rounded-xl">
-          <button type="submit" class="sm:col-span-3 bg-blue-600 text-white font-bold py-2.5 rounded-xl">Simpan Data Siswa</button>
+          <input type="text" id="sMemberID" placeholder="ID Anggota" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="text" id="sPersonalID" placeholder="Personal ID" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="text" id="sInstansi" value="SMA Negeri 4 Manado" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-blue-500">
+          <input type="date" id="sRegis" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
+          <input type="date" id="sExp" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-blue-500">
+          <button type="submit" class="sm:col-span-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Simpan Data Siswa</button>
         </form>
       </section>
 
       <!-- 3. Form Tambah Katalog Buku -->
-      <section id="secKatalog" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
-        <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-book text-emerald-600 mr-2"></i>Tambah Katalog Buku Physical</h3>
+      <section id="secKatalog" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
+        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-book text-emerald-400"></i>Tambah Katalog Buku Physical</h3>
         <form id="formKatalog" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <input type="text" id="bJudul" placeholder="Judul Buku" required class="p-2.5 border rounded-xl">
-          <input type="text" id="bPengarang" placeholder="Pengarang" required class="p-2.5 border rounded-xl">
-          <input type="text" id="bPenerbit" placeholder="Penerbit" required class="p-2.5 border rounded-xl">
-          <input type="number" id="bEkslempar" placeholder="Jumlah Ekslempar" required class="p-2.5 border rounded-xl">
-          <input type="url" id="bCover" placeholder="Link Cover Buku (URL / Google Drive Direct Link)" required class="sm:col-span-2 p-2.5 border rounded-xl">
-          <button type="submit" class="sm:col-span-2 bg-emerald-600 text-white font-bold py-2.5 rounded-xl">Tambah Ke Katalog</button>
+          <input type="text" id="bJudul" placeholder="Judul Buku" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <input type="text" id="bPengarang" placeholder="Pengarang" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <input type="text" id="bPenerbit" placeholder="Penerbit" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <input type="number" id="bEkslempar" placeholder="Jumlah Ekslempar" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <input type="url" id="bCover" placeholder="Link Cover Buku (URL / Google Drive Direct Link)" required class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-emerald-500">
+          <button type="submit" class="sm:col-span-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">Tambah Ke Katalog</button>
         </form>
       </section>
 
       <!-- 4. Form Kelola Duta Literasi -->
-      <section id="secDuta" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-4">
-        <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-crown text-amber-500 mr-2"></i>Kelola Duta Literasi & Masa Jabatan</h3>
+      <section id="secDuta" class="bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4">
+        <h3 class="font-extrabold text-base text-white flex items-center gap-2"><i class="fa-solid fa-crown text-amber-400"></i>Kelola Duta Literasi & Masa Jabatan</h3>
         <form id="formDuta" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <input type="text" id="dNama" placeholder="Nama Siswa" required class="p-2.5 border rounded-xl">
-          <input type="text" id="dKelas" placeholder="Kelas" required class="p-2.5 border rounded-xl">
-          <textarea id="dVisi" placeholder="Visi-Misi Calon" class="sm:col-span-2 p-2.5 border rounded-xl"></textarea>
-          <select id="dStatus" class="p-2.5 border rounded-xl">
+          <input type="text" id="dNama" placeholder="Nama Siswa" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+          <input type="text" id="dKelas" placeholder="Kelas" required class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+          <textarea id="dVisi" placeholder="Visi-Misi Calon" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500 h-24"></textarea>
+          <select id="dStatus" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl outline-none focus:border-amber-500">
             <option value="calon">Status: Calon Duta</option>
             <option value="terpilih">Status: Duta Terpilih (Min 2 Orang)</option>
             <option value="alumni">Status: Alumni Duta Literasi</option>
           </select>
-          <input type="text" id="dPeriode" placeholder="Periode Ke- (misal: Periode I - 2026)" class="p-2.5 border rounded-xl">
-          <input type="url" id="dFoto" placeholder="URL Foto Duta (Min. 10MB Supported Direct Link)" class="sm:col-span-2 p-2.5 border rounded-xl">
-          <button type="submit" class="sm:col-span-2 bg-amber-500 text-slate-900 font-bold py-2.5 rounded-xl">Simpan Data Duta</button>
+          <input type="text" id="dPeriode" placeholder="Periode Ke- (misal: Periode I - 2026)" class="p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+          <input type="url" id="dFoto" placeholder="URL Foto Duta (Min. 10MB Supported Direct Link)" class="sm:col-span-2 p-3 bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-400 rounded-xl outline-none focus:border-amber-500">
+          <button type="submit" class="sm:col-span-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg">Simpan Data Duta</button>
         </form>
       </section>
 
@@ -107,7 +107,18 @@
     import { db } from '../js/firebase-config.js';
     import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    // Submit Siswa
+    document.getElementById('formPetugas').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, "petugas"), {
+        nama: document.getElementById('pNama').value,
+        jabatan: document.getElementById('pJabatan').value,
+        username: document.getElementById('pUser').value,
+        password: document.getElementById('pPass').value,
+      });
+      alert("Data Petugas Berhasil Disimpan!");
+      e.target.reset();
+    });
+
     document.getElementById('formSiswa').addEventListener('submit', async (e) => {
       e.preventDefault();
       await addDoc(collection(db, "siswa"), {
@@ -129,7 +140,6 @@
       e.target.reset();
     });
 
-    // Submit Katalog
     document.getElementById('formKatalog').addEventListener('submit', async (e) => {
       e.preventDefault();
       await addDoc(collection(db, "katalog"), {
@@ -143,7 +153,6 @@
       e.target.reset();
     });
 
-    // Submit Duta
     document.getElementById('formDuta').addEventListener('submit', async (e) => {
       e.preventDefault();
       await addDoc(collection(db, "duta_literasi"), {
