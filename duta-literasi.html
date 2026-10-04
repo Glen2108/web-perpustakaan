@@ -103,28 +103,32 @@
 
   </main>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
-      authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
-      projectId: "web-perpustakaan-e3ae8",
-      storageBucket: "web-perpustakaan-e3ae8.firebasestorage.app",
-      appId: "1:960845187515:web:9333b70d1052fc66435c9e"
-    };
+  // 1. Ganti dengan Konfigurasi Firebase Asli Anda dari Project Settings
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhm-T5p4l4-Tgg79apq8OATQkKrAoJ-e0",
+    authDomain: "web-perpustakaan-e3ae8.firebaseapp.com",
+    projectId: "web-perpustakaan-e3ae8",
+    storageBucket: "web-perpustakaan-e3ae8.firebasestorage.app",
+    appId: "1:960845187515:web:9333b70d1052fc66435c9e"
+  };
 
-    initializeApp(firebaseConfig);
-    const ENDPOINT = "https://us-central1-web-perpustakaan-e3ae8.cloudfunctions.net/dataConnect";
+  initializeApp(firebaseConfig);
+  const ENDPOINT = "https://us-central1-web-perpustakaan-e3ae8.cloudfunctions.net/dataConnect";
 
-    // Validasi Ukuran Foto File (Maksimal 1MB = 1.048.576 Bytes)
-    let photoBase64 = "";
-    document.getElementById("inputFotoFile").addEventListener("change", function(e) {
+  let photoBase64 = "";
+
+  // 2. Validasi & Konversi Foto (< 1 MB)
+  const inputFoto = document.getElementById("inputFotoFile");
+  if (inputFoto) {
+    inputFoto.addEventListener("change", function(e) {
       const file = e.target.files[0];
       if (!file) return;
 
       if (file.size > 1024 * 1024) {
-        alert("Ukuran file foto melebihi 1 MB! Silakan pilih foto dengan ukuran lebih kecil.");
+        alert("Ukuran foto melebihi 1 MB! Silakan pilih file foto yang lebih kecil.");
         this.value = "";
         photoBase64 = "";
         return;
@@ -134,83 +138,125 @@
       reader.onload = () => { photoBase64 = reader.result; };
       reader.readAsDataURL(file);
     });
+  }
 
-    // Simpan Data Duta (Otomatis Hitung +2 Bulan Masa Jabatan)
-    document.getElementById("formDuta").addEventListener("submit", async (e) => {
+  // 3. Simpan Data Duta (Dilengkapi Error Handling & Notifikasi)
+  const formDuta = document.getElementById("formDuta");
+  if (formDuta) {
+    formDuta.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!photoBase64) return alert("Silakan unggah foto dengan ukuran di bawah 1MB.");
 
-      const nama = document.getElementById("inputNama").value;
-      const kelas = document.getElementById("inputKelas").value;
-      const periode = document.getElementById("inputPeriode").value;
-      const tglPelantikanStr = document.getElementById("inputPelantikan").value;
-      const isSelected = document.getElementById("inputStatus").value === "true";
-      const slogan = document.getElementById("inputSlogan").value;
+      const btnSubmit = e.target.querySelector('button[type="submit"]');
+      btnSubmit.disabled = true;
+      btnSubmit.innerText = "Menyimpan Data...";
 
-      // Kalkulasi Tanggal Akhir Jabatan (+ 2 Bulan)
-      const tglPelantikan = new Date(tglPelantikanStr);
-      const tglBerakhir = new Date(tglPelantikan);
-      tglBerakhir.setMonth(tglBerakhir.getMonth() + 2);
-      const tglBerakhirStr = tglBerakhir.toISOString().split('T')[0];
-
-      const mutation = `
-        mutation {
-          literacyAmbassador_insert(data: {
-            studentName: "${nama}",
-            studentClass: "${kelas}",
-            termPeriod: "${periode}",
-            inaugurationDate: "${tglPelantikanStr}",
-            endDate: "${tglBerakhirStr}",
-            isSelected: ${isSelected},
-            photoUrl: "${photoBase64}",
-            slogan: "${slogan}"
-          })
-        }
-      `;
-
-      await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query: mutation }) });
-      alert("Data Duta Literasi berhasil disimpan!");
-      e.target.reset();
-      photoBase64 = "";
-      fetchDuta();
-    });
-
-    // Load Data Duta
-    async function fetchDuta() {
-      const query = `query { literacyAmbassadors { id studentName studentClass termPeriod inaugurationDate endDate isSelected photoUrl slogan } }`;
       try {
-        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }) });
-        const { data } = await res.json();
-        const list = data?.literacyAmbassadors || [];
+        const nama = document.getElementById("inputNama").value.trim();
+        const kelas = document.getElementById("inputKelas").value.trim();
+        const periode = document.getElementById("inputPeriode").value.trim();
+        const tglPelantikanStr = document.getElementById("inputPelantikan").value;
+        const isSelected = document.getElementById("inputStatus").value === "true";
+        const slogan = document.getElementById("inputSlogan").value.trim();
 
-        const terpilih = list.find(d => d.isSelected);
-        if (terpilih) {
-          document.getElementById("badgePeriode").innerText = terpilih.termPeriod || "PERIODE AKTIF";
-          document.getElementById("namaDuta").innerText = terpilih.studentName;
-          document.getElementById("kelasDuta").innerText = terpilih.studentClass;
-          document.getElementById("masaJabatan").innerText = `Masa Jabatan: ${terpilih.inaugurationDate} s.d ${terpilih.endDate} (2 Bulan)`;
-          if (terpilih.photoUrl) {
-            const img = document.getElementById("fotoDuta");
-            img.src = terpilih.photoUrl;
-            img.classList.remove("hidden");
-            document.getElementById("placeholderFoto").classList.add("hidden");
-          }
+        if (!tglPelantikanStr) {
+          throw new Error("Tanggal pelantikan wajib diisi!");
         }
 
-        const kandidatList = list.filter(d => !d.isSelected);
-        const grid = document.getElementById("gridKandidat");
+        // Kalkulasi Masa Jabatan Otomatis +2 Bulan
+        const tglPelantikan = new Date(tglPelantikanStr);
+        const tglBerakhir = new Date(tglPelantikan);
+        tglBerakhir.setMonth(tglBerakhir.getMonth() + 2);
+        const tglBerakhirStr = tglBerakhir.toISOString().split('T')[0];
+
+        // Bersihkan string Base64 dari karakter newline
+        const cleanPhoto = photoBase64 ? photoBase64.replace(/[\r\n]/g, "") : "";
+
+        const mutation = `
+          mutation {
+            literacyAmbassador_insert(data: {
+              studentId: "${nama} (${kelas})",
+              termPeriod: "${periode}",
+              inaugurationDate: "${tglPelantikanStr}",
+              endDate: "${tglBerakhirStr}",
+              isSelected: ${isSelected},
+              photoUrl: "${cleanPhoto}",
+              slogan: "${slogan}"
+            })
+          }
+        `;
+
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: mutation })
+        });
+
+        const result = await res.json();
+
+        // Cek jika GraphQL mengembalikan error internal
+        if (result.errors && result.errors.length > 0) {
+          throw new Error(result.errors[0].message);
+        }
+
+        alert("Data Duta Literasi berhasil disimpan!");
+        formDuta.reset();
+        photoBase64 = "";
+        fetchDuta();
+
+      } catch (err) {
+        console.error("Detail Error:", err);
+        alert("Gagal menyimpan data: " + err.message);
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "Simpan Data Duta Literasi";
+      }
+    });
+  }
+
+  // 4. Load Data Duta dari Firebase
+  async function fetchDuta() {
+    const query = `query { literacyAmbassadors { id studentId termPeriod inaugurationDate endDate isSelected photoUrl slogan } }`;
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query })
+      });
+      const { data } = await res.json();
+      const list = data?.literacyAmbassadors || [];
+
+      const terpilih = list.find(d => d.isSelected);
+      if (terpilih) {
+        document.getElementById("badgePeriode").innerText = terpilih.termPeriod || "PERIODE AKTIF";
+        document.getElementById("namaDuta").innerText = terpilih.studentId || "Duta Terpilih";
+        document.getElementById("kelasDuta").innerText = terpilih.slogan || "-";
+        document.getElementById("masaJabatan").innerText = `Masa Jabatan: ${terpilih.inaugurationDate} s.d ${terpilih.endDate} (2 Bulan)`;
+        if (terpilih.photoUrl) {
+          const img = document.getElementById("fotoDuta");
+          img.src = terpilih.photoUrl;
+          img.classList.remove("hidden");
+          document.getElementById("placeholderFoto").classList.add("hidden");
+        }
+      }
+
+      const kandidatList = list.filter(d => !d.isSelected);
+      const grid = document.getElementById("gridKandidat");
+      if (grid) {
         grid.innerHTML = kandidatList.map(k => `
           <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <h4 class="font-bold text-slate-800 text-sm">${k.studentName}</h4>
-            <p class="text-xs text-slate-500">${k.studentClass}</p>
+            <h4 class="font-bold text-slate-800 text-sm">${k.studentId}</h4>
+            <p class="text-xs text-slate-500">${k.termPeriod}</p>
             <p class="text-xs text-slate-600 italic mt-2">"${k.slogan || '-'}"</p>
           </div>
         `).join('') || `<p class="text-xs text-slate-400">Belum ada kandidat tambahan.</p>`;
+      }
 
-      } catch (err) { console.error("Gagal memuat Duta Literasi:", err); }
+    } catch (err) {
+      console.error("Gagal memuat data Duta Literasi:", err);
     }
+  }
 
-    fetchDuta();
-  </script>
+  fetchDuta();
+</script>
 </body>
 </html>
