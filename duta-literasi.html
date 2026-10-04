@@ -3,60 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duta Literasi - Perpus SMAN 4 Manado</title>
+  <title>Duta Literasi - SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-  <header class="bg-blue-900 text-white shadow-md">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-xl font-extrabold tracking-wide">Perpus SMAN 4 Manado</h1>
+  <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="index.html" class="font-black text-lg">PERPUSTAKAAN SMAN 4 MANADO</a>
       <nav class="space-x-6 text-sm font-semibold">
-        <a href="index.html" class="hover:text-blue-200">Beranda</a>
-        <a href="katalog.html" class="hover:text-blue-200">Katalog</a>
-        <a href="duta-literasi.html" class="underline underline-offset-4 text-blue-200">Duta Literasi</a>
-        <a href="admin/dashboard.html" class="bg-blue-800 hover:bg-blue-700 px-3 py-1.5 rounded-lg">Admin Panel</a>
+        <a href="index.html" class="hover:text-amber-400">Beranda</a>
+        <a href="katalog.html" class="hover:text-amber-400">Katalog</a>
+        <a href="duta-literasi.html" class="text-amber-400 font-bold">Duta Literasi</a>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-6 py-10 space-y-10">
-    <div class="bg-gradient-to-br from-blue-900 to-indigo-800 text-white rounded-3xl p-8 text-center shadow-xl">
-      <h2 class="text-2xl md:text-4xl font-black">Duta Literasi Sekolah</h2>
-      <p class="text-blue-200 text-sm mt-1">Perpustakaan SMAN 4 Manado</p>
-      
-      <div id="cardDuta" class="mt-6 bg-white/10 p-6 rounded-2xl max-w-sm mx-auto">
-        <h3 id="namaDuta" class="text-xl font-bold">Memuat Duta...</h3>
-        <p id="sloganDuta" class="text-xs text-blue-200 mt-2">-</p>
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-12">
+    
+    <!-- Hero Banner & Insentif -->
+    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-8 rounded-3xl shadow-xl space-y-6">
+      <div class="max-w-3xl space-y-2">
+        <span class="bg-amber-400 text-slate-900 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">Ajang Bergengsi</span>
+        <h2 class="text-3xl font-black">Program & Pemilihan Duta Literasi</h2>
+        <p class="text-blue-200 text-sm">Masa Jabatan Duta Literasi adalah <strong>2 Bulan</strong> terhitung sejak tanggal pelantikan resmi.</p>
+      </div>
+
+      <!-- Persyaratan & Fasilitas Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/10">
+        <div class="bg-white/10 backdrop-blur p-5 rounded-2xl border border-white/10 space-y-2 text-xs">
+          <h4 class="font-bold text-amber-300 text-sm"><i class="fa-solid fa-list-check mr-1"></i> Persyaratan Calon Duta</h4>
+          <ul class="list-disc list-inside space-y-1 text-slate-200">
+            <li>Minimal meminjam 4 Buku fisik terhitung sejak pendaftaran dibuka.</li>
+            <li>Membuat ringkasan/resensi resmi untuk minimal 2 dari 4 buku yang dipinjam.</li>
+            <li>Tidak terdeteksi melakukan pelanggaran atau terlambat mengembalikan buku.</li>
+          </ul>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur p-5 rounded-2xl border border-white/10 space-y-2 text-xs">
+          <h4 class="font-bold text-amber-300 text-sm"><i class="fa-solid fa-award mr-1"></i> Fasilitas & Reward Duta Terpilih</h4>
+          <ul class="list-disc list-inside space-y-1 text-slate-200">
+            <li>Memakai Slempang Resmi Duta Literasi di acara-acara penting sekolah.</li>
+            <li>Mendapatkan 1 Sertifikat Penghargaan Resmi di akhir masa jabatan.</li>
+            <li>Mendapatkan Insentif Tunai Sebesar <strong>Rp 50.000,-</strong>.</li>
+          </ul>
+        </div>
       </div>
     </div>
+
+    <!-- Section Duta Terpilih (Min 2 Orang) -->
+    <section class="space-y-4">
+      <div class="border-b pb-2">
+        <h3 class="text-xl font-extrabold text-slate-900"><i class="fa-solid fa-crown text-amber-500 mr-2"></i>Duta Literasi Terpilih Periode Ini</h3>
+        <p class="text-xs text-slate-500">Ikon penggerak minat baca SMAN 4 Manado</p>
+      </div>
+      <div id="gridDutaTerpilih" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <p class="text-xs text-slate-400 col-span-full">Memuat data Duta Terpilih...</p>
+      </div>
+    </section>
+
+    <!-- Section Calon Duta Literasi -->
+    <section class="space-y-4">
+      <div class="border-b pb-2">
+        <h3 class="text-xl font-extrabold text-slate-900"><i class="fa-solid fa-users text-blue-600 mr-2"></i>Daftar Calon Duta Literasi</h3>
+        <p class="text-xs text-slate-500">Siswa-siswi berbakat yang sedang dalam sesi seleksi</p>
+      </div>
+      <div id="gridCalonDuta" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-xs text-slate-400 col-span-full">Memuat calon duta...</p>
+      </div>
+    </section>
+
   </main>
 
   <script type="module">
-    import { ENDPOINT } from './js/firebase-config.js';
+    import { db } from './js/firebase-config.js';
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    async function fetchDuta() {
-      const query = `query { literacyAmbassadors { studentId slogan isSelected } }`;
+    async function loadDutaData() {
       try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query })
-        });
-        const { data } = await res.json();
-        const list = data?.literacyAmbassadors || [];
-        const terpilih = list.find(d => d.isSelected);
+        const snap = await getDocs(collection(db, "duta_literasi"));
+        const terpilihGrid = document.getElementById('gridDutaTerpilih');
+        const calonGrid = document.getElementById('gridCalonDuta');
 
-        if (terpilih) {
-          document.getElementById("namaDuta").innerText = terpilih.studentId;
-          document.getElementById("sloganDuta").innerText = `"${terpilih.slogan || ''}"`;
-        }
+        let htmlTerpilih = "";
+        let htmlCalon = "";
+
+        snap.forEach(d => {
+          const item = d.data();
+          if (item.status === 'terpilih') {
+            htmlTerpilih += `
+              <div class="bg-white rounded-3xl p-6 border-2 border-amber-300 shadow-lg flex flex-col sm:flex-row gap-5 items-center">
+                <img src="${item.foto || 'https://via.placeholder.com/150'}" class="w-28 h-36 object-cover rounded-2xl shadow-md border">
+                <div class="space-y-1 text-center sm:text-left">
+                  <span class="bg-amber-100 text-amber-900 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full">DUTA TERPILIH</span>
+                  <h4 class="font-black text-lg text-slate-900">${item.nama}</h4>
+                  <p class="text-xs font-bold text-blue-700">Kelas: ${item.kelas}</p>
+                  <p class="text-xs text-slate-600 italic mt-2">"${item.visiMisi}"</p>
+                </div>
+              </div>
+            `;
+          } else {
+            htmlCalon += `
+              <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2">
+                <h4 class="font-black text-slate-900 text-base">${item.nama}</h4>
+                <p class="text-xs font-bold text-blue-600">Kelas: ${item.kelas}</p>
+                <div class="bg-slate-50 p-3 rounded-xl text-xs text-slate-600">
+                  <strong>Visi-Misi:</strong> ${item.visiMisi}
+                </div>
+              </div>
+            `;
+          }
+        });
+
+        terpilihGrid.innerHTML = htmlTerpilih || `<p class="col-span-full text-xs text-slate-400">Belum ada Duta Terpilih yang ditetapkan admin.</p>`;
+        calonGrid.innerHTML = htmlCalon || `<p class="col-span-full text-xs text-slate-400">Belum ada Calon Duta terdaftar.</p>`;
       } catch (err) {
-        console.error("Gagal memuat Duta:", err);
+        console.error(err);
       }
     }
 
-    fetchDuta();
+    loadDutaData();
   </script>
 </body>
 </html>
