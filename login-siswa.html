@@ -96,74 +96,84 @@
   </div>
 
   <script type="module">
-    import { db } from './js/firebase-config.js';
-    import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { db } from './js/firebase-config.js';
+  import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    const form = document.getElementById('formLoginSiswa');
-    const alertBox = document.getElementById('alertBox');
-    const alertMsg = document.getElementById('alertMsg');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const btnIcon = document.getElementById('btnIcon');
-    const togglePass = document.getElementById('togglePass');
-    const passVal = document.getElementById('passVal');
+  const form = document.getElementById('formLoginSiswa');
+  const alertBox = document.getElementById('alertBox');
+  const alertMsg = document.getElementById('alertMsg');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText = document.getElementById('btnText');
+  const btnIcon = document.getElementById('btnIcon');
+  const togglePass = document.getElementById('togglePass');
+  const passVal = document.getElementById('passVal');
 
-    // Toggle Tampilkan Password
-    togglePass.addEventListener('click', () => {
-      const isPass = passVal.type === 'password';
-      passVal.type = isPass ? 'text' : 'password';
-      togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
-    });
+  togglePass.addEventListener('click', () => {
+    const isPass = passVal.type === 'password';
+    passVal.type = isPass ? 'text' : 'password';
+    togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+  });
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      alertBox.classList.add('hidden');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertBox.classList.add('hidden');
+    
+    const u = document.getElementById('userVal').value.trim();
+    const p = passVal.value.trim();
+
+    submitBtn.disabled = true;
+    btnText.innerText = "Memeriksa Akun...";
+    btnIcon.className = "fa-solid fa-spinner fa-spin";
+
+    try {
+      const colRef = collection(db, "anggota");
       
-      const u = document.getElementById('userVal').value.trim();
-      const p = passVal.value.trim();
+      // Pencarian fleksibel: Username, NISN, atau ID Anggota
+      let q = query(colRef, where("username", "==", u), where("password", "==", p));
+      let snap = await getDocs(q);
 
-      // UI Loading State
-      submitBtn.disabled = true;
-      btnText.innerText = "Memeriksa Akun...";
-      btnIcon.className = "fa-solid fa-spinner fa-spin";
-
-      try {
-        const q = query(collection(db, "siswa"), where("username", "==", u), where("password", "==", p));
-        const snap = await getDocs(q);
-
-        if (!snap.empty) {
-          const docData = snap.docs[0].data();
-          const userData = { docId: snap.docs[0].id, ...docData };
-          
-          // Simpan Sesi Login di LocalStorage
-          localStorage.setItem('userSession', JSON.stringify(userData));
-          
-          btnText.innerText = "Login Berhasil!";
-          btnIcon.className = "fa-solid fa-circle-check";
-          
-          setTimeout(() => {
-            window.location.href = "profil.html";
-          }, 600);
-        } else {
-          showError("Username atau Password tidak cocok!");
-        }
-      } catch (err) {
-        console.error(err);
-        showError("Gagal terhubung ke server. Periksa koneksi internet Anda.");
-      } finally {
-        if (!localStorage.getItem('userSession')) {
-          submitBtn.disabled = false;
-          btnText.innerText = "Masuk Beranda Siswa";
-          btnIcon.className = "fa-solid fa-right-to-bracket";
-        }
+      if (snap.empty) {
+        q = query(colRef, where("nisn", "==", u), where("password", "==", p));
+        snap = await getDocs(q);
       }
-    });
 
-    function showError(msg) {
-      alertMsg.innerText = msg;
-      alertBox.classList.remove('hidden');
-      alertBox.classList.add('flex');
-    }
+      if (snap.empty) {
+        q = query(colRef, where("id", "==", u), where("password", "==", p));
+        snap = await getDocs(q);
+      }
+
+      if (!snap.empty) {
+        const docData = snap.docs[0].data();
+        const userData = { docId: snap.docs[0].id, ...docData };
+        
+        localStorage.setItem('userSession', JSON.stringify(userData));
+        
+        btnText.innerText = "Login Berhasil!";
+        btnIcon.className = "fa-solid fa-circle-check";
+        
+        setTimeout(() => {
+          window.location.href = "profil.html";
+              }, 600);
+            } else {
+              showError("Username/NISN atau Password tidak cocok!");
+            }
+          } catch (err) {
+            console.error(err);
+            showError("Gagal terhubung ke server. Periksa koneksi internet Anda.");
+          } finally {
+            if (!localStorage.getItem('userSession')) {
+              submitBtn.disabled = false;
+              btnText.innerText = "Masuk Beranda Siswa";
+              btnIcon.className = "fa-solid fa-right-to-bracket";
+            }
+          }
+        });
+
+        function showError(msg) {
+          alertMsg.innerText = msg;
+          alertBox.classList.remove('hidden');
+          alertBox.classList.add('flex');
+        }
   </script>
 </body>
 </html>

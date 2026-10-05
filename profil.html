@@ -228,66 +228,96 @@
   </footer>
 
   <!-- Script Penanganan Sesi & Tampilan Data -->
-  <script>
-    // Toggle Mobile Menu
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenuBtn && mobileMenu) {
-      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  <script type="module">
+  import { db } from './js/firebase-config.js';
+  import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  }
+
+  function renderUserData() {
+    if (!currentUser) return;
+
+    const nama = currentUser.nama || currentUser.username || 'Siswa';
+    const initial = nama.charAt(0).toUpperCase();
+    const idAnggota = currentUser.id || '-';
+    const nisn = currentUser.nisn || '-';
+    const kelas = currentUser.kelas || 'Siswa Aktif';
+    const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
+    const status = currentUser.status || 'Standar';
+
+    document.getElementById('navAvatar').innerText = initial;
+    document.getElementById('navUserName').innerText = nama;
+    document.getElementById('navUserClass').innerText = kelas;
+
+    document.getElementById('heroAvatar').innerText = initial;
+    document.getElementById('profileNama').innerText = nama;
+    document.getElementById('profileID').innerText = nisn !== '-' ? nisn : idAnggota;
+    document.getElementById('profileKelas').innerText = kelas;
+
+    document.getElementById('detailNama').innerText = nama;
+    document.getElementById('detailMemberId').innerText = idAnggota + " / " + nisn;
+    document.getElementById('detailKelas').innerText = kelas;
+    document.getElementById('detailInstansi').innerText = instansi;
+
+    document.getElementById('cardNama').innerText = nama;
+    document.getElementById('cardNIS').innerText = "ID: " + idAnggota + " | NISN: " + nisn;
+
+    const badgeStatus = document.getElementById('badgeStatus');
+    if (badgeStatus) {
+      badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+      badgeStatus.innerText = "• Status: " + status;
     }
+  }
 
-    // Tampilkan Data Pengguna dari LocalStorage
-    function renderUserData() {
-      if (!currentUser) return;
+  function loadUserPeminjaman() {
+    if (!currentUser) return;
+    const listEl = document.getElementById('listPeminjaman');
+    const userNama = currentUser.nama || '';
 
-      const nama = currentUser.nama || currentUser.username || 'Siswa';
-      const initial = nama.charAt(0).toUpperCase();
-      const nis = currentUser.memberId || currentUser.username || '-';
-      const kelas = currentUser.kelas || 'Siswa Aktif';
-      const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
-      const status = currentUser.status || 'Aktif';
-
-      // Header Navigasi
-      document.getElementById('navAvatar').innerText = initial;
-      document.getElementById('navUserName').innerText = nama;
-      document.getElementById('navUserClass').innerText = kelas;
-
-      // Hero Card
-      document.getElementById('heroAvatar').innerText = initial;
-      document.getElementById('profileNama').innerText = nama;
-      document.getElementById('profileID').innerText = nis;
-      document.getElementById('profileKelas').innerText = kelas;
-
-      // Detail Kartu
-      document.getElementById('detailNama').innerText = nama;
-      document.getElementById('detailMemberId').innerText = nis;
-      document.getElementById('detailKelas').innerText = kelas;
-      document.getElementById('detailInstansi').innerText = instansi;
-
-      // Card Digital
-      document.getElementById('cardNama').innerText = nama;
-      document.getElementById('cardNIS').innerText = "ID: " + nis;
-
-      // Badge Status
-      const badgeStatus = document.getElementById('badgeStatus');
-      if (status === 'Aktif') {
-        badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
-        badgeStatus.innerText = "• Anggota Aktif";
-      } else {
-        badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-400/20 text-rose-300 border border-rose-400/30";
-        badgeStatus.innerText = "• " + status;
+    const q = query(collection(db, "pinjam"), where("peminjam", "==", userNama));
+    onSnapshot(q, (snapshot) => {
+      if (snapshot.empty) {
+        listEl.innerHTML = `
+          <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <i class="fa-solid fa-book-open text-2xl mb-1 text-slate-300 block"></i>
+            Belum ada riwayat peminjaman buku aktif.
+          </div>
+        `;
+        return;
       }
+
+      let html = '';
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        html += `
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between text-xs">
+            <div>
+              <p class="font-extrabold text-slate-800">${data.buku || '-'}</p>
+              <p class="text-[10px] text-slate-500">Tgl Pinjam: ${data.tglPinjam || '-'} | Kembali: <span class="text-rose-600 font-bold">${data.tglKembali || '-'}</span></p>
+            </div>
+            <span class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800">
+              ${data.status || 'Dipinjam'}
+            </span>
+          </div>
+        `;
+        });
+        listEl.innerHTML = html;
+      });
     }
 
-    // Fungsi Logout Aman (Menghapus Sesi LocalStorage)
-    function handleLogout() {
+    window.handleLogout = function() {
       if (confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?")) {
         localStorage.removeItem('userSession');
         window.location.href = "login-siswa.html";
       }
-    }
+    };
 
     renderUserData();
+    loadUserPeminjaman();
   </script>
 </body>
 </html>
