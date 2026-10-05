@@ -223,173 +223,193 @@
 
   <!-- Script Firestore & LocalStorage Sync untuk Memuat Anggota & Petugas -->
   <script type="module">
-    import { db } from './js/firebase-config.js';
-    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { db } from './js/firebase-config.js';
+  import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    let listSiswa = [];
-    let listPetugas = [];
+  let listSiswa = [];
+  let listPetugas = [];
 
-    const pubTypeSelect = document.getElementById('pubTypeSelect');
-    const pubStatusSelect = document.getElementById('pubStatusSelect');
-    const pubSearchInput = document.getElementById('pubSearchInput');
-    const pubTableHead = document.getElementById('pubTableHead');
-    const pubTableBody = document.getElementById('pubTableBody');
+  const pubTypeSelect = document.getElementById('pubTypeSelect');
+  const pubStatusSelect = document.getElementById('pubStatusSelect');
+  const pubSearchInput = document.getElementById('pubSearchInput');
+  const pubTableHead = document.getElementById('pubTableHead');
+  const pubTableBody = document.getElementById('pubTableBody');
 
-    // 1. Fungsi memuat data dari LocalStorage
-    function loadFromLocalStorage() {
-      try {
-        const localSiswa = localStorage.getItem('siswaData') || localStorage.getItem('perpustakaan_siswa');
-        const localPetugas = localStorage.getItem('petugasData') || localStorage.getItem('perpustakaan_petugas');
-        const localPerpustakaan = localStorage.getItem('perpustakaanData');
+  // 1. Memuat data dari LocalStorage sebagai cadangan lokal
+  function loadFromLocalStorage() {
+    try {
+      const localSiswa = localStorage.getItem('anggotaData') || localStorage.getItem('siswaData') || localStorage.getItem('perpustakaan_anggota') || localStorage.getItem('perpustakaan_siswa');
+      const localPetugas = localStorage.getItem('petugasData') || localStorage.getItem('perpustakaan_petugas');
+      const localPerpustakaan = localStorage.getItem('perpustakaanData');
 
-        if (localPerpustakaan) {
-          const parsed = JSON.parse(localPerpustakaan);
-          if (parsed.siswa) listSiswa = parsed.siswa;
-          if (parsed.petugas) listPetugas = parsed.petugas;
-        } else {
-          if (localSiswa) listSiswa = JSON.parse(localSiswa);
-          if (localPetugas) listPetugas = JSON.parse(localPetugas);
-        }
-        renderPublicTable();
-      } catch (e) {
-        console.warn("Gagal memuat data dari localStorage:", e);
-      }
-    }
-
-    // Panggilan awal dari LocalStorage
-    loadFromLocalStorage();
-
-    // 2. Realtime listener storage untuk pembaruan instan antar-tab/halaman dashboard
-    window.addEventListener('storage', (e) => {
-      if (['perpustakaanData', 'siswaData', 'petugasData', 'perpustakaan_siswa', 'perpustakaan_petugas'].includes(e.key)) {
-        loadFromLocalStorage();
-      }
-    });
-
-    // 3. Realtime listener koleksi siswa (Firebase Firestore)
-    onSnapshot(collection(db, "siswa"), (snap) => {
-      if (!snap.empty) {
-        listSiswa = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderPublicTable();
-      }
-    }, (err) => {
-      console.warn("Gagal memuat data siswa dari Firestore:", err);
-      loadFromLocalStorage();
-    });
-
-    // 4. Realtime listener koleksi petugas (Firebase Firestore)
-    onSnapshot(collection(db, "petugas"), (snap) => {
-      if (!snap.empty) {
-        listPetugas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderPublicTable();
-      }
-    }, (err) => {
-      console.warn("Gagal memuat data petugas dari Firestore:", err);
-      loadFromLocalStorage();
-    });
-
-    pubTypeSelect.addEventListener('change', renderPublicTable);
-    pubStatusSelect.addEventListener('change', renderPublicTable);
-    pubSearchInput.addEventListener('input', renderPublicTable);
-
-    function renderPublicTable() {
-      const tipe = pubTypeSelect.value;
-      const statusFilter = pubStatusSelect.value;
-      const keyword = pubSearchInput.value.toLowerCase().trim();
-
-      if (tipe === 'siswa') {
-        pubTableHead.innerHTML = `
-          <th class="p-3.5">ID Anggota</th>
-          <th class="p-3.5">Nama Lengkap</th>
-          <th class="p-3.5">Kelas</th>
-          <th class="p-3.5">Instansi</th>
-          <th class="p-3.5 text-center">Status Keanggotaan</th>
-        `;
-
-        let filtered = listSiswa.filter(item => {
-          const statusVal = item.status || 'Aktif';
-          const matchStatus = (statusFilter === 'semua') || (statusVal === statusFilter);
-          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || (item.memberId || '').toLowerCase().includes(keyword);
-          return matchStatus && matchKey;
-        });
-
-        if (!filtered.length) {
-          pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Tidak ada data anggota siswa yang ditemukan.</td></tr>`;
-          return;
-        }
-
-        pubTableBody.innerHTML = filtered.map(item => {
-          const st = item.status || 'Aktif';
-          let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-          if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
-          if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
-
-          return `
-            <tr class="hover:bg-slate-50 transition">
-              <td class="p-3.5 font-mono text-brand-600 font-bold">${item.memberId || '-'}</td>
-              <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
-              <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
-              <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
-              </td>
-            </tr>
-          `;
-        }).join('');
-
+      if (localPerpustakaan) {
+        const parsed = JSON.parse(localPerpustakaan);
+        if (parsed.anggota) listSiswa = parsed.anggota;
+        else if (parsed.siswa) listSiswa = parsed.siswa;
+        if (parsed.petugas) listPetugas = parsed.petugas;
       } else {
-        pubTableHead.innerHTML = `
-          <th class="p-3.5">Nama Petugas</th>
-          <th class="p-3.5">Jabatan</th>
-          <th class="p-3.5">Username</th>
-          <th class="p-3.5 text-center">Status</th>
-        `;
-
-        let filtered = listPetugas.filter(item => {
-          const statusVal = item.status || 'Aktif';
-          const matchStatus = (statusFilter === 'semua') || (statusVal === statusFilter);
-          const matchKey = (item.nama || '').toLowerCase().includes(keyword) || (item.username || '').toLowerCase().includes(keyword);
-          return matchStatus && matchKey;
-        });
-
-        if (!filtered.length) {
-          pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Tidak ada data petugas yang ditemukan.</td></tr>`;
-          return;
-        }
-
-        pubTableBody.innerHTML = filtered.map(item => {
-          const st = item.status || 'Aktif';
-          let badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
-          if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
-          if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
-
-          return `
-            <tr class="hover:bg-slate-50 transition">
-              <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
-              <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
-              <td class="p-3.5 font-mono text-slate-500">${item.username || '-'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
-              </td>
-            </tr>
-          `;
-        }).join('');
+        if (localSiswa) listSiswa = JSON.parse(localSiswa);
+        if (localPetugas) listPetugas = JSON.parse(localPetugas);
       }
+      renderPublicTable();
+    } catch (e) {
+      console.warn("Gagal memuat data dari localStorage:", e);
     }
-  </script>
+  }
+
+  loadFromLocalStorage();
+
+  // 2. Listener pembaruan otomatis antar-tab browser
+  window.addEventListener('storage', (e) => {
+    if (['perpustakaanData', 'anggotaData', 'siswaData', 'petugasData', 'perpustakaan_anggota', 'perpustakaan_siswa', 'perpustakaan_petugas'].includes(e.key)) {
+      loadFromLocalStorage();
+    }
+  });
+
+  // 3. Listener Realtime koleksi 'anggota' Firestore
+  onSnapshot(collection(db, "anggota"), (snap) => {
+    if (!snap.empty) {
+      listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+      renderPublicTable();
+    }
+  }, (err) => {
+    console.warn("Gagal memuat dari koleksi 'anggota', mencoba koleksi 'siswa':", err);
+    onSnapshot(collection(db, "siswa"), (snapSiswa) => {
+      if (!snapSiswa.empty) {
+        listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
+        renderPublicTable();
+      }
+    });
+  });
+
+  // 4. Listener Realtime koleksi 'petugas' Firestore
+  onSnapshot(collection(db, "petugas"), (snap) => {
+    if (!snap.empty) {
+      listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+      renderPublicTable();
+    }
+  }, (err) => {
+    console.warn("Gagal memuat data petugas dari Firestore:", err);
+    loadFromLocalStorage();
+  });
+
+  pubTypeSelect.addEventListener('change', renderPublicTable);
+  pubStatusSelect.addEventListener('change', renderPublicTable);
+  pubSearchInput.addEventListener('input', renderPublicTable);
+
+  function renderPublicTable() {
+    const tipe = pubTypeSelect.value;
+    const statusFilter = pubStatusSelect.value;
+    const keyword = pubSearchInput.value.toLowerCase().trim();
+
+    if (tipe === 'siswa') {
+      pubTableHead.innerHTML = `
+        <th class="p-3.5">ID Anggota</th>
+        <th class="p-3.5">Nama Lengkap</th>
+        <th class="p-3.5">Kelas</th>
+        <th class="p-3.5">Instansi</th>
+        <th class="p-3.5 text-center">Status Keanggotaan</th>
+      `;
+
+      let filtered = listSiswa.filter(item => {
+        const statusVal = item.status || 'Aktif';
+        const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
+        
+        const idAnggota = (item.id || item.memberId || '').toString().toLowerCase();
+        const namaSiswa = (item.nama || '').toLowerCase();
+        const nisnSiswa = (item.nisn || '').toString().toLowerCase();
+
+        const matchKey = namaSiswa.includes(keyword) || idAnggota.includes(keyword) || nisnSiswa.includes(keyword);
+        return matchStatus && matchKey;
+      });
+
+      if (!filtered.length) {
+        pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Tidak ada data anggota siswa yang ditemukan.</td></tr>`;
+        return;
+      }
+
+      pubTableBody.innerHTML = filtered.map(item => {
+        const st = item.status || 'Aktif';
+        let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+        if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+        if (st === 'Standar') badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
+        const displayId = item.id || item.memberId || '-';
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="p-3.5 font-mono text-brand-600 font-bold">${displayId}</td>
+            <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+            <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
+            <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
+            <td class="p-3.5 text-center">
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+    } else {
+      pubTableHead.innerHTML = `
+        <th class="p-3.5">Nama Petugas</th>
+        <th class="p-3.5">Jabatan</th>
+        <th class="p-3.5">Username</th>
+        <th class="p-3.5 text-center">Status</th>
+      `;
+
+      let filtered = listPetugas.filter(item => {
+        const statusVal = item.status || 'Aktif';
+        const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
+        const matchKey = (item.nama || '').toLowerCase().includes(keyword) || (item.username || '').toLowerCase().includes(keyword);
+        return matchStatus && matchKey;
+      });
+
+      if (!filtered.length) {
+        pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Tidak ada data petugas yang ditemukan.</td></tr>`;
+        return;
+      }
+
+      pubTableBody.innerHTML = filtered.map(item => {
+        const st = item.status || 'Aktif';
+        let badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+        if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+        if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+            <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
+            <td class="p-3.5 font-mono text-slate-500">${item.username || '-'}</td>
+            <td class="p-3.5 text-center">
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+            </td>
+          </tr>
+            `;
+          }).join('');
+        }
+      }
+    </script>
 
   <!-- Script Jam Realtime & Kalender -->
+  <!-- Script Jam Realtime & Kalender (Versi Perbaikan) -->
   <script>
     function updateClock() {
       const now = new Date();
-      const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' };
-      document.getElementById('realtimeClock').innerText = now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar' }) + " WITA";
-      document.getElementById('realtimeDate').innerText = now.toLocaleDateString('id-ID', optionsDate);
+      const witaOptions = { timeZone: 'Asia/Makassar' };
+      
+      const witaTimeString = now.toLocaleTimeString('id-ID', witaOptions);
+      const witaDateString = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' });
+      
+      document.getElementById('realtimeClock').innerText = witaTimeString + " WITA";
+      document.getElementById('realtimeDate').innerText = witaDateString;
+      document.getElementById('calendarMonth').innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
 
-      // Status Buka/Tutup
-      const day = now.getDay();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
+      // Pengecekan status operasional berdasarkan waktu WITA
+      const witaDate = new Date(now.toLocaleString('en-US', witaOptions));
+      const day = witaDate.getDay();
+      const hours = witaDate.getHours();
+      const minutes = witaDate.getMinutes();
       const timeNum = hours * 100 + minutes;
 
       const badge = document.getElementById('statusBadge');
@@ -412,20 +432,31 @@
 
     function generateCalendar() {
       const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
       grid.innerHTML = '';
+
       const days = ['Mg', 'Sn', 'Sl', 'Rb', 'Km', 'Jm', 'Sb'];
       days.forEach(d => grid.innerHTML += `<div class="font-extrabold text-slate-400 py-1">${d}</div>`);
       
       const now = new Date();
-      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-      const totalDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      const witaDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Makassar' }));
+      const year = witaDate.getFullYear();
+      const month = witaDate.getMonth();
 
+      // Perhitungan hari pertama dan total hari dalam bulan berjalan
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const todayDate = witaDate.getDate();
+
+      // Menambahkan slot kosong sebelum tanggal 1
       for (let i = 0; i < firstDay; i++) {
         grid.innerHTML += `<div></div>`;
       }
-      for (let day = 1; day <= totalDays; day++) {
-        const isToday = day === now.getDate();
-        grid.innerHTML += `<div class="py-1 rounded-lg ${isToday ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-100'}">${day}</div>`;
+
+      // Menampilkan tanggal
+      for (let d = 1; d <= totalDays; d++) {
+        const isToday = d === todayDate;
+        grid.innerHTML += `<div class="py-1 rounded-lg ${isToday ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-100'}">${d}</div>`;
       }
     }
 
