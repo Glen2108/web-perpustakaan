@@ -238,11 +238,11 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">ID Anggota</label>
-              <input type="text" id="inpIdAnggota" required placeholder="AGT-001" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+              <input type="text" id="inpIdAnggota" required placeholder="Otomatis terisi..." oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">NISN / Personal ID</label>
-              <input type="text" id="inpPersonalId" required placeholder="0051234567" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+              <input type="text" id="inpPersonalId" required placeholder="Otomatis terisi..." oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
             </div>
           </div>
 
@@ -265,7 +265,29 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-              <input type="text" id="inpKelas" required placeholder="X IPA 1" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+              <select id="inpKelas" required onchange="window.handleKelasChange()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-slate-800">
+                <option value="" disabled selected>-- Pilih Kelas --</option>
+                <optgroup label="Kelas X (10)">
+                  <option value="X-1">X-1</option>
+                  <option value="X-2">X-2</option>
+                  <option value="X-3">X-3</option>
+                  <option value="X-4">X-4</option>
+                </optgroup>
+                <optgroup label="Kelas XI (11)">
+                  <option value="XI-1">XI-1</option>
+                  <option value="XI-2">XI-2</option>
+                  <option value="XI-3">XI-3</option>
+                  <option value="XI-4">XI-4</option>
+                  <option value="XI-5">XI-5</option>
+                </optgroup>
+                <optgroup label="Kelas XII (12)">
+                  <option value="XII-1">XII-1</option>
+                  <option value="XII-2">XII-2</option>
+                  <option value="XII-3">XII-3</option>
+                  <option value="XII-4">XII-4</option>
+                  <option value="XII-5">XII-5</option>
+                </optgroup>
+              </select>
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Status Perpustakaan</label>
@@ -571,6 +593,65 @@
       searchQuery: ''
     };
 
+    // Fungsi Generate ID Anggota & Personal ID Otomatis
+    window.generateAutoIds = function(selectedKelas) {
+      if (!selectedKelas) return;
+
+      let gradeCode = '';
+      let minSeq = 1;
+
+      // Urutan 26 (tahun) 0 (angka sendiri) 10/11/12 (kelas) XX (urut)
+      if (selectedKelas.startsWith('X-')) {
+        gradeCode = '10';
+        minSeq = 18; // terhitung dari 2601017 -> lanjut 18
+      } else if (selectedKelas.startsWith('XI-')) {
+        gradeCode = '11';
+        minSeq = 12; // terhitung dari 2601111 -> lanjut 12
+      } else if (selectedKelas.startsWith('XII-')) {
+        gradeCode = '12';
+        minSeq = 19; // terhitung dari 2601218 -> lanjut 19
+      }
+
+      if (!gradeCode) return;
+
+      const prefix = '260' + gradeCode;
+      const existingMembers = window.dbData.anggota || [];
+
+      let maxSeq = minSeq - 1;
+
+      existingMembers.forEach(m => {
+        const rawVal = String(m.nisn || m.personalId || m.id || '');
+        const match = rawVal.match(new RegExp('260' + gradeCode + '(\\d+)'));
+        if (match && match[1]) {
+          const seq = parseInt(match[1], 10);
+          if (seq > maxSeq) {
+            maxSeq = seq;
+          }
+        }
+      });
+
+      const nextSeq = maxSeq + 1;
+      const seqStr = String(nextSeq).padStart(2, '0');
+      const generatedCode = prefix + seqStr;
+
+      const inpPersonalId = document.getElementById('inpPersonalId');
+      const inpIdAnggota = document.getElementById('inpIdAnggota');
+
+      if (inpPersonalId) inpPersonalId.value = generatedCode;
+      if (inpIdAnggota) inpIdAnggota.value = 'AGT-' + generatedCode;
+
+      if (typeof window.updateCardPreview === 'function') {
+        window.updateCardPreview();
+      }
+    };
+
+    window.handleKelasChange = function() {
+      const kelasVal = document.getElementById('inpKelas')?.value;
+      if (kelasVal) {
+        window.generateAutoIds(kelasVal);
+      }
+    };
+
     const collections = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
     collections.forEach(colName => {
       onSnapshot(collection(db, colName), (snapshot) => {
@@ -579,6 +660,14 @@
           ...docSnap.data()
         }));
         window.renderTableData();
+
+        // Regenerate ID jika modal anggota sedang dibuka dalam posisi tambah data baru
+        if (window.currentActiveTable === 'anggota' && !window.editingMemberId) {
+          const currentKelas = document.getElementById('inpKelas')?.value;
+          if (currentKelas) {
+            window.generateAutoIds(currentKelas);
+          }
+        }
       });
     });
 
@@ -1044,6 +1133,7 @@
           await addDoc(collection(db, 'anggota'), payload);
           alert('Data anggota baru berhasil disimpan!');
         }
+        window.editingMemberId = null;
         window.toggleModal('modalSiswa', false);
       } catch (err) {
         alert('Gagal menyimpan data: ' + err.message);
