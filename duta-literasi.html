@@ -6,45 +6,73 @@
   <title>Duta Literasi - SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: { brand: { 800: '#1e3a8a', 900: '#0f172a', 600: '#2563eb', 500: '#3b82f6' } }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
 
-  <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800">
+  <!-- Header Navigasi -->
+  <header class="bg-brand-900 text-white sticky top-0 z-40 border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="index.html" class="font-black text-lg">PERPUSTAKAAN SMAN 4 MANADO</a>
-      <nav class="space-x-6 text-sm font-semibold">
-        <a href="index.html" class="hover:text-amber-400">Beranda</a>
-        <a href="katalog.html" class="hover:text-amber-400">Katalog</a>
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-200 text-brand-900 flex items-center justify-center font-black text-xl shadow-lg">
+          <i class="fa-solid fa-book-bookmark"></i>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-none">PERPUSTAKAAN DIGITAL</h1>
+          <p class="text-[11px] text-blue-300 font-medium tracking-wider">SMA NEGERI 4 MANADO</p>
+        </div>
+      </a>
+      <nav class="hidden md:flex space-x-8 text-sm font-semibold">
+        <a href="index.html" class="hover:text-amber-300 transition">Beranda</a>
+        <a href="katalog.html" class="hover:text-amber-300 transition">Katalog Buku</a>
         <a href="duta-literasi.html" class="text-amber-400 font-bold">Duta Literasi</a>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-6 py-10 space-y-12">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
     
     <!-- Hero Banner & Insentif -->
-    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-8 rounded-3xl shadow-xl space-y-6">
+    <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6">
       <div class="max-w-3xl space-y-2">
-        <span class="bg-amber-400 text-slate-900 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">Ajang Bergengsi</span>
-        <h2 class="text-3xl font-black">Program & Pemilihan Duta Literasi</h2>
-        <p class="text-blue-200 text-sm">Masa Jabatan Duta Literasi adalah <strong>2 Bulan</strong> terhitung sejak tanggal pelantikan resmi.</p>
+        <span class="bg-amber-400 text-slate-900 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+          <i class="fa-solid fa-award mr-1"></i> Ajang Bergengsi
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black">Program & Pemilihan Duta Literasi</h2>
+        <p class="text-blue-200 text-xs sm:text-sm leading-relaxed">
+          Masa Jabatan Duta Literasi adalah <strong>2 Bulan</strong> terhitung sejak tanggal pelantikan resmi.
+        </p>
       </div>
 
       <!-- Persyaratan & Fasilitas Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/10">
         <div class="bg-white/10 backdrop-blur p-5 rounded-2xl border border-white/10 space-y-2 text-xs">
-          <h4 class="font-bold text-amber-300 text-sm"><i class="fa-solid fa-list-check mr-1"></i> Persyaratan Calon Duta</h4>
-          <ul class="list-disc list-inside space-y-1 text-slate-200">
-            <li>Minimal meminjam 4 Buku fisik terhitung sejak pendaftaran dibuka.</li>
+          <h3 class="font-bold text-amber-300 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-list-check"></i> Persyaratan Calon Duta
+          </h3>
+          <ul class="list-disc list-inside space-y-1 text-slate-200 leading-relaxed">
+            <li>Minimal meminjam 4 buku fisik terhitung sejak pendaftaran dibuka.</li>
             <li>Membuat ringkasan/resensi resmi untuk minimal 2 dari 4 buku yang dipinjam.</li>
             <li>Tidak terdeteksi melakukan pelanggaran atau terlambat mengembalikan buku.</li>
           </ul>
         </div>
 
         <div class="bg-white/10 backdrop-blur p-5 rounded-2xl border border-white/10 space-y-2 text-xs">
-          <h4 class="font-bold text-amber-300 text-sm"><i class="fa-solid fa-award mr-1"></i> Fasilitas & Reward Duta Terpilih</h4>
-          <ul class="list-disc list-inside space-y-1 text-slate-200">
-            <li>Memakai Slempang Resmi Duta Literasi di acara-acara penting sekolah.</li>
+          <h3 class="font-bold text-amber-300 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-gift"></i> Fasilitas & Reward Duta Terpilih
+          </h3>
+          <ul class="list-disc list-inside space-y-1 text-slate-200 leading-relaxed">
+            <li>Memakai Selempang Resmi Duta Literasi di acara-acara penting sekolah.</li>
             <li>Mendapatkan 1 Sertifikat Penghargaan Resmi di akhir masa jabatan.</li>
             <li>Mendapatkan Insentif Tunai Sebesar <strong>Rp 50.000,-</strong>.</li>
           </ul>
@@ -52,25 +80,33 @@
       </div>
     </div>
 
-    <!-- Section Duta Terpilih (Min 2 Orang) -->
+    <!-- Section Duta Terpilih -->
     <section class="space-y-4">
-      <div class="border-b pb-2">
-        <h3 class="text-xl font-extrabold text-slate-900"><i class="fa-solid fa-crown text-amber-500 mr-2"></i>Duta Literasi Terpilih Periode Ini</h3>
-        <p class="text-xs text-slate-500">Ikon penggerak minat baca SMAN 4 Manado</p>
+      <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-crown text-amber-500"></i> Duta Literasi Terpilih Periode Ini
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Ikon penggerak minat baca SMAN 4 Manado (Masa Jabatan 2 Bulan)</p>
+        </div>
       </div>
       <div id="gridDutaTerpilih" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <p class="text-xs text-slate-400 col-span-full">Memuat data Duta Terpilih...</p>
+        <p class="text-xs text-slate-400 col-span-full italic py-4">Memuat data Duta Terpilih...</p>
       </div>
     </section>
 
     <!-- Section Calon Duta Literasi -->
     <section class="space-y-4">
-      <div class="border-b pb-2">
-        <h3 class="text-xl font-extrabold text-slate-900"><i class="fa-solid fa-users text-blue-600 mr-2"></i>Daftar Calon Duta Literasi</h3>
-        <p class="text-xs text-slate-500">Siswa-siswi berbakat yang sedang dalam sesi seleksi</p>
+      <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-user-clock text-indigo-600"></i> Daftar Calon Duta Literasi
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Siswa-siswi berbakat yang sedang dalam masa pencalonan (7 Hari)</p>
+        </div>
       </div>
       <div id="gridCalonDuta" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <p class="text-xs text-slate-400 col-span-full">Memuat calon duta...</p>
+        <p class="text-xs text-slate-400 col-span-full italic py-4">Memuat calon duta...</p>
       </div>
     </section>
 
@@ -78,52 +114,82 @@
 
   <script type="module">
     import { db } from './js/firebase-config.js';
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    async function loadDutaData() {
-      try {
-        const snap = await getDocs(collection(db, "duta_literasi"));
-        const terpilihGrid = document.getElementById('gridDutaTerpilih');
-        const calonGrid = document.getElementById('gridCalonDuta');
+    const terpilihGrid = document.getElementById('gridDutaTerpilih');
+    const calonGrid = document.getElementById('gridCalonDuta');
 
-        let htmlTerpilih = "";
-        let htmlCalon = "";
+    function renderDutaView(docs) {
+      if (!terpilihGrid || !calonGrid) return;
 
-        snap.forEach(d => {
-          const item = d.data();
-          if (item.status === 'terpilih') {
-            htmlTerpilih += `
-              <div class="bg-white rounded-3xl p-6 border-2 border-amber-300 shadow-lg flex flex-col sm:flex-row gap-5 items-center">
-                <img src="${item.foto || 'https://via.placeholder.com/150'}" class="w-28 h-36 object-cover rounded-2xl shadow-md border">
-                <div class="space-y-1 text-center sm:text-left">
-                  <span class="bg-amber-100 text-amber-900 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full">DUTA TERPILIH</span>
-                  <h4 class="font-black text-lg text-slate-900">${item.nama}</h4>
-                  <p class="text-xs font-bold text-blue-700">Kelas: ${item.kelas}</p>
-                  <p class="text-xs text-slate-600 italic mt-2">"${item.visiMisi}"</p>
+      let htmlTerpilih = "";
+      let htmlCalon = "";
+
+      docs.forEach(d => {
+        const item = d.data ? d.data() : d;
+        const tipeVal = (item.tipe || item.status || '').toString().toLowerCase();
+
+        const isTerpilih = tipeVal === 'terpilih' || tipeVal.includes('terpilih');
+
+        if (isTerpilih) {
+          htmlTerpilih += `
+            <div class="bg-white rounded-3xl p-6 border-2 border-amber-300 shadow-lg flex flex-col sm:flex-row gap-5 items-center">
+              <div class="w-28 h-36 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200 flex items-center justify-center">
+                ${item.foto 
+                  ? `<img src="${item.foto}" class="w-full h-full object-cover">`
+                  : `<i class="fa-solid fa-user text-4xl text-slate-300"></i>`
+                }
+              </div>
+              <div class="space-y-1.5 text-center sm:text-left flex-1">
+                <span class="bg-amber-100 text-amber-900 font-black text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider inline-block">DUTA TERPILIH</span>
+                <h4 class="font-black text-lg text-slate-900">${item.nama || '-'}</h4>
+                <p class="text-xs font-bold text-blue-700">Kelas: ${item.kelas || '-'} ${item.periode ? `| Periode: ${item.periode}` : ''}</p>
+                <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100 mt-2">
+                  <p class="text-xs text-slate-600 italic">"${item.visiMisi || item.visi || 'Tidak ada deskripsi visi-misi.'}"</p>
                 </div>
               </div>
-            `;
-          } else {
-            htmlCalon += `
-              <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2">
-                <h4 class="font-black text-slate-900 text-base">${item.nama}</h4>
-                <p class="text-xs font-bold text-blue-600">Kelas: ${item.kelas}</p>
-                <div class="bg-slate-50 p-3 rounded-xl text-xs text-slate-600">
-                  <strong>Visi-Misi:</strong> ${item.visiMisi}
+            </div>
+          `;
+        } else {
+          htmlCalon += `
+            <div class="bg-white rounded-2xl p-5 border border-purple-200 shadow-sm space-y-3 flex flex-col justify-between">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="px-2 py-0.5 bg-purple-100 text-purple-800 font-bold text-[10px] rounded-md uppercase">Pencalonan (7 Hari)</span>
+                  ${item.tglSelesai ? `<span class="text-[10px] text-slate-400">Batas: ${item.tglSelesai}</span>` : ''}
                 </div>
+                <h4 class="font-black text-slate-900 text-base mt-1">${item.nama || '-'}</h4>
+                <p class="text-xs font-bold text-blue-600">Kelas: ${item.kelas || '-'}</p>
               </div>
-            `;
-          }
-        });
+              <div class="bg-slate-50 p-3 rounded-xl text-xs text-slate-600 border border-slate-100">
+                <strong class="text-slate-800">Visi & Misi:</strong>
+                <p class="mt-0.5 italic">${item.visiMisi || item.visi || '-'}</p>
+              </div>
+            </div>
+          `;
+        }
+      });
 
-        terpilihGrid.innerHTML = htmlTerpilih || `<p class="col-span-full text-xs text-slate-400">Belum ada Duta Terpilih yang ditetapkan admin.</p>`;
-        calonGrid.innerHTML = htmlCalon || `<p class="col-span-full text-xs text-slate-400">Belum ada Calon Duta terdaftar.</p>`;
-      } catch (err) {
-        console.error(err);
-      }
+      terpilihGrid.innerHTML = htmlTerpilih || `<p class="col-span-full text-xs text-slate-400 italic py-4">Belum ada Duta Terpilih yang ditetapkan admin.</p>`;
+      calonGrid.innerHTML = htmlCalon || `<p class="col-span-full text-xs text-slate-400 italic py-4">Belum ada Calon Duta terdaftar saat ini.</p>`;
     }
 
-    loadDutaData();
+    // Realtime Listener Firestore (Mendukung koleksi 'duta_literasi' atau 'duta')
+    onSnapshot(collection(db, "duta_literasi"), (snap) => {
+      if (!snap.empty) {
+        renderDutaView(snap.docs);
+      } else {
+        // Fallback jika admin menyimpan di koleksi 'duta'
+        onSnapshot(collection(db, "duta"), (snapDuta) => {
+          renderDutaView(snapDuta.docs);
+        });
+      }
+    }, (err) => {
+      console.warn("Mencoba fallback koleksi 'duta':", err);
+      onSnapshot(collection(db, "duta"), (snapDuta) => {
+        renderDutaView(snapDuta.docs);
+      });
+    });
   </script>
 </body>
 </html>

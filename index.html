@@ -164,6 +164,47 @@
     </div>
   </section>
 
+  <!-- Seksi Realtime Duta Literasi Sekolah -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div>
+          <span class="text-xs font-black text-amber-600 uppercase tracking-wider">Program Unggulan</span>
+          <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-award text-amber-500"></i> Duta Literasi Sekolah
+          </h3>
+        </div>
+        <a href="duta-literasi.html" class="text-xs font-bold text-blue-600 hover:text-blue-800">
+          Lihat Selengkapnya <i class="fa-solid fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Duta Terpilih (2 Bulan) -->
+        <div class="bg-white p-5 rounded-3xl shadow-lg border border-amber-200 space-y-3">
+          <div class="flex items-center justify-between border-b pb-2">
+            <h4 class="font-extrabold text-sm text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-crown text-amber-500"></i> Duta Literasi Terpilih (Masa Jabatan 2 Bulan)
+            </h4>
+          </div>
+          <div id="containerDutaTerpilih" class="space-y-2">
+            <p class="text-xs text-slate-400 italic py-2">Memuat data Duta Terpilih...</p>
+          </div>
+        </div>
+
+        <!-- Card Calon Duta (7 Hari) -->
+        <div class="bg-white p-5 rounded-3xl shadow-lg border border-purple-200 space-y-3">
+          <div class="flex items-center justify-between border-b pb-2">
+            <h4 class="font-extrabold text-sm text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-clock text-purple-600"></i> Calon Duta Literasi (Masa Pencalonan 7 Hari)
+            </h4>
+          </div>
+          <div id="containerCalonDuta" class="space-y-2">
+            <p class="text-xs text-slate-400 italic py-2">Memuat data Calon Duta...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   <!-- Seksi Daftar Anggota & Petugas Perpustakaan -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
     <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-6">
@@ -228,12 +269,131 @@
 
   let listSiswa = [];
   let listPetugas = [];
+  let listDuta = [];
 
   const pubTypeSelect = document.getElementById('pubTypeSelect');
-  const pubStatusSelect = document.getElementById('pubStatusSelect');
   const pubSearchInput = document.getElementById('pubSearchInput');
   const pubTableHead = document.getElementById('pubTableHead');
   const pubTableBody = document.getElementById('pubTableBody');
+
+  // 1. Synchronize Listener Firestore Real-time
+  onSnapshot(collection(db, "anggota"), (snapshot) => {
+    listSiswa = snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
+    renderPubTable();
+  });
+
+  onSnapshot(collection(db, "petugas"), (snapshot) => {
+    listPetugas = snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
+    renderPubTable();
+  });
+
+  onSnapshot(collection(db, "duta"), (snapshot) => {
+    listDuta = snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
+    renderPubTable();
+    renderDutaLiterasiCards();
+  });
+
+  // 2. Render Showcase Duta Literasi
+  function renderDutaLiterasiCards() {
+    const containerTerpilih = document.getElementById('containerDutaTerpilih');
+    const containerCalon = document.getElementById('containerCalonDuta');
+    if (!containerTerpilih || !containerCalon) return;
+
+    const terpilihList = listDuta.filter(d => d.tipe === 'terpilih' || d.status?.includes('Terpilih'));
+    const calonList = listDuta.filter(d => d.tipe === 'calon' || d.status?.includes('Calon') || d.status?.includes('Pencalonan'));
+
+    // Render Duta Terpilih
+    if (terpilihList.length === 0) {
+      containerTerpilih.innerHTML = `<p class="text-xs text-slate-400 italic py-3 text-center">Belum ada Duta Literasi Terpilih aktif.</p>`;
+    } else {
+      containerTerpilih.innerHTML = terpilihList.map(item => `
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-3.5 rounded-2xl border border-amber-200 shadow-sm flex items-center justify-between">
+          <div class="space-y-0.5">
+            <span class="px-2 py-0.5 bg-amber-400 text-slate-900 font-black text-[9px] rounded uppercase">Terpilih (2 Bulan)</span>
+            <h5 class="font-extrabold text-slate-900 text-xs mt-1">${item.nama || '-'}</h5>
+            <p class="text-[11px] text-slate-600">Kelas: ${item.kelas || '-'} | Periode: ${item.periode || '-'}</p>
+          </div>
+          <div class="w-8 h-8 rounded-xl bg-amber-400/20 text-amber-700 flex items-center justify-center font-black text-sm">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Calon Duta
+    if (calonList.length === 0) {
+      containerCalon.innerHTML = `<p class="text-xs text-slate-400 italic py-3 text-center">Tidak ada calon dalam masa pencalonan saat ini.</p>`;
+        } else {
+          containerCalon.innerHTML = calonList.map(item => `
+            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-3.5 rounded-2xl border border-purple-200 shadow-sm flex items-center justify-between">
+              <div class="space-y-0.5">
+                <span class="px-2 py-0.5 bg-purple-600 text-white font-black text-[9px] rounded uppercase">Pencalonan (7 Hari)</span>
+                <h5 class="font-extrabold text-slate-900 text-xs mt-1">${item.nama || '-'}</h5>
+                <p class="text-[11px] text-slate-600">Kelas: ${item.kelas || '-'} | Batas: ${item.tglSelesai || '-'}</p>
+              </div>
+              <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-700 flex items-center justify-center font-black text-sm">
+                <i class="fa-solid fa-user-clock"></i>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+    // 3. Render Tabel Publik Beranda
+  function renderPubTable() {
+    if (!pubTypeSelect || !pubTableHead || !pubTableBody) return;
+    const type = pubTypeSelect.value;
+    const query = (pubSearchInput?.value || '').toLowerCase();
+
+    if (type === 'siswa') {
+      pubTableHead.innerHTML = `
+        <tr>
+          <th class="px-4 py-3">ID Anggota</th>
+          <th class="px-4 py-3">Nama Siswa</th>
+          <th class="px-4 py-3">Kelas</th>
+          <th class="px-4 py-3">Status</th>
+        </tr>
+      `;
+      const filtered = listSiswa.filter(s => (s.nama || '').toLowerCase().includes(query) || (s.id || '').toLowerCase().includes(query));
+      if (filtered.length === 0) {
+        pubTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">Tidak ada data anggota ditemukan.</td></tr>`;
+      } else {
+        pubTableBody.innerHTML = filtered.map(s => `
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-3 font-bold text-blue-600">${s.id || '-'}</td>
+            <td class="px-4 py-3 font-bold text-slate-900">${s.nama || '-'}</td>
+            <td class="px-4 py-3">${s.kelas || '-'}</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px]">${s.status || 'Aktif'}</span></td>
+          </tr>
+        `).join('');
+      }
+    } else if (type === 'petugas') {
+      pubTableHead.innerHTML = `
+        <tr>
+          <th class="px-4 py-3">ID Petugas</th>
+          <th class="px-4 py-3">Nama Petugas</th>
+          <th class="px-4 py-3">Jabatan</th>
+          <th class="px-4 py-3">Status</th>
+        </tr>
+      `;
+      const filtered = listPetugas.filter(p => (p.nama || '').toLowerCase().includes(query) || (p.jabatan || '').toLowerCase().includes(query));
+      if (filtered.length === 0) {
+        pubTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">Tidak ada data petugas ditemukan.</td></tr>`;
+      } else {
+        pubTableBody.innerHTML = filtered.map(p => `
+          <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <td class="px-4 py-3 font-bold text-indigo-600">${p.id || '-'}</td>
+            <td class="px-4 py-3 font-bold text-slate-900">${p.nama || '-'}</td>
+            <td class="px-4 py-3">${p.jabatan || '-'}</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px]">${p.status || 'Aktif'}</span></td>
+          </tr>
+        `).join('');
+      }
+    }
+  }
+
+  if (pubTypeSelect) pubTypeSelect.addEventListener('change', renderPubTable);
+  if (pubSearchInput) pubSearchInput.addEventListener('input', renderPubTable);
 
   // 1. Memuat data dari LocalStorage sebagai cadangan lokal
   function loadFromLocalStorage() {
@@ -408,7 +568,6 @@
       }
     </script>
 
-  <!-- Script Jam Realtime & Kalender -->
   <!-- Script Jam Realtime & Kalender (Versi Perbaikan) -->
   <script>
     function updateClock() {
