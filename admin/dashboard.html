@@ -18,36 +18,24 @@
     }
   </script>
 
-  <!-- Gaya CSS Khusus Untuk Cetak Kartu Anggota (Printout) -->
   <style>
     @media print {
-      body * {
-        visibility: hidden !important;
-      }
-      #areaCetakKartu, #areaCetakKartu * {
-        visibility: visible !important;
-      }
+      body * { visibility: hidden !important; }
+      #areaCetakKartu, #areaCetakKartu * { visibility: visible !important; }
       #areaCetakKartu {
         position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 20px !important;
-        justify-content: center !important;
-        background: white !important;
+        left: 0 !important; top: 0 !important;
+        width: 100% !important; display: flex !important;
+        flex-direction: row !important; gap: 20px !important;
+        justify-content: center !important; background: white !important;
         padding: 20px !important;
       }
-      .no-print {
-        display: none !important;
-      }
+      .no-print { display: none !important; }
     }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
-  <!-- Verifikasi Sesi Admin -->
   <script>
     const adminSession = localStorage.getItem('adminSession');
     if (!adminSession) {
@@ -56,10 +44,9 @@
     const currentAdmin = JSON.parse(adminSession || '{}');
   </script>
 
-  <!-- Header / Navigasi Admin -->
+  <!-- Header -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      
       <a href="../index.html" class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-lg">
           <i class="fa-solid fa-user-shield"></i>
@@ -72,9 +59,7 @@
 
       <div class="flex items-center gap-3">
         <div class="hidden sm:flex items-center gap-3 bg-slate-800 px-3.5 py-1.5 rounded-2xl border border-slate-700">
-          <div class="w-7 h-7 rounded-lg bg-indigo-500 text-white font-black flex items-center justify-center text-xs">
-            A
-          </div>
+          <div class="w-7 h-7 rounded-lg bg-indigo-500 text-white font-black flex items-center justify-center text-xs">A</div>
           <div class="text-left">
             <p class="text-xs font-bold leading-tight text-white" id="adminEmailText">Admin Perpustakaan</p>
             <p class="text-[10px] text-indigo-300 font-medium">Petugas Aktif</p>
@@ -89,21 +74,15 @@
     </div>
   </header>
 
-  <!-- Konten Utama Dashboard -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
     
-    <!-- Banner Utama -->
     <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div class="space-y-2">
         <div class="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 rounded-full text-xs font-bold">
           <i class="fa-solid fa-shield-halved mr-1"></i> Sistem Manajemen Otomasi
         </div>
-        <h2 class="text-2xl sm:text-3xl font-black tracking-tight">
-          Selamat Datang, Admin Perpustakaan
-        </h2>
-        <p class="text-xs sm:text-sm text-slate-300" id="adminInfoEmail">
-          Email Admin: -
-        </p>
+        <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Selamat Datang, Admin Perpustakaan</h2>
+        <p class="text-xs sm:text-sm text-slate-300" id="adminInfoEmail">Email Admin: -</p>
       </div>
 
       <a href="../index.html" class="w-full md:w-auto text-center bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95">
@@ -111,18 +90,16 @@
       </a>
     </div>
 
-    <!-- 5 Modul Utama -->
+    <!-- Modul Utama -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       
-      <!-- Modul 1: Kelola Anggota -->
-      <div id="card-anggota" onclick="switchTable('anggota')" class="card-module cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-blue-500 hover:shadow-2xl transition flex flex-col justify-between space-y-4 relative group">
+      <!-- Modul 1: Anggota -->
+      <div id="card-anggota" onclick="switchTable('anggota')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-blue-500 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
-          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-users"></i>
-          </div>
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-users"></i></div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Kelola Anggota</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-snug">Tambah data profil anggota & akun login siswa.</p>
+            <p class="text-[11px] text-slate-500 mt-1">Tambah data profil anggota & akun login siswa.</p>
           </div>
         </div>
         <button onclick="event.stopPropagation(); window.openAddMemberModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
@@ -130,15 +107,13 @@
         </button>
       </div>
 
-      <!-- Modul 2: Kelola Petugas -->
-      <div id="card-petugas" onclick="switchTable('petugas')" class="card-module cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-indigo-400 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
+      <!-- Modul 2: Petugas -->
+      <div id="card-petugas" onclick="switchTable('petugas')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-indigo-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-user-shield"></i>
-          </div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-user-shield"></i></div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Kelola Petugas</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-snug">Tambah akun login & jabatan petugas.</p>
+            <p class="text-[11px] text-slate-500 mt-1">Tambah akun login & jabatan petugas.</p>
           </div>
         </div>
         <button onclick="event.stopPropagation(); openModalWithTable('modalPetugas', 'petugas')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
@@ -146,15 +121,13 @@
         </button>
       </div>
 
-      <!-- Modul 3: Katalog Buku -->
-      <div id="card-buku" onclick="switchTable('buku')" class="card-module cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-amber-400 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
+      <!-- Modul 3: Buku -->
+      <div id="card-buku" onclick="switchTable('buku')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-amber-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
-          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-book"></i>
-          </div>
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-book"></i></div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Katalog Buku</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-snug">Tambah koleksi, penerbit, stok, & cover buku.</p>
+            <p class="text-[11px] text-slate-500 mt-1">Tambah koleksi, penerbit, stok, & cover buku.</p>
           </div>
         </div>
         <button onclick="event.stopPropagation(); openModalWithTable('modalBuku', 'buku')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
@@ -163,113 +136,31 @@
       </div>
 
       <!-- Modul 4: Duta Literasi -->
-      <div id="card-duta" onclick="switchTable('duta')" class="card-module cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-purple-400 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
+      <div id="card-duta" onclick="switchTable('duta')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-purple-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
-          <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-award"></i>
-          </div>
+          <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-award"></i></div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Duta Literasi</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-snug">Kelola Calon (7 hari) & Duta Terpilih (2 bulan).</p>
+            <p class="text-[11px] text-slate-500 mt-1">Kelola Calon (7 hari) & Duta Terpilih (2 bulan).</p>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-1.5">
           <button onclick="event.stopPropagation(); openModalWithTable('modalCalonDuta', 'duta')" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-[11px] transition flex items-center justify-center gap-1 shadow-md">
-            <i class="fa-solid fa-user-clock text-[9px]"></i> + Calon (7H)
+            + Calon
           </button>
           <button onclick="event.stopPropagation(); openModalWithTable('modalDutaTerpilih', 'duta')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2 rounded-xl text-[11px] transition flex items-center justify-center gap-1 shadow-md">
-            <i class="fa-solid fa-crown text-[9px]"></i> + Terpilih (2B)
+            + Terpilih
           </button>
         </div>
       </div>
 
-      <!-- Popup 4A: Tambah Calon Duta Literasi (Masa Pencalonan 7 Hari) -->
-      <div id="modalCalonDuta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
-          <div class="flex items-center justify-between border-b pb-3">
-            <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-              <i class="fa-solid fa-user-clock text-purple-600"></i> Tambah Calon Duta (7 Hari)
-            </h3>
-            <button onclick="toggleModal('modalCalonDuta', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <form id="formTambahCalonDuta" class="space-y-3 text-xs">
-            <div class="p-2.5 bg-purple-50 text-purple-900 rounded-xl border border-purple-200 text-[11px]">
-              <i class="fa-solid fa-circle-info mr-1"></i> Masa pencalonan akan dihitung <strong>7 hari otomatis</strong> sejak tanggal mulai.
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Nama Siswa / Calon Duta</label>
-              <input type="text" id="inpNamaCalonDuta" required placeholder="Nama lengkap siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-              <input type="text" id="inpKelasCalonDuta" required placeholder="XI IPA 2" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Visi / Program Kerja Singkat</label>
-              <textarea id="inpVisiCalonDuta" rows="2" placeholder="Visi kampanye literasi..." class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none"></textarea>
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai Pencalonan</label>
-              <input type="date" id="inpTglMulaiCalon" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
-            </div>
-            <div class="pt-2 flex items-center justify-end gap-2">
-              <button type="button" onclick="toggleModal('modalCalonDuta', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-              <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-purple-600 text-white hover:bg-purple-700 shadow-md">Simpan Calon Duta</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Popup 4B: Tambah Duta Literasi Terpilih (Masa Jabatan 2 Bulan) -->
-      <div id="modalDutaTerpilih" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
-          <div class="flex items-center justify-between border-b pb-3">
-            <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-              <i class="fa-solid fa-crown text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)
-            </h3>
-            <button onclick="toggleModal('modalDutaTerpilih', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <form id="formTambahDutaTerpilih" class="space-y-3 text-xs">
-            <div class="p-2.5 bg-amber-50 text-amber-900 rounded-xl border border-amber-200 text-[11px]">
-              <i class="fa-solid fa-circle-info mr-1"></i> Masa jabatan Duta Terpilih berlaku selama <strong>2 bulan otomatis</strong>.
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Nama Siswa / Duta Terpilih</label>
-              <input type="text" id="inpNamaDutaTerpilih" required placeholder="Nama lengkap siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-              <input type="text" id="inpKelasDutaTerpilih" required placeholder="XI IPA 1" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Catatan / Prestasi Duta</label>
-              <input type="text" id="inpPrestasiDutaTerpilih" placeholder="Juara 1 Lomba Resensi Buku" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
-            </div>
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai Jabatan</label>
-              <input type="date" id="inpTglMulaiTerpilih" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
-            </div>
-            <div class="pt-2 flex items-center justify-end gap-2">
-              <button type="button" onclick="toggleModal('modalDutaTerpilih', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-              <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 hover:bg-amber-400 shadow-md">Tetapkan Duta Terpilih</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Modul 5: Transaksi Pinjam -->
-      <div id="card-pinjam" onclick="switchTable('pinjam')" class="card-module cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-emerald-400 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
+      <!-- Modul 5: Pinjam -->
+      <div id="card-pinjam" onclick="switchTable('pinjam')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-emerald-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
-            <i class="fa-solid fa-handshake"></i>
-          </div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-handshake"></i></div>
           <div>
             <h3 class="font-extrabold text-slate-900 text-sm">Transaksi Pinjam</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-snug">Sirkulasi peminjaman & pengembalian.</p>
+            <p class="text-[11px] text-slate-500 mt-1">Sirkulasi peminjaman & pengembalian.</p>
           </div>
         </div>
         <button onclick="event.stopPropagation(); openModalWithTable('modalPinjam', 'pinjam')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
@@ -279,140 +170,87 @@
 
     </div>
 
-    <!-- ================= SECTION TABEL LIST DATA ================= -->
-    <section id="sectionTabelData" class="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 space-y-5 scroll-mt-24">
-      
-      <!-- Navigasi Tab & Judul Tabel -->
+    <!-- Section Tabel -->
+    <section id="sectionTabelData" class="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 space-y-5">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div>
           <div class="flex items-center gap-2 text-xs font-extrabold text-blue-600 uppercase tracking-wider mb-1">
             <i class="fa-solid fa-list-check"></i>
             <span>Manajemen Data Perpustakaan (Real-time Cloud)</span>
           </div>
-          <h3 id="tableTitle" class="text-xl font-extrabold text-slate-900">
-            Daftar Anggota Perpustakaan
-          </h3>
+          <h3 id="tableTitle" class="text-xl font-extrabold text-slate-900">Daftar Anggota Perpustakaan</h3>
         </div>
 
-        <!-- Tab Selector Manual -->
         <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold text-slate-600">
-          <button id="btnTabAnggota" onclick="switchTable('anggota')" class="px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition">
-            Anggota
-          </button>
-          <button id="btnTabPetugas" onclick="switchTable('petugas')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">
-            Petugas
-          </button>
-          <button id="btnTabBuku" onclick="switchTable('buku')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">
-            Buku
-          </button>
-          <button id="btnTabDuta" onclick="switchTable('duta')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">
-            Duta
-          </button>
-          <button id="btnTabPinjam" onclick="switchTable('pinjam')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">
-            Peminjaman
-          </button>
+          <button id="btnTabAnggota" onclick="switchTable('anggota')" class="px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition">Anggota</button>
+          <button id="btnTabPetugas" onclick="switchTable('petugas')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Petugas</button>
+          <button id="btnTabBuku" onclick="switchTable('buku')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Buku</button>
+          <button id="btnTabDuta" onclick="switchTable('duta')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Duta</button>
+          <button id="btnTabPinjam" onclick="switchTable('pinjam')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Peminjaman</button>
         </div>
       </div>
 
-      <!-- Control Bar: Pagination Limit & Petunjuk Sorting -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-600">
-        <div class="flex items-center gap-2">
-          <span>Tampilkan per halaman:</span>
-          <select id="pageSizeSelect" onchange="window.changePageSize(this.value)" class="bg-white border border-slate-200 rounded-xl px-3 py-1.5 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-slate-700 shadow-sm cursor-pointer">
-            <option value="10">10 data</option>
-            <option value="25">25 data</option>
-            <option value="50">50 data</option>
-            <option value="100">100 data</option>
-          </select>
-        </div>
-        
-        <div class="flex items-center gap-2 text-slate-500 font-normal italic text-[11px]">
-          <i class="fa-solid fa-arrow-up-z-a text-blue-500"></i>
-          <span>Klik judul kolom pada tabel untuk mengurutkan data (Sorting).</span>
-        </div>
-      </div>
-
-      <!-- Wadah Responsive Tabel -->
       <div class="overflow-x-auto rounded-2xl border border-slate-100">
         <table class="w-full text-left text-xs">
-          <thead id="tableHead" class="bg-slate-50 text-slate-600 font-extrabold uppercase border-b border-slate-100">
-            <!-- Header terisi otomatis -->
-          </thead>
-          <tbody id="tableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
-            <!-- Baris data terisi otomatis -->
-          </tbody>
+          <thead id="tableHead" class="bg-slate-50 text-slate-600 font-extrabold uppercase border-b border-slate-100"></thead>
+          <tbody id="tableBody" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
         </table>
       </div>
 
-      <!-- Footer Info Jumlah Data & Pagination -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 gap-3">
         <p id="tableCountInfo">Menampilkan 0 data</p>
-        
-        <!-- Pagination Controls -->
-        <div id="paginationControls" class="flex items-center gap-1.5 font-bold">
-          <!-- Tombol halaman terisi otomatis -->
-        </div>
       </div>
-
     </section>
 
   </main>
 
-  <!-- ================= POPUP MODAL SECTION ================= -->
-
-  <!-- Popup 1: Tambah / Edit Siswa -->
+  <!-- Modal 1: Anggota/Siswa -->
   <div id="modalSiswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-5xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[95vh] overflow-y-auto">
-      
       <div class="flex items-center justify-between border-b pb-3 sticky top-0 bg-white z-20">
         <h3 id="modalSiswaTitle" class="font-black text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-address-card text-blue-600"></i> Tambah Anggota & Akun Login Siswa
         </h3>
-        <button onclick="toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <button onclick="toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Form Input Data Anggota -->
         <form id="formTambahSiswa" class="lg:col-span-5 space-y-3 text-xs">
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">ID Anggota</label>
-              <input type="text" id="inpIdAnggota" required placeholder="AGT-001" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="text" id="inpIdAnggota" required placeholder="AGT-001" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">NISN / Personal ID</label>
-              <input type="text" id="inpPersonalId" required placeholder="0051234567" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="text" id="inpPersonalId" required placeholder="0051234567" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
             </div>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Nama Lengkap</label>
-            <input type="text" id="inpNama" required placeholder="Nama Siswa" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" id="inpNama" required placeholder="Nama Siswa" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
           </div>
 
-          <!-- Input Username dan Password untuk Login Smartphone -->
           <div class="grid grid-cols-2 gap-2 bg-blue-50/50 p-2.5 rounded-2xl border border-blue-100">
             <div>
               <label class="block font-bold text-blue-900 mb-1">Username Login</label>
-              <input type="text" id="inpUsernameSiswa" required placeholder="username.siswa" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="text" id="inpUsernameSiswa" required placeholder="username.siswa" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block font-bold text-blue-900 mb-1">Password Login</label>
-              <input type="password" id="inpPasswordSiswa" required placeholder="••••••••" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="password" id="inpPasswordSiswa" required placeholder="••••••••" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-              <input type="text" id="inpKelas" required placeholder="X IPA 1" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="text" id="inpKelas" required placeholder="X IPA 1" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Status Perpustakaan</label>
-              <select id="inpStatus" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <select id="inpStatus" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="Standar">Standar</option>
                 <option value="Istimewa">Istimewa</option>
               </select>
@@ -422,22 +260,22 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Tgl Registrasi</label>
-              <input type="date" id="inpRegis" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="date" id="inpRegis" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Tgl Kadaluarsa</label>
-              <input type="date" id="inpKadaluarsa" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="date" id="inpKadaluarsa" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
             </div>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Instansi</label>
-            <input type="text" id="inpInstansi" value="SMAN 4 MANADO" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" id="inpInstansi" value="SMAN 4 MANADO" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Status Keanggotaan</label>
-            <select id="inpStatusKeanggotaan" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+            <select id="inpStatusKeanggotaan" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
               <option value="Aktif">Aktif</option>
               <option value="Alumni">Alumni</option>
               <option value="Non-aktif">Non-aktif</option>
@@ -454,23 +292,18 @@
           </div>
         </form>
 
-        <!-- Pratinjau Overlay Kartu Depan & Belakang -->
         <div class="lg:col-span-7 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex flex-col items-center space-y-4">
           <p class="text-xs font-bold text-slate-500 self-start flex items-center gap-1.5">
             <i class="fa-solid fa-eye text-blue-600"></i> Pratinjau Kartu Anggota (Otomatis)
           </p>
 
           <div id="areaCetakKartu" class="flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
-            
-            <!-- Template Depan -->
-            <div class="relative w-[320px] h-[200px] rounded-2xl overflow-hidden shadow-lg border border-slate-300 bg-white flex-shrink-0">
+            <div class="relative w-[320px] h-[200px] rounded-2xl overflow-hidden shadow-lg border border-slate-300 bg-white shrink-0">
               <img src="assets/kartu-depan.png" onerror="this.src='https://placehold.co/320x200/1e3a8a/ffffff?text=assets/kartu-depan.png'" class="w-full h-full object-cover absolute inset-0 z-0" alt="Kartu Depan">
-              
               <div class="relative z-10 p-3 h-full flex flex-col justify-between text-slate-900 pointer-events-none">
                 <div class="text-right">
                   <span id="previewStatus" class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-extrabold text-[9px] rounded-md shadow">STANDAR</span>
                 </div>
-                
                 <div class="mt-auto space-y-1 bg-white/85 p-2 rounded-xl border border-white/40 shadow-sm">
                   <p id="previewNama" class="font-extrabold text-xs text-slate-900 truncate">NAMA ANGGOTA</p>
                   <div class="grid grid-cols-2 text-[10px] text-slate-700">
@@ -485,115 +318,97 @@
               </div>
             </div>
 
-            <!-- Template Belakang -->
-            <div class="relative w-[320px] h-[200px] rounded-2xl overflow-hidden shadow-lg border border-slate-300 bg-white flex-shrink-0">
+            <div class="relative w-[320px] h-[200px] rounded-2xl overflow-hidden shadow-lg border border-slate-300 bg-white shrink-0">
               <img src="assets/kartu-belakang.png" onerror="this.src='https://placehold.co/320x200/0f172a/ffffff?text=assets/kartu-belakang.png'" class="w-full h-full object-cover absolute inset-0 z-0" alt="Kartu Belakang">
-              
               <div class="relative z-10 p-3 h-full flex flex-col justify-between text-slate-800 pointer-events-none">
                 <div class="text-center bg-white/80 p-1.5 rounded-lg text-[9px]">
                   <p class="font-bold text-indigo-900" id="previewInstansi">PERPUSTAKAAN SMAN 4 MANADO</p>
                   <p class="text-[8px] text-slate-600">Kartu ini wajib dibawa saat meminjam buku.</p>
                 </div>
-
                 <div class="flex items-end justify-between bg-white/85 p-2 rounded-xl border border-white/40 shadow-sm">
                   <div class="text-[8px] space-y-0.5 text-slate-600">
                     <p>Regis: <span id="previewRegis" class="font-bold text-slate-800">-</span></p>
                     <p>Status: <span id="previewStatusBelakang" class="font-bold text-slate-800">Aktif</span></p>
                   </div>
-                  <div class="text-center">
-                    <div class="w-20 h-6 bg-slate-900 flex items-center justify-center text-[7px] text-white tracking-widest font-mono">
-                      |||||||||||||||||
-                    </div>
+                  <div class="w-20 h-6 bg-slate-900 flex items-center justify-center text-[7px] text-white tracking-widest font-mono">
+                    |||||||||||||||||
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
 
         </div>
-
       </div>
-
     </div>
   </div>
 
-  <!-- Popup 2: Tambah Petugas -->
+  <!-- Modal 2: Petugas -->
   <div id="modalPetugas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas
-        </h3>
-        <button onclick="toggleModal('modalPetugas', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas</h3>
+        <button onclick="toggleModal('modalPetugas', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahPetugas" class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nama Petugas</label>
-          <input type="text" id="inpNamaPetugas" required placeholder="Nama lengkap petugas" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+          <input type="text" id="inpNamaPetugas" required placeholder="Nama lengkap" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Email Petugas</label>
-          <input type="email" id="inpEmailPetugas" required placeholder="petugas@sman4manado.sch.id" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+          <input type="email" id="inpEmailPetugas" required placeholder="petugas@sman4manado.sch.id" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
-
         <div class="grid grid-cols-2 gap-2 bg-indigo-50/50 p-2.5 rounded-2xl border border-indigo-100">
           <div>
-            <label class="block font-bold text-indigo-900 mb-1">Username Login</label>
-            <input type="text" id="inpUsernamePetugas" required placeholder="username.petugas" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+            <label class="block font-bold text-indigo-900 mb-1">Username</label>
+            <input type="text" id="inpUsernamePetugas" required placeholder="username" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 outline-none">
           </div>
           <div>
-            <label class="block font-bold text-indigo-900 mb-1">Password Login</label>
-            <input type="password" id="inpPasswordPetugas" required placeholder="••••••••" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+            <label class="block font-bold text-indigo-900 mb-1">Password</label>
+            <input type="password" id="inpPasswordPetugas" required placeholder="••••••••" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 outline-none">
           </div>
         </div>
-
         <div>
           <label class="block font-bold text-slate-700 mb-1">Jabatan / Role</label>
-          <input type="text" id="inpJabatanPetugas" required placeholder="Staf Sirkulasi" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+          <input type="text" id="inpJabatanPetugas" required placeholder="Staf Sirkulasi" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalPetugas', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">Daftarkan Petugas</button>
+          <button type="button" onclick="toggleModal('modalPetugas', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white shadow-md">Daftarkan Petugas</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Popup 3: Tambah Buku -->
+  <!-- Modal 3: Buku -->
   <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-book-medical text-amber-500"></i> Tambah Koleksi Buku
-        </h3>
-        <button onclick="toggleModal('modalBuku', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-book-medical text-amber-500"></i> Tambah Koleksi Buku</h3>
+        <button onclick="toggleModal('modalBuku', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahBuku" class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
-          <input type="text" id="inpJudulBuku" required placeholder="Judul buku lengkap" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          <input type="text" id="inpJudulBuku" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Pengarang / Penulis</label>
-          <input type="text" id="inpPengarangBuku" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Pengarang</label>
+          <input type="text" id="inpPengarangBuku" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Penerbit</label>
-          <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Kategori</label>
-            <input type="text" id="inpKategoriBuku" placeholder="Misal: Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+            <input type="text" id="inpKategoriBuku" placeholder="Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">BOS Tahap</label>
-            <select id="inpBosTahap" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none font-bold">
+            <select id="inpBosTahap" class="w-full p-3 rounded-xl border border-slate-200 outline-none font-bold">
               <option value="Satu">Tahap Satu</option>
               <option value="Dua">Tahap Dua</option>
             </select>
@@ -601,110 +416,117 @@
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Jumlah Stok</label>
-          <input type="number" id="inpStokBuku" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+          <input type="number" id="inpStokBuku" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
-
-        <!-- Input Cover Buku (URL / Google Drive / File) -->
-        <div class="space-y-2 border-t pt-3 mt-2">
-          <label class="block font-bold text-slate-700">Cover Buku</label>
-          
-          <div>
-            <span class="text-[11px] text-slate-500 font-medium">Opsi A: Tempel URL Gambar / Link Google Drive</span>
-            <input type="url" id="inpCoverUrl" placeholder="https://drive.google.com/file/d/... atau https://..." class="w-full p-2.5 mt-1 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none text-xs">
-          </div>
-
-          <div>
-            <span class="text-[11px] text-slate-500 font-medium">Opsi B: Unggah Gambar dari Perangkat</span>
-            <input type="file" id="inpCoverFile" accept="image/*" class="w-full p-2 mt-1 rounded-xl border border-slate-200 bg-slate-50 text-xs">
-          </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">URL Cover Buku</label>
+          <input type="url" id="inpCoverUrl" placeholder="https://..." class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
-
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 hover:bg-amber-400 shadow-md">Simpan Buku</button>
+          <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Simpan Buku</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Popup 4: Tambah Duta Literasi -->
-  <div id="modalDuta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <!-- Modal 4A: Calon Duta -->
+  <div id="modalCalonDuta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-award text-purple-600"></i> Tambah Duta Literasi
-        </h3>
-        <button onclick="toggleModal('modalDuta', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-clock text-purple-600"></i> Tambah Calon Duta (7 Hari)</h3>
+        <button onclick="toggleModal('modalCalonDuta', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <form id="formTambahDuta" class="space-y-3 text-xs">
+      <form id="formTambahCalonDuta" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Siswa / Duta</label>
-          <input type="text" id="inpNamaDuta" required placeholder="Nama lengkap siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Nama Siswa</label>
+          <input type="text" id="inpNamaCalonDuta" required placeholder="Nama lengkap" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-          <input type="text" id="inpKelasDuta" required placeholder="XI IPA 2" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          <input type="text" id="inpKelasCalonDuta" required placeholder="XI IPA 2" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Periode Jabatan</label>
-          <input type="text" id="inpPeriodeDuta" required placeholder="2026/2027" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-purple-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Visi Singkat</label>
+          <textarea id="inpVisiCalonDuta" rows="2" placeholder="Visi kampanye..." class="w-full p-3 rounded-xl border border-slate-200 outline-none"></textarea>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai</label>
+          <input type="date" id="inpTglMulaiCalon" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalDuta', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-purple-600 text-white hover:bg-purple-700 shadow-md">Tetapkan Duta</button>
+          <button type="button" onclick="toggleModal('modalCalonDuta', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-purple-600 text-white shadow-md">Simpan Calon Duta</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Popup 5: Transaksi Pinjam -->
+  <!-- Modal 4B: Duta Terpilih -->
+  <div id="modalDutaTerpilih" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)</h3>
+        <button onclick="toggleModal('modalDutaTerpilih', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formTambahDutaTerpilih" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Siswa</label>
+          <input type="text" id="inpNamaDutaTerpilih" required placeholder="Nama siswa" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kelas</label>
+          <input type="text" id="inpKelasDutaTerpilih" required placeholder="XI IPA 1" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Prestasi</label>
+          <input type="text" id="inpPrestasiDutaTerpilih" placeholder="Juara 1 Lomba Resensi Buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai Jabatan</label>
+          <input type="date" id="inpTglMulaiTerpilih" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="toggleModal('modalDutaTerpilih', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Tetapkan Duta Terpilih</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 5: Pinjam -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-handshake text-emerald-600"></i> Catat Peminjaman
-        </h3>
-        <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-handshake text-emerald-600"></i> Catat Peminjaman</h3>
+        <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahPinjam" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam (Siswa)</label>
-          <input type="text" id="inpPeminjam" required placeholder="Masukkan nama siswa" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam</label>
+          <input type="text" id="inpPeminjam" required placeholder="Nama siswa" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
-          <input type="text" id="inpBukuPinjam" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+          <input type="text" id="inpBukuPinjam" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Tanggal Pengembalian</label>
-          <input type="date" id="inpTglKembali" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none">
+          <input type="date" id="inpTglKembali" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalPinjam', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-md">Simpan Peminjaman</button>
+          <button type="button" onclick="toggleModal('modalPinjam', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-emerald-600 text-white shadow-md">Simpan Peminjaman</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- SCRIPT UTAMA REALTIME FIRESTORE INTEGRATION & MANAJEMEN TABEL -->
+  <!-- Script Utama Modul Firestore & Event Handlers -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
-    import { signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-    import { 
-      collection, 
-      addDoc, 
-      updateDoc,
-      onSnapshot, 
-      doc, 
-      deleteDoc 
-    } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, addDoc, updateDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    // Menampilkan Informasi Admin
     if (typeof currentAdmin !== 'undefined' && currentAdmin) {
       const emailText = document.getElementById('adminEmailText');
       const infoEmail = document.getElementById('adminInfoEmail');
@@ -712,23 +534,15 @@
       if (infoEmail) infoEmail.innerText = "Email Admin: " + (currentAdmin.email || '-');
     }
 
-    // State Objek & Sistem Tabel (Pagination, Sort, Edit)
-    window.dbData = {
-      anggota: [],
-      petugas: [],
-      buku: [],
-      duta: [],
-      pinjam: []
+    window.handleAdminLogout = function() {
+      localStorage.removeItem('adminSession');
+      window.location.href = "login.html";
     };
 
+    window.dbData = { anggota: [], petugas: [], buku: [], duta: [], pinjam: [] };
     window.currentActiveTable = 'anggota';
-    window.currentPage = 1;
-    window.pageSize = 10;
-    window.sortColumn = 'id';
-    window.sortDirection = 'asc';
     window.editingMemberId = null;
 
-    // Listener Real-time Cloud Firestore
     const collections = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
     collections.forEach(colName => {
       onSnapshot(collection(db, colName), (snapshot) => {
@@ -740,15 +554,11 @@
       });
     });
 
-    // Modal Manager
     window.toggleModal = function(modalId, show) {
       const modal = document.getElementById(modalId);
       if (modal) {
-        if (show) {
-          modal.classList.remove('hidden');
-        } else {
-          modal.classList.add('hidden');
-        }
+        if (show) modal.classList.remove('hidden');
+        else modal.classList.add('hidden');
       }
     };
 
@@ -757,7 +567,6 @@
       window.toggleModal(modalId, true);
     };
 
-    // Fungsi Pembuka Modal Tambah Anggota Baru (Reset Mode Edit)
     window.openAddMemberModal = function() {
       window.editingMemberId = null;
       const form = document.getElementById('formTambahSiswa');
@@ -773,358 +582,215 @@
       window.openModalWithTable('modalSiswa', 'anggota');
     };
 
-    // Navigasi Tab Tabel
     window.switchTable = function(type) {
       window.currentActiveTable = type;
-      window.currentPage = 1;
-      window.sortColumn = type === 'buku' ? 'kode' : (type === 'pinjam' ? 'id' : 'id');
-      window.sortDirection = 'asc';
-
-      const cardBorderColors = {
-        anggota: 'border-blue-500',
-        petugas: 'border-indigo-500',
-        buku: 'border-amber-500',
-        duta: 'border-purple-500',
-        pinjam: 'border-emerald-500'
-      };
-
-      document.querySelectorAll('.card-module').forEach(card => {
-        card.className = card.className.replace(/border-(blue|indigo|amber|purple|emerald)-500/g, 'border-transparent');
-      });
-
-      const activeCard = document.getElementById(`card-${type}`);
-      if (activeCard) {
-        activeCard.classList.remove('border-transparent');
-        activeCard.classList.add(cardBorderColors[type]);
-      }
-
       const tabs = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
       tabs.forEach(t => {
-        const btn = document.getElementById(`btnTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const btn = document.getElementById('btnTab' + t.charAt(0).toUpperCase() + t.slice(1));
         if (btn) {
           if (t === type) {
-            btn.className = "px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition font-extrabold";
+            btn.className = 'px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition font-bold';
           } else {
-            btn.className = "px-3.5 py-2 rounded-xl hover:text-slate-900 transition font-bold";
+            btn.className = 'px-3.5 py-2 rounded-xl hover:text-slate-900 transition font-bold';
           }
         }
       });
 
-      window.renderTableData();
-
-      const section = document.getElementById('sectionTabelData');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-
-    // Handler Ganti Halaman (Pagination)
-    window.changePage = function(page) {
-      window.currentPage = page;
-      window.renderTableData();
-    };
-
-    // Handler Ganti Jumlah Opsi Entri
-    window.changePageSize = function(size) {
-      window.pageSize = parseInt(size, 10) || 10;
-      window.currentPage = 1;
-      window.renderTableData();
-    };
-
-    // Handler Sorting Kolom
-    window.handleSort = function(col) {
-      if (window.sortColumn === col) {
-        window.sortDirection = window.sortDirection === 'asc' ? 'desc' : 'asc';
-      } else {
-        window.sortColumn = col;
-        window.sortDirection = 'asc';
-      }
-      window.renderTableData();
-    };
-
-    // Render Data Tabel Real-time dengan Fitur Sorting & Pagination
-    window.renderTableData = function() {
-      const type = window.currentActiveTable;
-      const headEl = document.getElementById('tableHead');
-      const bodyEl = document.getElementById('tableBody');
-      const titleEl = document.getElementById('tableTitle');
-      const countEl = document.getElementById('tableCountInfo');
-
-      if (!headEl || !bodyEl || !titleEl || !countEl) return;
-
-      const list = window.dbData[type] || [];
-
-      // Logic Sorting Data
-      let sortedList = [...list].sort((a, b) => {
-        let valA = a[window.sortColumn] ?? '';
-        let valB = b[window.sortColumn] ?? '';
-        if (typeof valA === 'string') valA = valA.toLowerCase();
-        if (typeof valB === 'string') valB = valB.toLowerCase();
-
-        if (valA < valB) return window.sortDirection === 'asc' ? -1 : 1;
-        if (valA > valB) return window.sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      });
-
-      // Logic Pagination Data
-      const totalItems = sortedList.length;
-      const totalPages = Math.ceil(totalItems / window.pageSize) || 1;
-
-      if (window.currentPage > totalPages) window.currentPage = totalPages;
-      if (window.currentPage < 1) window.currentPage = 1;
-
-      const startIndex = (window.currentPage - 1) * window.pageSize;
-      const endIndex = Math.min(startIndex + window.pageSize, totalItems);
-      const paginatedList = sortedList.slice(startIndex, endIndex);
-
-      // Icon Sort Helper
-      const getSortIcon = (col) => {
-        if (window.sortColumn !== col) return '<i class="fa-solid fa-sort text-slate-300 ml-1"></i>';
-        return window.sortDirection === 'asc' 
-          ? '<i class="fa-solid fa-sort-up text-blue-600 ml-1"></i>' 
-          : '<i class="fa-solid fa-sort-down text-blue-600 ml-1"></i>';
+      const titleMap = {
+        anggota: 'Daftar Anggota Perpustakaan',
+        petugas: 'Daftar Petugas Perpustakaan',
+        buku: 'Katalog Koleksi Buku',
+        duta: 'Daftar Duta Literasi',
+        pinjam: 'Data Transaksi Peminjaman'
       };
+      const titleEl = document.getElementById('tableTitle');
+      if (titleEl) titleEl.innerText = titleMap[type] || 'Daftar Data';
 
-      let headHtml = '';
-      let bodyHtml = '';
+      window.renderTableData();
+    };
+
+    window.renderTableData = function() {
+      const thead = document.getElementById('tableHead');
+      const tbody = document.getElementById('tableBody');
+      const countInfo = document.getElementById('tableCountInfo');
+
+      if (!thead || !tbody) return;
+
+      const type = window.currentActiveTable;
+      let dataList = window.dbData[type] || [];
+      const totalData = dataList.length;
+
+      if (countInfo) countInfo.innerText = `Menampilkan ${totalData} data`;
 
       if (type === 'anggota') {
-        titleEl.innerText = 'Daftar Anggota Perpustakaan';
-        headHtml = `
+        thead.innerHTML = `
           <tr>
-            <th onclick="window.handleSort('id')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">ID Anggota ${getSortIcon('id')}</th>
-            <th onclick="window.handleSort('nisn')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">NISN ${getSortIcon('nisn')}</th>
-            <th onclick="window.handleSort('nama')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Nama Siswa ${getSortIcon('nama')}</th>
-            <th onclick="window.handleSort('username')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Username ${getSortIcon('username')}</th>
-            <th onclick="window.handleSort('kelas')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Kelas ${getSortIcon('kelas')}</th>
-            <th onclick="window.handleSort('status')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Status ${getSortIcon('status')}</th>
-            <th onclick="window.handleSort('kadaluarsa')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Berlaku s/d ${getSortIcon('kadaluarsa')}</th>
-            <th class="px-4 py-3.5 text-center">Aksi</th>
+            <th class="p-3.5">ID Anggota</th>
+            <th class="p-3.5">Nama Lengkap</th>
+            <th class="p-3.5">Kelas</th>
+            <th class="p-3.5">Instansi</th>
+            <th class="p-3.5 text-center">Status</th>
+            <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-
-        bodyHtml = paginatedList.map(item => `
-          <tr class="hover:bg-slate-50/80 transition">
-            <td class="px-4 py-3.5 font-bold text-blue-600">${item.id || '-'}</td>
-            <td class="px-4 py-3.5 font-mono">${item.nisn || '-'}</td>
-            <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.nama || '-'}</td>
-            <td class="px-4 py-3.5 font-semibold text-slate-700">${item.username || '-'}</td>
-            <td class="px-4 py-3.5">${item.kelas || '-'}</td>
-            <td class="px-4 py-3.5">
-              <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-md ${item.status === 'ISTIMEWA' || item.status === 'Istimewa' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
-                ${item.status || 'Standar'}
-              </span>
-            </td>
-            <td class="px-4 py-3.5 text-slate-500">${item.kadaluarsa || '-'}</td>
-            <td class="px-4 py-3.5 text-center space-x-1">
-              <button onclick="window.editMemberData('${item.firestoreId}')" class="px-2.5 py-1 bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded-lg font-bold transition" title="Edit Data">
-                <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
-              </button>
-              <button onclick="window.previewAndPrintMember('${item.firestoreId}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white rounded-lg font-bold transition" title="Cetak Kartu">
-                <i class="fa-solid fa-print mr-1"></i> Kartu
-              </button>
-              <button onclick="window.deleteRowData('anggota', '${item.firestoreId}')" class="px-2 py-1 text-rose-500 hover:bg-rose-50 rounded-lg transition" title="Hapus">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
-
+        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
+          dataList.map(item => `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
+              <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
+              <td class="p-3.5">${item.kelas || '-'}</td>
+              <td class="p-3.5 text-slate-500">${item.instansi || 'SMAN 4 MANADO'}</td>
+              <td class="p-3.5 text-center">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${item.statusKeanggotaan === 'Non-aktif' ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">
+                  ${item.statusKeanggotaan || item.status || 'Aktif'}
+                </span>
+              </td>
+              <td class="p-3.5 text-center space-x-1">
+                <button onclick="window.editAnggota('${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 font-bold hover:bg-blue-100"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button onclick="window.deleteRecord('anggota', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('');
       } else if (type === 'petugas') {
-        titleEl.innerText = 'Daftar Petugas Perpustakaan';
-        headHtml = `
+        thead.innerHTML = `
           <tr>
-            <th onclick="window.handleSort('id')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">ID Petugas ${getSortIcon('id')}</th>
-            <th onclick="window.handleSort('nama')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Nama Petugas ${getSortIcon('nama')}</th>
-            <th onclick="window.handleSort('email')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Email ${getSortIcon('email')}</th>
-            <th onclick="window.handleSort('username')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Username ${getSortIcon('username')}</th>
-            <th onclick="window.handleSort('jabatan')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Jabatan ${getSortIcon('jabatan')}</th>
-            <th onclick="window.handleSort('status')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Status ${getSortIcon('status')}</th>
-            <th class="px-4 py-3.5 text-center">Aksi</th>
+            <th class="p-3.5">Nama Petugas</th>
+            <th class="p-3.5">Email / Username</th>
+            <th class="p-3.5">Jabatan</th>
+            <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-
-        bodyHtml = paginatedList.map(item => `
-          <tr class="hover:bg-slate-50/80 transition">
-            <td class="px-4 py-3.5 font-bold text-indigo-600">${item.id || '-'}</td>
-            <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.nama || '-'}</td>
-            <td class="px-4 py-3.5 text-slate-600">${item.email || '-'}</td>
-            <td class="px-4 py-3.5 font-semibold text-slate-700">${item.username || '-'}</td>
-            <td class="px-4 py-3.5 font-semibold">${item.jabatan || '-'}</td>
-            <td class="px-4 py-3.5">
-              <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md">${item.status || 'Aktif'}</span>
-            </td>
-            <td class="px-4 py-3.5 text-center">
-              <button onclick="window.deleteRowData('petugas', '${item.firestoreId}')" class="px-2 py-1 text-rose-500 hover:bg-rose-50 rounded-lg transition">
-                <i class="fa-solid fa-trash"></i> Hapus
-              </button>
-            </td>
-          </tr>
-        `).join('');
-
+        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-400">Belum ada data petugas.</td></tr>` :
+          dataList.map(item => `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
+              <td class="p-3.5 text-slate-600">${item.email || item.username || '-'}</td>
+              <td class="p-3.5 font-medium">${item.jabatan || 'Petugas'}</td>
+              <td class="p-3.5 text-center">
+                <button onclick="window.deleteRecord('petugas', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('');
       } else if (type === 'buku') {
-        titleEl.innerText = 'Katalog Koleksi Buku';
-        headHtml = `
+        thead.innerHTML = `
           <tr>
-            <th onclick="window.handleSort('kode')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Kode ${getSortIcon('kode')}</th>
-            <th onclick="window.handleSort('judul')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Judul Buku ${getSortIcon('judul')}</th>
-            <th onclick="window.handleSort('pengarang')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Pengarang ${getSortIcon('pengarang')}</th>
-            <th onclick="window.handleSort('penerbit')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Penerbit ${getSortIcon('penerbit')}</th>
-            <th onclick="window.handleSort('bosTahap')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">BOS Tahap ${getSortIcon('bosTahap')}</th>
-            <th onclick="window.handleSort('kategori')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Kategori ${getSortIcon('kategori')}</th>
-            <th onclick="window.handleSort('stok')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Stok ${getSortIcon('stok')}</th>
-            <th class="px-4 py-3.5 text-center">Aksi</th>
+            <th class="p-3.5">Judul Buku</th>
+            <th class="p-3.5">Pengarang</th>
+            <th class="p-3.5">Penerbit</th>
+            <th class="p-3.5">Kategori</th>
+            <th class="p-3.5 text-center">Stok</th>
+            <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-
-        bodyHtml = paginatedList.map(item => `
-          <tr class="hover:bg-slate-50/80 transition">
-            <td class="px-4 py-3.5 font-bold text-amber-600">${item.kode || '-'}</td>
-            <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.judul || '-'}</td>
-            <td class="px-4 py-3.5">${item.pengarang || '-'}</td>
-            <td class="px-4 py-3.5 text-slate-600">${item.penerbit || '-'}</td>
-            <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-amber-100 text-amber-800 font-bold rounded-md">Tahap ${item.bosTahap || 'Satu'}</span></td>
-            <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">${item.kategori || 'Umum'}</span></td>
-            <td class="px-4 py-3.5 font-bold text-blue-600">${item.stok || 0} Eks</td>
-            <td class="px-4 py-3.5 text-center">
-              <button onclick="window.deleteRowData('buku', '${item.firestoreId}')" class="px-2 py-1 text-rose-500 hover:bg-rose-50 rounded-lg transition">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
+        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
+          dataList.map(item => `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-bold text-slate-900">${item.judul || '-'}</td>
+              <td class="p-3.5 text-slate-600">${item.pengarang || '-'}</td>
+              <td class="p-3.5 text-slate-500">${item.penerbit || '-'}</td>
+              <td class="p-3.5 font-medium">${item.kategori || '-'}</td>
+              <td class="p-3.5 text-center font-bold text-amber-600">${item.stok || 1}</td>
+              <td class="p-3.5 text-center">
+                <button onclick="window.deleteRecord('buku', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('');
       } else if (type === 'duta') {
-        titleEl.innerText = 'Daftar Duta Literasi Sekolah';
-        headHtml = `
+        thead.innerHTML = `
           <tr>
-            <th onclick="window.handleSort('id')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">ID Duta ${getSortIcon('id')}</th>
-            <th onclick="window.handleSort('nama')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Nama Duta ${getSortIcon('nama')}</th>
-            <th onclick="window.handleSort('kelas')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Kelas ${getSortIcon('kelas')}</th>
-            <th onclick="window.handleSort('periode')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Periode ${getSortIcon('periode')}</th>
-            <th onclick="window.handleSort('status')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Status ${getSortIcon('status')}</th>
-            <th class="px-4 py-3.5 text-center">Aksi</th>
+            <th class="p-3.5">Nama Siswa</th>
+            <th class="p-3.5">Kelas</th>
+            <th class="p-3.5">Tipe / Status</th>
+            <th class="p-3.5">Periode / Tanggal</th>
+            <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-
-        bodyHtml = paginatedList.map(item => `
-          <tr class="hover:bg-slate-50/80 transition">
-            <td class="px-4 py-3.5 font-bold text-purple-600">${item.id || '-'}</td>
-            <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.nama || '-'}</td>
-            <td class="px-4 py-3.5">${item.kelas || '-'}</td>
-            <td class="px-4 py-3.5 font-semibold">${item.periode || '-'}</td>
-            <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded-md font-bold text-[10px]">${item.status || 'Aktif'}</span></td>
-            <td class="px-4 py-3.5 text-center">
-              <button onclick="window.deleteRowData('duta', '${item.firestoreId}')" class="px-2 py-1 text-rose-500 hover:bg-rose-50 rounded-lg transition">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
-
+        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada data Duta Literasi.</td></tr>` :
+          dataList.map(item => `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
+              <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
+              <td class="p-3.5">
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${item.tipe === 'Terpilih' ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'}">
+                  ${item.tipe || 'Calon Duta'}
+                </span>
+              </td>
+              <td class="p-3.5 text-slate-500">${item.tglMulai || item.periode || '-'}</td>
+              <td class="p-3.5 text-center">
+                <button onclick="window.deleteRecord('duta', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('');
       } else if (type === 'pinjam') {
-        titleEl.innerText = 'Sirkulasi Transaksi Peminjaman Buku';
-        headHtml = `
+        thead.innerHTML = `
           <tr>
-            <th onclick="window.handleSort('id')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">ID Transaksi ${getSortIcon('id')}</th>
-            <th onclick="window.handleSort('peminjam')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Nama Peminjam ${getSortIcon('peminjam')}</th>
-            <th onclick="window.handleSort('buku')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Judul Buku ${getSortIcon('buku')}</th>
-            <th onclick="window.handleSort('tglPinjam')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Tgl Pinjam ${getSortIcon('tglPinjam')}</th>
-            <th onclick="window.handleSort('tglKembali')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Tgl Kembali ${getSortIcon('tglKembali')}</th>
-            <th onclick="window.handleSort('status')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Status ${getSortIcon('status')}</th>
-            <th class="px-4 py-3.5 text-center">Aksi</th>
+            <th class="p-3.5">Peminjam</th>
+            <th class="p-3.5">Judul Buku</th>
+            <th class="p-3.5">Tgl Pinjam</th>
+            <th class="p-3.5">Tgl Kembali</th>
+            <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-
-        bodyHtml = paginatedList.map(item => `
-          <tr class="hover:bg-slate-50/80 transition">
-            <td class="px-4 py-3.5 font-bold text-emerald-600">${item.id || '-'}</td>
-            <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.peminjam || '-'}</td>
-            <td class="px-4 py-3.5">${item.buku || '-'}</td>
-            <td class="px-4 py-3.5">${item.tglPinjam || '-'}</td>
-            <td class="px-4 py-3.5 font-semibold text-rose-600">${item.tglKembali || '-'}</td>
-            <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-md font-bold text-[10px]">${item.status || 'Dipinjam'}</span></td>
-            <td class="px-4 py-3.5 text-center">
-              <button onclick="window.deleteRowData('pinjam', '${item.firestoreId}')" class="px-2 py-1 text-rose-500 hover:bg-rose-50 rounded-lg transition">
-                <i class="fa-solid fa-check mr-1"></i> Kembalikan
-              </button>
-            </td>
-          </tr>
-        `).join('');
-      }
-
-      if (totalItems === 0) {
-        bodyHtml = `
-          <tr>
-            <td colspan="8" class="text-center py-8 text-slate-400 italic">Belum ada data tersedia pada database Cloud.</td>
-          </tr>
-        `;
-      }
-
-      headEl.innerHTML = headHtml;
-      bodyEl.innerHTML = bodyHtml;
-
-      // Update Teks Informasi Jumlah Data
-      if (totalItems === 0) {
-        countEl.innerText = 'Menampilkan 0 dari 0 data';
-      } else {
-        countEl.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari total ${totalItems} data`;
-      }
-
-      // Render Tombol Pagination Controls
-      const pagControlsEl = document.getElementById('paginationControls');
-      if (pagControlsEl) {
-        if (totalPages <= 1) {
-          pagControlsEl.innerHTML = '';
-        } else {
-          let pagesHtml = `
-            <button onclick="window.changePage(${window.currentPage - 1})" ${window.currentPage === 1 ? 'disabled class="px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 transition"'}>
-              <i class="fa-solid fa-chevron-left"></i>
-            </button>
-          `;
-
-          for (let p = 1; p <= totalPages; p++) {
-            if (p === window.currentPage) {
-              pagesHtml += `<button class="px-3 py-1.5 rounded-xl bg-blue-600 text-white shadow-sm font-extrabold">${p}</button>`;
-            } else if (p === 1 || p === totalPages || Math.abs(p - window.currentPage) <= 1) {
-              pagesHtml += `<button onclick="window.changePage(${p})" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition font-bold">${p}</button>`;
-            } else if (p === 2 && window.currentPage > 3) {
-              pagesHtml += `<span class="px-1 text-slate-400">...</span>`;
-            } else if (p === totalPages - 1 && window.currentPage < totalPages - 2) {
-              pagesHtml += `<span class="px-1 text-slate-400">...</span>`;
-            }
-          }
-
-          pagesHtml += `
-            <button onclick="window.changePage(${window.currentPage + 1})" ${window.currentPage === totalPages ? 'disabled class="px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-300 cursor-not-allowed"' : 'class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 transition"'}>
-              <i class="fa-solid fa-chevron-right"></i>
-            </button>
-          `;
-
-          pagControlsEl.innerHTML = pagesHtml;
-        }
+        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
+          dataList.map(item => `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-3.5 font-bold text-slate-900">${item.peminjam || '-'}</td>
+              <td class="p-3.5 font-medium text-slate-700">${item.buku || '-'}</td>
+              <td class="p-3.5 text-slate-500">${item.tglPinjam || '-'}</td>
+              <td class="p-3.5 text-slate-500">${item.tglKembali || '-'}</td>
+              <td class="p-3.5 text-center">
+                <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `).join('');
       }
     };
 
-    // Fungsi Edit Anggota
-    window.editMemberData = function(firestoreId) {
-      const item = window.dbData.anggota.find(m => m.firestoreId === firestoreId);
+    window.updateCardPreview = function() {
+      const id = document.getElementById('inpIdAnggota')?.value || 'AGT-000';
+      const personalId = document.getElementById('inpPersonalId')?.value || '-';
+      const nama = document.getElementById('inpNama')?.value || 'NAMA ANGGOTA';
+      const kelas = document.getElementById('inpKelas')?.value || '-';
+      const status = document.getElementById('inpStatus')?.value || 'STANDAR';
+      const regis = document.getElementById('inpRegis')?.value || '-';
+      const kadaluarsa = document.getElementById('inpKadaluarsa')?.value || '-';
+      const instansi = document.getElementById('inpInstansi')?.value || 'SMAN 4 MANADO';
+      const statusKeanggotaan = document.getElementById('inpStatusKeanggotaan')?.value || 'Aktif';
+
+      if (document.getElementById('previewId')) document.getElementById('previewId').innerText = id;
+      if (document.getElementById('previewPersonalId')) document.getElementById('previewPersonalId').innerText = personalId;
+      if (document.getElementById('previewNama')) document.getElementById('previewNama').innerText = nama;
+      if (document.getElementById('previewKelas')) document.getElementById('previewKelas').innerText = kelas;
+      if (document.getElementById('previewStatus')) document.getElementById('previewStatus').innerText = status.toUpperCase();
+      if (document.getElementById('previewRegis')) document.getElementById('previewRegis').innerText = regis;
+      if (document.getElementById('previewKadaluarsa')) document.getElementById('previewKadaluarsa').innerText = kadaluarsa;
+      if (document.getElementById('previewInstansi')) document.getElementById('previewInstansi').innerText = instansi;
+      if (document.getElementById('previewStatusBelakang')) document.getElementById('previewStatusBelakang').innerText = statusKeanggotaan;
+    };
+
+    window.printCardSystem = function() {
+      window.print();
+    };
+
+    window.editAnggota = function(docId) {
+      const item = window.dbData.anggota.find(a => a.firestoreId === docId);
       if (!item) return;
 
-      window.editingMemberId = firestoreId;
-
+      window.editingMemberId = docId;
       if (document.getElementById('inpIdAnggota')) document.getElementById('inpIdAnggota').value = item.id || '';
-      if (document.getElementById('inpPersonalId')) document.getElementById('inpPersonalId').value = item.nisn || '';
+      if (document.getElementById('inpPersonalId')) document.getElementById('inpPersonalId').value = item.nisn || item.personalId || '';
       if (document.getElementById('inpNama')) document.getElementById('inpNama').value = item.nama || '';
       if (document.getElementById('inpUsernameSiswa')) document.getElementById('inpUsernameSiswa').value = item.username || '';
       if (document.getElementById('inpPasswordSiswa')) document.getElementById('inpPasswordSiswa').value = item.password || '';
       if (document.getElementById('inpKelas')) document.getElementById('inpKelas').value = item.kelas || '';
-      if (document.getElementById('inpStatus')) document.getElementById('inpStatus').value = item.status || 'Standar';
+      if (document.getElementById('inpStatus')) document.getElementById('inpStatus').value = item.statusPerpustakaan || 'Standar';
+      if (document.getElementById('inpRegis')) document.getElementById('inpRegis').value = item.tglRegis || '';
+      if (document.getElementById('inpKadaluarsa')) document.getElementById('inpKadaluarsa').value = item.tglKadaluarsa || '';
+      if (document.getElementById('inpInstansi')) document.getElementById('inpInstansi').value = item.instansi || 'SMAN 4 MANADO';
       if (document.getElementById('inpStatusKeanggotaan')) document.getElementById('inpStatusKeanggotaan').value = item.statusKeanggotaan || 'Aktif';
-      if (document.getElementById('inpRegis')) document.getElementById('inpRegis').value = item.regis || '';
-      if (document.getElementById('inpKadaluarsa')) document.getElementById('inpKadaluarsa').value = item.kadaluarsa || '';
 
       const titleEl = document.getElementById('modalSiswaTitle');
-      if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-user-pen text-amber-500"></i> Edit Data Anggota Perpustakaan';
+      if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Anggota Siswa';
 
       const btnEl = document.getElementById('btnSubmitSiswa');
       if (btnEl) btnEl.innerText = 'Update Data';
@@ -1133,295 +799,147 @@
       window.toggleModal('modalSiswa', true);
     };
 
-    // Hapus Row Data dari Firestore Database
-    window.deleteRowData = async function(type, firestoreId) {
-      if (confirm("Apakah Anda yakin ingin menghapus data ini dari database Cloud?")) {
+    window.deleteRecord = async function(collectionName, docId) {
+      if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
         try {
-          await deleteDoc(doc(db, type, firestoreId));
+          await deleteDoc(doc(db, collectionName, docId));
+          alert('Data berhasil dihapus.');
         } catch (err) {
-          alert("Gagal menghapus data: " + err.message);
+          alert('Gagal menghapus data: ' + err.message);
         }
       }
     };
 
-    // Pratinjau Kartu dari Tabel
-    window.previewAndPrintMember = function(firestoreId) {
-      const item = window.dbData.anggota.find(m => m.firestoreId === firestoreId);
-      if (item) {
-        window.editMemberData(firestoreId);
-      }
-    };
-
-    // Update Live Preview Kartu
-    window.updateCardPreview = function() {
-      const idAnggota = document.getElementById('inpIdAnggota')?.value || 'AGT-000';
-      const personalId = document.getElementById('inpPersonalId')?.value || '-';
-      const nama = document.getElementById('inpNama')?.value || 'NAMA ANGGOTA';
-      const kelas = document.getElementById('inpKelas')?.value || '-';
-      const status = document.getElementById('inpStatus')?.value || 'Standar';
-      const statusKeanggotaan = document.getElementById('inpStatusKeanggotaan')?.value || 'Aktif';
-      const regis = document.getElementById('inpRegis')?.value || '-';
-      const kadaluarsa = document.getElementById('inpKadaluarsa')?.value || '-';
-      const instansi = document.getElementById('inpInstansi')?.value || 'PERPUSTAKAAN SMAN 4 MANADO';
-
-      if (document.getElementById('previewId')) document.getElementById('previewId').innerText = idAnggota;
-      if (document.getElementById('previewPersonalId')) document.getElementById('previewPersonalId').innerText = personalId;
-      if (document.getElementById('previewNama')) document.getElementById('previewNama').innerText = nama.toUpperCase();
-      if (document.getElementById('previewKelas')) document.getElementById('previewKelas').innerText = kelas;
-      if (document.getElementById('previewStatus')) document.getElementById('previewStatus').innerText = status.toUpperCase();
-      if (document.getElementById('previewRegis')) document.getElementById('previewRegis').innerText = regis;
-      if (document.getElementById('previewKadaluarsa')) document.getElementById('previewKadaluarsa').innerText = kadaluarsa;
-      if (document.getElementById('previewInstansi')) document.getElementById('previewInstansi').innerText = instansi.toUpperCase();
-
-      const elBelakang = document.getElementById('previewStatusBelakang');
-      if (elBelakang) elBelakang.innerText = statusKeanggotaan;
-    };
-
-    // Cetak Printout
-    window.printCardSystem = function() {
-      window.print();
-    };
-
-    // Submit Form Tambah / Edit Anggota dengan Pencegahan Duplikat ID, NISN, Nama, Username
-    document.getElementById('formTambahSiswa').addEventListener('submit', async (e) => {
+    document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const inputId = document.getElementById('inpIdAnggota').value.trim();
-      const inputNisn = document.getElementById('inpPersonalId').value.trim();
-      const inputNama = document.getElementById('inpNama').value.trim();
-      const inputUsername = document.getElementById('inpUsernameSiswa').value.trim();
-
-      // Filter daftar anggota lain (abaikan data yang sedang di-edit)
-      const otherMembers = window.dbData.anggota.filter(m => m.firestoreId !== window.editingMemberId);
-
-      // 1. Validasi Duplikat ID Anggota
-      if (otherMembers.some(m => (m.id || '').toString().toLowerCase() === inputId.toLowerCase())) {
-        alert(`⚠️ Peringatan: ID Anggota "${inputId}" sudah terdaftar! Harap gunakan ID lain.`);
-        return;
-      }
-
-      // 2. Validasi Duplikat NISN
-      if (otherMembers.some(m => (m.nisn || '').toString().trim() === inputNisn)) {
-        alert(`⚠️ Peringatan: NISN / Personal ID "${inputNisn}" sudah terdaftar!`);
-        return;
-      }
-
-      // 3. Validasi Duplikat Nama Siswa
-      if (otherMembers.some(m => (m.nama || '').toString().toLowerCase() === inputNama.toLowerCase())) {
-        alert(`⚠️ Peringatan: Nama Siswa "${inputNama}" sudah terdaftar dalam sistem!`);
-        return;
-      }
-
-      // 4. Validasi Duplikat Username
-      if (otherMembers.some(m => (m.username || '').toString().toLowerCase() === inputUsername.toLowerCase())) {
-        alert(`⚠️ Peringatan: Username Login "${inputUsername}" sudah digunakan oleh anggota lain!`);
-        return;
-      }
-
-      const newSiswa = {
-        id: inputId,
-        nisn: inputNisn,
-        nama: inputNama,
-        username: inputUsername,
+      const payload = {
+        id: document.getElementById('inpIdAnggota').value,
+        nisn: document.getElementById('inpPersonalId').value,
+        nama: document.getElementById('inpNama').value,
+        username: document.getElementById('inpUsernameSiswa').value,
         password: document.getElementById('inpPasswordSiswa').value,
         kelas: document.getElementById('inpKelas').value,
-        status: document.getElementById('inpStatus').value,
-        statusKeanggotaan: document.getElementById('inpStatusKeanggotaan') ? document.getElementById('inpStatusKeanggotaan').value : 'Aktif',
-        regis: document.getElementById('inpRegis').value || new Date().toISOString().split('T')[0],
-        kadaluarsa: document.getElementById('inpKadaluarsa').value || '2027-12-31',
-        updatedAt: new Date().toISOString()
+        statusPerpustakaan: document.getElementById('inpStatus').value,
+        tglRegis: document.getElementById('inpRegis').value,
+        tglKadaluarsa: document.getElementById('inpKadaluarsa').value,
+        instansi: document.getElementById('inpInstansi').value,
+        statusKeanggotaan: document.getElementById('inpStatusKeanggotaan').value
       };
 
       try {
         if (window.editingMemberId) {
-          // Mode Edit / Update
-          await updateDoc(doc(db, 'anggota', window.editingMemberId), newSiswa);
-          alert("✅ Data anggota berhasil diperbarui!");
+          await updateDoc(doc(db, 'anggota', window.editingMemberId), payload);
+          alert('Data anggota berhasil diperbarui!');
         } else {
-          // Mode Tambah Baru
-          newSiswa.createdAt = new Date().toISOString();
-          await addDoc(collection(db, 'anggota'), newSiswa);
-          alert("✅ Data anggota baru berhasil disimpan!");
+          await addDoc(collection(db, 'anggota'), payload);
+          alert('Data anggota baru berhasil disimpan!');
         }
-        window.editingMemberId = null;
         window.toggleModal('modalSiswa', false);
-        e.target.reset();
       } catch (err) {
-        alert("Gagal menyimpan data ke Firestore: " + err.message);
+        alert('Gagal menyimpan data: ' + err.message);
       }
     });
 
-    // Submit Form Tambah Petugas
-    document.getElementById('formTambahPetugas').addEventListener('submit', async (e) => {
+    document.getElementById('formTambahPetugas')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const newPetugas = {
-        id: 'PTG-00' + (window.dbData.petugas.length + 1),
+      const payload = {
         nama: document.getElementById('inpNamaPetugas').value,
         email: document.getElementById('inpEmailPetugas').value,
         username: document.getElementById('inpUsernamePetugas').value,
         password: document.getElementById('inpPasswordPetugas').value,
         jabatan: document.getElementById('inpJabatanPetugas').value,
-        status: 'Aktif',
-        createdAt: new Date().toISOString()
+        status: 'Aktif'
       };
       try {
-        await addDoc(collection(db, 'petugas'), newPetugas);
+        await addDoc(collection(db, 'petugas'), payload);
+        alert('Petugas berhasil didaftarkan!');
         window.toggleModal('modalPetugas', false);
         e.target.reset();
       } catch (err) {
-        alert("Gagal menyimpan petugas ke Firestore: " + err.message);
+        alert('Gagal menambahkan petugas: ' + err.message);
       }
     });
 
-    // Helper Konversi Link Google Drive ke Direct Image Link
-    function formatGoogleDriveUrl(url) {
-      if (!url) return '';
-      const driveRegex = /\/d\/([a-zA-Z0-9_-]+)|id=([a-zA-Z0-9_-]+)/;
-      const match = url.match(driveRegex);
-      if (match) {
-        const fileId = match[1] || match[2];
-        return `https://lh3.googleusercontent.com/d/${fileId}`;
-      }
-      return url;
-    }
-
-    // Submit Form Tambah Buku
     document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const urlInput = document.getElementById('inpCoverUrl')?.value?.trim() || '';
-      const fileInput = document.getElementById('inpCoverFile')?.files[0];
-      let coverUrl = formatGoogleDriveUrl(urlInput);
-
-      // Jika admin mengunggah berkas lokal, konversi ke Base64
-      if (!coverUrl && fileInput) {
-        coverUrl = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (evt) => resolve(evt.target.result);
-          reader.readAsDataURL(fileInput);
-        });
-      }
-
-      const newBuku = {
-        kode: 'BK-00' + ((window.dbData?.buku?.length || 0) + 1),
+      const payload = {
         judul: document.getElementById('inpJudulBuku').value,
         pengarang: document.getElementById('inpPengarangBuku').value,
-        penerbit: document.getElementById('inpPenerbitBuku')?.value || '',
-        bosTahap: document.getElementById('inpBosTahap')?.value || 'Satu',
-        kategori: document.getElementById('inpKategoriBuku').value || 'Umum',
+        penerbit: document.getElementById('inpPenerbitBuku').value,
+        kategori: document.getElementById('inpKategoriBuku').value,
+        bosTahap: document.getElementById('inpBosTahap').value,
         stok: parseInt(document.getElementById('inpStokBuku').value) || 1,
-        ekslempar: parseInt(document.getElementById('inpStokBuku').value) || 1,
-        cover: coverUrl, // Tersinkron langsung dengan b.cover di katalog_3.html
-        createdAt: new Date().toISOString()
+        coverUrl: document.getElementById('inpCoverUrl').value || ''
       };
-
       try {
-        await addDoc(collection(db, 'buku'), newBuku);
-        alert("✅ Buku berhasil ditambahkan!");
+        await addDoc(collection(db, 'buku'), payload);
+        alert('Koleksi buku berhasil ditambahkan!');
         window.toggleModal('modalBuku', false);
         e.target.reset();
       } catch (err) {
-        alert("Gagal menyimpan buku ke Firestore: " + err.message);
+        alert('Gagal menambahkan buku: ' + err.message);
       }
     });
 
-    // Submit Form Tambah Calon Duta (Masa Pencalonan 7 Hari)
     document.getElementById('formTambahCalonDuta')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const tglMulai = document.getElementById('inpTglMulaiCalon').value;
-      const startDate = new Date(tglMulai);
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 7);
-      const tglSelesai = endDate.toISOString().split('T')[0];
-
-      const newCalon = {
-        id: 'DUT-C' + Math.floor(100 + Math.random() * 900),
+      const payload = {
         nama: document.getElementById('inpNamaCalonDuta').value,
         kelas: document.getElementById('inpKelasCalonDuta').value,
-        visi: document.getElementById('inpVisiCalonDuta').value || '-',
-        tipe: 'calon',
-        status: 'Masa Pencalonan (7 Hari)',
-        tglMulai: tglMulai,
-        tglSelesai: tglSelesai,
-        periode: `${tglMulai} s.d ${tglSelesai}`,
-        createdAt: new Date().toISOString()
+        visi: document.getElementById('inpVisiCalonDuta').value,
+        tglMulai: document.getElementById('inpTglMulaiCalon').value,
+        tipe: 'Calon Duta',
+        durasi: '7 Hari'
       };
-
       try {
-        await addDoc(collection(db, 'duta'), newCalon);
-        alert("✅ Calon Duta Literasi berhasil disimpan (Masa Pencalonan 7 Hari)!");
+        await addDoc(collection(db, 'duta'), payload);
+        alert('Calon Duta Literasi berhasil ditambahkan!');
         window.toggleModal('modalCalonDuta', false);
         e.target.reset();
       } catch (err) {
-        alert("Gagal menyimpan data calon duta: " + err.message);
+        alert('Gagal menambahkan calon duta: ' + err.message);
       }
     });
 
-// Submit Form Tambah Duta Terpilih (Masa Jabatan 2 Bulan)
-document.getElementById('formTambahDutaTerpilih')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const tglMulai = document.getElementById('inpTglMulaiTerpilih').value;
-  const startDate = new Date(tglMulai);
-  const endDate = new Date(startDate);
-  endDate.setMonth(startDate.getMonth() + 2);
-  const tglSelesai = endDate.toISOString().split('T')[0];
-
-  const newTerpilih = {
-    id: 'DUT-T' + Math.floor(100 + Math.random() * 900),
-    nama: document.getElementById('inpNamaDutaTerpilih').value,
-    kelas: document.getElementById('inpKelasDutaTerpilih').value,
-    prestasi: document.getElementById('inpPrestasiDutaTerpilih').value || '-',
-    tipe: 'terpilih',
-    status: 'Duta Terpilih (2 Bulan)',
-    tglMulai: tglMulai,
-    tglSelesai: tglSelesai,
-    periode: `${tglMulai} s.d ${tglSelesai}`,
-    createdAt: new Date().toISOString()
-  };
-
-  try {
-    await addDoc(collection(db, 'duta'), newTerpilih);
-    alert("✅ Duta Literasi Terpilih berhasil ditetapkan (Masa Jabatan 2 Bulan)!");
-    window.toggleModal('modalDutaTerpilih', false);
-    e.target.reset();
-  } catch (err) {
-    alert("Gagal menyimpan data duta terpilih: " + err.message);
-  }
-});
-
-    // Submit Form Transaksi Pinjam
-    document.getElementById('formTambahPinjam').addEventListener('submit', async (e) => {
+    document.getElementById('formTambahDutaTerpilih')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const newPinjam = {
-        id: 'TRX-' + Math.floor(100 + Math.random() * 900),
-        peminjam: document.getElementById('inpPeminjam').value,
-        buku: document.getElementById('inpBukuPinjam').value,
-        tglPinjam: new Date().toISOString().split('T')[0],
-        tglKembali: document.getElementById('inpTglKembali').value,
-        status: 'Dipinjam',
-        createdAt: new Date().toISOString()
+      const payload = {
+        nama: document.getElementById('inpNamaDutaTerpilih').value,
+        kelas: document.getElementById('inpKelasDutaTerpilih').value,
+        prestasi: document.getElementById('inpPrestasiDutaTerpilih').value,
+        tglMulai: document.getElementById('inpTglMulaiTerpilih').value,
+        tipe: 'Terpilih',
+        durasi: '2 Bulan'
       };
       try {
-        await addDoc(collection(db, 'pinjam'), newPinjam);
+        await addDoc(collection(db, 'duta'), payload);
+        alert('Duta Literasi Terpilih berhasil ditetapkan!');
+        window.toggleModal('modalDutaTerpilih', false);
+        e.target.reset();
+      } catch (err) {
+        alert('Gagal menetapkan duta terpilih: ' + err.message);
+      }
+    });
+
+    document.getElementById('formTambahPinjam')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const today = new Date().toISOString().substring(0, 10);
+      const payload = {
+        peminjam: document.getElementById('inpPeminjam').value,
+        buku: document.getElementById('inpBukuPinjam').value,
+        tglPinjam: today,
+        tglKembali: document.getElementById('inpTglKembali').value,
+        status: 'Dipinjam'
+      };
+      try {
+        await addDoc(collection(db, 'pinjam'), payload);
+        alert('Transaksi peminjaman berhasil dicatat!');
         window.toggleModal('modalPinjam', false);
         e.target.reset();
       } catch (err) {
-        alert("Gagal menyimpan transaksi ke Firestore: " + err.message);
+        alert('Gagal mencatat peminjaman: ' + err.message);
       }
     });
-
-    // Logout Handler
-    window.handleAdminLogout = async function() {
-      if (confirm("Apakah Anda yakin ingin keluar dari Portal Admin?")) {
-        try {
-          await signOut(auth);
-        } catch (err) {
-          console.warn("Signout Firebase:", err);
-        }
-        localStorage.removeItem('adminSession');
-        window.location.href = "../index.html";
-      }
-    };
   </script>
 </body>
 </html>
