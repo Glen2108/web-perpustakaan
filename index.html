@@ -58,14 +58,14 @@
           </div>
         </div>
 
-        <!-- Tombol Hamburger (Tampil Khusus Smartphone) -->
+        <!-- Tombol Hamburger Mobile -->
         <button id="mobileMenuBtn" aria-label="Toggle Navigation" class="md:hidden p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none border border-slate-700 transition">
           <i class="fa-solid fa-bars text-lg"></i>
         </button>
       </div>
     </div>
 
-    <!-- Container Menu Seluler (Tampil Saat Tombol Hamburger Ditekan) -->
+    <!-- Container Menu Seluler -->
     <div id="mobileMenu" class="hidden md:hidden bg-brand-900 border-t border-slate-800/80 px-4 pt-3 pb-4 space-y-2 text-sm font-semibold shadow-2xl">
       <a href="index.html" class="block px-4 py-2.5 rounded-xl bg-brand-800 text-amber-400 font-bold border border-brand-600/30">
         <i class="fa-solid fa-house mr-2"></i>Beranda
@@ -103,9 +103,9 @@
         <!-- Dynamic Clock Widget -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
           <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-            <p class="text-xs text-blue-200 font-semibold uppercase">Waktu Realtime Wita</p>
+            <p class="text-xs text-blue-200 font-semibold uppercase">Waktu Realtime WITA</p>
             <div id="realtimeClock" class="text-2xl font-black text-amber-300 font-mono mt-1">00:00:00 WITA</div>
-            <p id="realtimeDate" class="text-xs text-slate-300 mt-0.5">Minggu, 4 Oktober 2026</p>
+            <p id="realtimeDate" class="text-xs text-slate-300 mt-0.5">-</p>
           </div>
           <div id="statusOperasional" class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
             <p class="text-xs text-blue-200 font-semibold uppercase">Status Perpustakaan</p>
@@ -155,7 +155,7 @@
 
           <!-- Mini Dynamic Calendar -->
           <div class="mt-4 pt-3 border-t border-slate-100">
-            <div id="calendarMonth" class="text-xs font-bold text-center text-brand-800 uppercase tracking-wider mb-2">Oktober 2026</div>
+            <div id="calendarMonth" class="text-xs font-bold text-center text-brand-800 uppercase tracking-wider mb-2">-</div>
             <div id="calendarGrid" class="grid grid-cols-7 text-center text-[11px] gap-1 font-semibold text-slate-600"></div>
           </div>
         </div>
@@ -164,48 +164,7 @@
     </div>
   </section>
 
-  <!-- Seksi Realtime Duta Literasi Sekolah -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <div>
-          <span class="text-xs font-black text-amber-600 uppercase tracking-wider">Program Unggulan</span>
-          <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-award text-amber-500"></i> Duta Literasi Sekolah
-          </h3>
-        </div>
-        <a href="duta-literasi.html" class="text-xs font-bold text-blue-600 hover:text-blue-800">
-          Lihat Selengkapnya <i class="fa-solid fa-arrow-right ml-1"></i>
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Card Duta Terpilih (2 Bulan) -->
-        <div class="bg-white p-5 rounded-3xl shadow-lg border border-amber-200 space-y-3">
-          <div class="flex items-center justify-between border-b pb-2">
-            <h4 class="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-crown text-amber-500"></i> Duta Literasi Terpilih (Masa Jabatan 2 Bulan)
-            </h4>
-          </div>
-          <div id="containerDutaTerpilih" class="space-y-2">
-            <p class="text-xs text-slate-400 italic py-2">Memuat data Duta Terpilih...</p>
-          </div>
-        </div>
-
-        <!-- Card Calon Duta (7 Hari) -->
-        <div class="bg-white p-5 rounded-3xl shadow-lg border border-purple-200 space-y-3">
-          <div class="flex items-center justify-between border-b pb-2">
-            <h4 class="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-user-clock text-purple-600"></i> Calon Duta Literasi (Masa Pencalonan 7 Hari)
-            </h4>
-          </div>
-          <div id="containerCalonDuta" class="space-y-2">
-            <p class="text-xs text-slate-400 italic py-2">Memuat data Calon Duta...</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  <!-- Seksi Daftar Anggota & Petugas Perpustakaan -->
+  <!-- Seksi Daftar Anggota & Petugas Perpustakaan (Dengan Sorting & Pagination) -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
     <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-6">
       
@@ -219,7 +178,7 @@
           </p>
         </div>
 
-        <!-- Filter & Pencarian -->
+        <!-- Filter, Sorting, Limit & Pencarian -->
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <!-- Filter Tipe (Siswa / Petugas) -->
           <select id="pubTypeSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20">
@@ -230,14 +189,30 @@
           <!-- Filter Status -->
           <select id="pubStatusSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20">
             <option value="semua">Semua Status</option>
-            <option value="Aktif">Aktif</option>
+            <option value="Aktif">Aktif / Standar</option>
             <option value="Alumni">Alumni</option>
             <option value="Non-aktif">Non-aktif</option>
           </select>
 
+          <!-- Urutan / Sorting -->
+          <select id="pubSortSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20">
+            <option value="nama-asc">Urut: Nama (A - Z)</option>
+            <option value="nama-desc">Urut: Nama (Z - A)</option>
+            <option value="id-asc">Urut: ID (Ascending)</option>
+            <option value="id-desc">Urut: ID (Descending)</option>
+          </select>
+
+          <!-- Tampilan per halaman (Pagination Limit) -->
+          <select id="pubLimitSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20">
+            <option value="10">10 / hal</option>
+            <option value="25">25 / hal</option>
+            <option value="50">50 / hal</option>
+            <option value="100">100 / hal</option>
+          </select>
+
           <!-- Input Pencarian -->
           <div class="relative">
-            <input type="text" id="pubSearchInput" placeholder="Cari nama / ID..." class="bg-slate-50 text-slate-800 text-xs px-3 py-2.5 pl-8 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20 w-44 sm:w-56">
+            <input type="text" id="pubSearchInput" placeholder="Cari nama / ID..." class="bg-slate-50 text-slate-800 text-xs px-3 py-2.5 pl-8 rounded-xl border border-slate-200 outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20 w-44 sm:w-52">
             <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400 text-xs"></i>
           </div>
         </div>
@@ -246,7 +221,7 @@
       <!-- Tabel Data -->
       <div class="overflow-x-auto rounded-2xl border border-slate-200">
         <table class="w-full text-left text-xs text-slate-700">
-          <thead class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider">
+          <thead class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider select-none">
             <tr id="pubTableHead">
               <!-- Header tabel diisi melalui JavaScript -->
             </tr>
@@ -259,316 +234,313 @@
         </table>
       </div>
 
+      <!-- Footer Pagination & Keterangan Jumlah Data -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 text-xs text-slate-500">
+        <div id="pubPaginationInfo" class="font-medium">
+          Menampilkan 0 - 0 dari 0 data
+        </div>
+        <div id="pubPaginationBtns" class="flex items-center gap-1">
+          <!-- Tombol Halaman diisi melalui JavaScript -->
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- Script Firestore & LocalStorage Sync untuk Memuat Anggota & Petugas -->
+  <!-- Script Firestore & LocalStorage Sync (Anggota & Petugas) -->
   <script type="module">
-  import { db } from './js/firebase-config.js';
-  import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { db } from './js/firebase-config.js';
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-  let listSiswa = [];
-  let listPetugas = [];
-  let listDuta = [];
+    let listSiswa = [];
+    let listPetugas = [];
+    let currentPage = 1;
 
-  const pubTypeSelect = document.getElementById('pubTypeSelect');
-  const pubSearchInput = document.getElementById('pubSearchInput');
-  const pubTableHead = document.getElementById('pubTableHead');
-  const pubTableBody = document.getElementById('pubTableBody');
+    const pubTypeSelect = document.getElementById('pubTypeSelect');
+    const pubStatusSelect = document.getElementById('pubStatusSelect');
+    const pubSortSelect = document.getElementById('pubSortSelect');
+    const pubLimitSelect = document.getElementById('pubLimitSelect');
+    const pubSearchInput = document.getElementById('pubSearchInput');
+    const pubTableHead = document.getElementById('pubTableHead');
+    const pubTableBody = document.getElementById('pubTableBody');
+    const pubPaginationInfo = document.getElementById('pubPaginationInfo');
+    const pubPaginationBtns = document.getElementById('pubPaginationBtns');
 
-  // 1. Synchronize Listener Firestore Real-time
-  onSnapshot(collection(db, "anggota"), (snapshot) => {
-    listSiswa = snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
-    renderPubTable();
-  });
+    // 1. Memuat data dari LocalStorage sebagai cadangan lokal
+    function loadFromLocalStorage() {
+      try {
+        const localSiswa = localStorage.getItem('anggotaData') || localStorage.getItem('siswaData') || localStorage.getItem('perpustakaan_anggota') || localStorage.getItem('perpustakaan_siswa');
+        const localPetugas = localStorage.getItem('petugasData') || localStorage.getItem('perpustakaan_petugas');
+        const localPerpustakaan = localStorage.getItem('perpustakaanData');
 
-  onSnapshot(collection(db, "petugas"), (snapshot) => {
-    listPetugas = snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
-    renderPubTable();
-  });
-
-  onSnapshot(collection(db, "duta"), (snapshot) => {
-    listDuta = snapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
-    renderPubTable();
-    renderDutaLiterasiCards();
-  });
-
-  // 2. Render Showcase Duta Literasi
-  function renderDutaLiterasiCards() {
-    const containerTerpilih = document.getElementById('containerDutaTerpilih');
-    const containerCalon = document.getElementById('containerCalonDuta');
-    if (!containerTerpilih || !containerCalon) return;
-
-    const terpilihList = listDuta.filter(d => d.tipe === 'terpilih' || d.status?.includes('Terpilih'));
-    const calonList = listDuta.filter(d => d.tipe === 'calon' || d.status?.includes('Calon') || d.status?.includes('Pencalonan'));
-
-    // Render Duta Terpilih
-    if (terpilihList.length === 0) {
-      containerTerpilih.innerHTML = `<p class="text-xs text-slate-400 italic py-3 text-center">Belum ada Duta Literasi Terpilih aktif.</p>`;
-    } else {
-      containerTerpilih.innerHTML = terpilihList.map(item => `
-        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-3.5 rounded-2xl border border-amber-200 shadow-sm flex items-center justify-between">
-          <div class="space-y-0.5">
-            <span class="px-2 py-0.5 bg-amber-400 text-slate-900 font-black text-[9px] rounded uppercase">Terpilih (2 Bulan)</span>
-            <h5 class="font-extrabold text-slate-900 text-xs mt-1">${item.nama || '-'}</h5>
-            <p class="text-[11px] text-slate-600">Kelas: ${item.kelas || '-'} | Periode: ${item.periode || '-'}</p>
-          </div>
-          <div class="w-8 h-8 rounded-xl bg-amber-400/20 text-amber-700 flex items-center justify-center font-black text-sm">
-            <i class="fa-solid fa-crown"></i>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Render Calon Duta
-    if (calonList.length === 0) {
-      containerCalon.innerHTML = `<p class="text-xs text-slate-400 italic py-3 text-center">Tidak ada calon dalam masa pencalonan saat ini.</p>`;
+        if (localPerpustakaan) {
+          const parsed = JSON.parse(localPerpustakaan);
+          if (parsed.anggota) listSiswa = parsed.anggota;
+          else if (parsed.siswa) listSiswa = parsed.siswa;
+          if (parsed.petugas) listPetugas = parsed.petugas;
         } else {
-          containerCalon.innerHTML = calonList.map(item => `
-            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-3.5 rounded-2xl border border-purple-200 shadow-sm flex items-center justify-between">
-              <div class="space-y-0.5">
-                <span class="px-2 py-0.5 bg-purple-600 text-white font-black text-[9px] rounded uppercase">Pencalonan (7 Hari)</span>
-                <h5 class="font-extrabold text-slate-900 text-xs mt-1">${item.nama || '-'}</h5>
-                <p class="text-[11px] text-slate-600">Kelas: ${item.kelas || '-'} | Batas: ${item.tglSelesai || '-'}</p>
-              </div>
-              <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-700 flex items-center justify-center font-black text-sm">
-                <i class="fa-solid fa-user-clock"></i>
-              </div>
-            </div>
-          `).join('');
+          if (localSiswa) listSiswa = JSON.parse(localSiswa);
+          if (localPetugas) listPetugas = JSON.parse(localPetugas);
         }
-      }
-
-    // 3. Render Tabel Publik Beranda
-  function renderPubTable() {
-    if (!pubTypeSelect || !pubTableHead || !pubTableBody) return;
-    const type = pubTypeSelect.value;
-    const query = (pubSearchInput?.value || '').toLowerCase();
-
-    if (type === 'siswa') {
-      pubTableHead.innerHTML = `
-        <tr>
-          <th class="px-4 py-3">ID Anggota</th>
-          <th class="px-4 py-3">Nama Siswa</th>
-          <th class="px-4 py-3">Kelas</th>
-          <th class="px-4 py-3">Status</th>
-        </tr>
-      `;
-      const filtered = listSiswa.filter(s => (s.nama || '').toLowerCase().includes(query) || (s.id || '').toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        pubTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">Tidak ada data anggota ditemukan.</td></tr>`;
-      } else {
-        pubTableBody.innerHTML = filtered.map(s => `
-          <tr class="border-b border-slate-100 hover:bg-slate-50">
-            <td class="px-4 py-3 font-bold text-blue-600">${s.id || '-'}</td>
-            <td class="px-4 py-3 font-bold text-slate-900">${s.nama || '-'}</td>
-            <td class="px-4 py-3">${s.kelas || '-'}</td>
-            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px]">${s.status || 'Aktif'}</span></td>
-          </tr>
-        `).join('');
-      }
-    } else if (type === 'petugas') {
-      pubTableHead.innerHTML = `
-        <tr>
-          <th class="px-4 py-3">ID Petugas</th>
-          <th class="px-4 py-3">Nama Petugas</th>
-          <th class="px-4 py-3">Jabatan</th>
-          <th class="px-4 py-3">Status</th>
-        </tr>
-      `;
-      const filtered = listPetugas.filter(p => (p.nama || '').toLowerCase().includes(query) || (p.jabatan || '').toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        pubTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400">Tidak ada data petugas ditemukan.</td></tr>`;
-      } else {
-        pubTableBody.innerHTML = filtered.map(p => `
-          <tr class="border-b border-slate-100 hover:bg-slate-50">
-            <td class="px-4 py-3 font-bold text-indigo-600">${p.id || '-'}</td>
-            <td class="px-4 py-3 font-bold text-slate-900">${p.nama || '-'}</td>
-            <td class="px-4 py-3">${p.jabatan || '-'}</td>
-            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[10px]">${p.status || 'Aktif'}</span></td>
-          </tr>
-        `).join('');
-      }
-    }
-  }
-
-  if (pubTypeSelect) pubTypeSelect.addEventListener('change', renderPubTable);
-  if (pubSearchInput) pubSearchInput.addEventListener('input', renderPubTable);
-
-  // 1. Memuat data dari LocalStorage sebagai cadangan lokal
-  function loadFromLocalStorage() {
-    try {
-      const localSiswa = localStorage.getItem('anggotaData') || localStorage.getItem('siswaData') || localStorage.getItem('perpustakaan_anggota') || localStorage.getItem('perpustakaan_siswa');
-      const localPetugas = localStorage.getItem('petugasData') || localStorage.getItem('perpustakaan_petugas');
-      const localPerpustakaan = localStorage.getItem('perpustakaanData');
-
-      if (localPerpustakaan) {
-        const parsed = JSON.parse(localPerpustakaan);
-        if (parsed.anggota) listSiswa = parsed.anggota;
-        else if (parsed.siswa) listSiswa = parsed.siswa;
-        if (parsed.petugas) listPetugas = parsed.petugas;
-      } else {
-        if (localSiswa) listSiswa = JSON.parse(localSiswa);
-        if (localPetugas) listPetugas = JSON.parse(localPetugas);
-      }
-      renderPublicTable();
-    } catch (e) {
-      console.warn("Gagal memuat data dari localStorage:", e);
-    }
-  }
-
-  loadFromLocalStorage();
-
-  // 2. Listener pembaruan otomatis antar-tab browser
-  window.addEventListener('storage', (e) => {
-    if (['perpustakaanData', 'anggotaData', 'siswaData', 'petugasData', 'perpustakaan_anggota', 'perpustakaan_siswa', 'perpustakaan_petugas'].includes(e.key)) {
-      loadFromLocalStorage();
-    }
-  });
-
-  // 3. Listener Realtime koleksi 'anggota' Firestore
-  onSnapshot(collection(db, "anggota"), (snap) => {
-    if (!snap.empty) {
-      listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-      renderPublicTable();
-    }
-  }, (err) => {
-    console.warn("Gagal memuat dari koleksi 'anggota', mencoba koleksi 'siswa':", err);
-    onSnapshot(collection(db, "siswa"), (snapSiswa) => {
-      if (!snapSiswa.empty) {
-        listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
         renderPublicTable();
+      } catch (e) {
+        console.warn("Gagal memuat data dari localStorage:", e);
+      }
+    }
+
+    loadFromLocalStorage();
+
+    window.addEventListener('storage', (e) => {
+      if (['perpustakaanData', 'anggotaData', 'siswaData', 'petugasData', 'perpustakaan_anggota', 'perpustakaan_siswa', 'perpustakaan_petugas'].includes(e.key)) {
+        loadFromLocalStorage();
       }
     });
-  });
 
-  // 4. Listener Realtime koleksi 'petugas' Firestore
-  onSnapshot(collection(db, "petugas"), (snap) => {
-    if (!snap.empty) {
-      listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-      renderPublicTable();
-    }
-  }, (err) => {
-    console.warn("Gagal memuat data petugas dari Firestore:", err);
-    loadFromLocalStorage();
-  });
+    // Realtime Listener Firestore (Anggota Siswa)
+    onSnapshot(collection(db, "anggota"), (snap) => {
+      if (!snap.empty) {
+        listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+        renderPublicTable();
+      }
+    }, (err) => {
+      console.warn("Mencoba koleksi 'siswa':", err);
+      onSnapshot(collection(db, "siswa"), (snapSiswa) => {
+        if (!snapSiswa.empty) {
+          listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
+          renderPublicTable();
+        }
+      });
+    });
 
-  pubTypeSelect.addEventListener('change', renderPublicTable);
-  pubStatusSelect.addEventListener('change', renderPublicTable);
-  pubSearchInput.addEventListener('input', renderPublicTable);
+    // Realtime Listener Firestore (Petugas)
+    onSnapshot(collection(db, "petugas"), (snap) => {
+      if (!snap.empty) {
+        listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+        renderPublicTable();
+      }
+    }, (err) => {
+      console.warn("Gagal memuat data petugas dari Firestore:", err);
+    });
 
-  function renderPublicTable() {
-    const tipe = pubTypeSelect.value;
-    const statusFilter = pubStatusSelect.value;
-    const keyword = pubSearchInput.value.toLowerCase().trim();
+    // Fungsi Render Tabel Utama
+    function renderPublicTable() {
+      if (!pubTypeSelect || !pubTableHead || !pubTableBody) return;
 
-    if (tipe === 'siswa') {
-      pubTableHead.innerHTML = `
-        <th class="p-3.5">ID Anggota</th>
-        <th class="p-3.5">Nama Lengkap</th>
-        <th class="p-3.5">Kelas</th>
-        <th class="p-3.5">Instansi</th>
-        <th class="p-3.5 text-center">Status Keanggotaan</th>
-      `;
+      const tipe = pubTypeSelect.value;
+      const statusFilter = pubStatusSelect ? pubStatusSelect.value : 'semua';
+      const sortMode = pubSortSelect ? pubSortSelect.value : 'nama-asc';
+      const pageSize = pubLimitSelect ? (parseInt(pubLimitSelect.value) || 10) : 10;
+      const keyword = (pubSearchInput?.value || '').toLowerCase().trim();
 
-      let filtered = listSiswa.filter(item => {
-        // Ambil status keanggotaan dan status keaktifan dari berbagai kemungkinan field admin
-        const statusKeanggotaanVal = (item.statusKeanggotaan || item.keanggotaan || item.tipeKeanggotaan || item.jenisKeanggotaan || item.status || 'Aktif').toString();
-        const statusAktifVal = (item.statusAktif || item.status || 'Aktif').toString();
+      const rawData = (tipe === 'siswa') ? listSiswa : listPetugas;
 
-        const matchStatus = (statusFilter === 'semua') || 
-                            (statusKeanggotaanVal.toLowerCase() === statusFilter.toLowerCase()) || 
-                            (statusAktifVal.toLowerCase() === statusFilter.toLowerCase());
-        
-        const idAnggota = (item.id || item.memberId || '').toString().toLowerCase();
-        const namaSiswa = (item.nama || '').toLowerCase();
-        const nisnSiswa = (item.nisn || '').toString().toLowerCase();
+      // Filter Data
+      let filtered = rawData.filter(item => {
+        if (tipe === 'siswa') {
+          const statusKeanggotaanVal = (item.statusKeanggotaan || item.keanggotaan || item.tipeKeanggotaan || item.jenisKeanggotaan || item.status || 'Aktif').toString();
+          const statusAktifVal = (item.statusAktif || item.status || 'Aktif').toString();
 
-        const matchKey = namaSiswa.includes(keyword) || idAnggota.includes(keyword) || nisnSiswa.includes(keyword);
-        return matchStatus && matchKey;
+          const matchStatus = (statusFilter === 'semua') || 
+                              (statusKeanggotaanVal.toLowerCase() === statusFilter.toLowerCase()) || 
+                              (statusAktifVal.toLowerCase() === statusFilter.toLowerCase());
+          
+          const idAnggota = (item.id || item.memberId || '').toString().toLowerCase();
+          const namaSiswa = (item.nama || '').toLowerCase();
+          const nisnSiswa = (item.nisn || '').toString().toLowerCase();
+
+          return matchStatus && (namaSiswa.includes(keyword) || idAnggota.includes(keyword) || nisnSiswa.includes(keyword));
+        } else {
+          const statusVal = (item.status || 'Aktif').toString();
+          const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
+          const namaPetugas = (item.nama || '').toLowerCase();
+          const usernamePetugas = (item.username || item.id || '').toLowerCase();
+
+          return matchStatus && (namaPetugas.includes(keyword) || usernamePetugas.includes(keyword));
+        }
       });
 
-      if (!filtered.length) {
-        pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Tidak ada data anggota siswa yang ditemukan.</td></tr>`;
-        return;
-      }
+      // Sorting Data A-Z / Z-A / ID
+      filtered.sort((a, b) => {
+        const namaA = (a.nama || '').toString();
+        const namaB = (b.nama || '').toString();
+        const idA = (a.id || a.memberId || a.username || '').toString();
+        const idB = (b.id || b.memberId || b.username || '').toString();
 
-      pubTableBody.innerHTML = filtered.map(item => {
-        // Membaca status keanggotaan sesuai data dashboard admin
-        const st = item.statusKeanggotaan || item.keanggotaan || item.tipeKeanggotaan || item.jenisKeanggotaan || item.status || 'Aktif';
-        const stLower = st.toString().toLowerCase();
-
-        // Penentuan gaya badge berdasarkan nilai status
-        let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        if (stLower === 'alumni' || stLower === 'vip' || stLower === 'duta literasi') {
-          badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
-        } else if (stLower === 'non-aktif' || stLower === 'tidak aktif' || stLower === 'suspend') {
-          badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
-        } else if (stLower === 'premium' || stLower === 'khusus') {
-          badgeStyle = 'bg-indigo-50 text-indigo-700 border-indigo-200';
-        } else if (stLower === 'standar' || stLower === 'aktif' || stLower === 'siswa') {
-          badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        } else {
-          badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+        if (sortMode === 'nama-asc') {
+          return namaA.localeCompare(namaB, 'id', { sensitivity: 'base' });
+        } else if (sortMode === 'nama-desc') {
+          return namaB.localeCompare(namaA, 'id', { sensitivity: 'base' });
+        } else if (sortMode === 'id-asc') {
+          return idA.localeCompare(idB, 'id', { numeric: true });
+        } else if (sortMode === 'id-desc') {
+          return idB.localeCompare(idA, 'id', { numeric: true });
         }
+        return 0;
+      });
 
-        const displayId = item.id || item.memberId || '-';
+      // Perhitungan Pagination
+      const totalItems = filtered.length;
+      const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
-        return `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="p-3.5 font-mono text-brand-600 font-bold">${displayId}</td>
-            <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
-            <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
-            <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
-            <td class="p-3.5 text-center">
-              <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
-            </td>
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, totalItems);
+      const pageData = filtered.slice(startIndex, endIndex);
+
+      // Render Header & Baris Tabel
+      if (tipe === 'siswa') {
+        pubTableHead.innerHTML = `
+          <tr>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('id')">
+              ID Anggota <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+            </th>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('nama')">
+              Nama Lengkap <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+            </th>
+            <th class="p-3.5">Kelas</th>
+            <th class="p-3.5">Instansi</th>
+            <th class="p-3.5 text-center">Status Keanggotaan</th>
           </tr>
         `;
-      }).join('');
 
-    } else {
-      pubTableHead.innerHTML = `
-        <th class="p-3.5">Nama Petugas</th>
-        <th class="p-3.5">Jabatan</th>
-        <th class="p-3.5">Username</th>
-        <th class="p-3.5 text-center">Status</th>
-      `;
+        if (totalItems === 0) {
+          pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Tidak ada data anggota siswa yang ditemukan.</td></tr>`;
+        } else {
+          pubTableBody.innerHTML = pageData.map(item => {
+            const st = item.statusKeanggotaan || item.keanggotaan || item.tipeKeanggotaan || item.jenisKeanggotaan || item.status || 'Aktif';
+            const stLower = st.toString().toLowerCase();
 
-      let filtered = listPetugas.filter(item => {
-        const statusVal = item.status || 'Aktif';
-        const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
-        const matchKey = (item.nama || '').toLowerCase().includes(keyword) || (item.username || '').toLowerCase().includes(keyword);
-        return matchStatus && matchKey;
-      });
+            let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            if (stLower === 'alumni' || stLower === 'vip' || stLower === 'duta literasi') {
+              badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+            } else if (stLower === 'non-aktif' || stLower === 'tidak aktif' || stLower === 'suspend') {
+              badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+            } else if (stLower === 'premium' || stLower === 'khusus') {
+              badgeStyle = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+            } else if (stLower === 'standar' || stLower === 'aktif' || stLower === 'siswa') {
+              badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            } else {
+              badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+            }
 
-      if (!filtered.length) {
-        pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Tidak ada data petugas yang ditemukan.</td></tr>`;
-        return;
-      }
+            const displayId = item.id || item.memberId || '-';
 
-      pubTableBody.innerHTML = filtered.map(item => {
-        const st = item.status || 'Aktif';
-        let badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
-        if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
-        if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+            return `
+              <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                <td class="p-3.5 font-mono text-brand-600 font-bold">${displayId}</td>
+                <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+                <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
+                <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
+                <td class="p-3.5 text-center">
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
 
-        return `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
-            <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
-            <td class="p-3.5 font-mono text-slate-500">${item.username || '-'}</td>
-            <td class="p-3.5 text-center">
-              <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
-            </td>
+      } else {
+        pubTableHead.innerHTML = `
+          <tr>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('nama')">
+              Nama Petugas <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+            </th>
+            <th class="p-3.5">Jabatan</th>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('id')">
+              Username / ID <i class="fa-solid fa-sort ml-1 text-slate-400"></i>
+            </th>
+            <th class="p-3.5 text-center">Status</th>
           </tr>
+        `;
+
+        if (totalItems === 0) {
+          pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Tidak ada data petugas yang ditemukan.</td></tr>`;
+        } else {
+          pubTableBody.innerHTML = pageData.map(item => {
+            const st = item.status || 'Aktif';
+            let badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+            if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+            if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+
+            return `
+              <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+                <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
+                <td class="p-3.5 font-mono text-slate-500">${item.username || item.id || '-'}</td>
+                <td class="p-3.5 text-center">
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+                </td>
+              </tr>
             `;
           }).join('');
         }
       }
-    </script>
 
-  <!-- Script Jam Realtime & Kalender (Versi Perbaikan) -->
+      // Render Informasi Pagination
+      if (pubPaginationInfo) {
+        const from = totalItems === 0 ? 0 : startIndex + 1;
+        pubPaginationInfo.innerText = `Menampilkan ${from} - ${endIndex} dari ${totalItems} data`;
+      }
+
+      // Render Tombol Navigasi Halaman
+      if (pubPaginationBtns) {
+        let btnsHtml = `
+          <button onclick="window.changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <i class="fa-solid fa-chevron-left text-[10px]"></i>
+          </button>
+        `;
+
+        let startP = Math.max(1, currentPage - 2);
+        let endP = Math.min(totalPages, startP + 4);
+        if (endP - startP < 4) startP = Math.max(1, endP - 4);
+
+        for (let p = startP; p <= endP; p++) {
+          const active = p === currentPage;
+          btnsHtml += `
+            <button onclick="window.changePage(${p})" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition ${active ? 'bg-brand-600 text-white border-brand-600 shadow-sm' : 'border-slate-200 hover:bg-slate-100 text-slate-700'}">
+              ${p}
+            </button>
+          `;
+        }
+
+        btnsHtml += `
+          <button onclick="window.changePage(${currentPage + 1})" ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          </button>
+        `;
+
+        pubPaginationBtns.innerHTML = btnsHtml;
+      }
+    }
+
+    // Fungsi Global Navigasi Halaman & Toggle Sort via Klik Header
+    window.changePage = function(page) {
+      currentPage = page;
+      renderPublicTable();
+    };
+
+    window.toggleSort = function(field) {
+      if (!pubSortSelect) return;
+      if (field === 'nama') {
+        pubSortSelect.value = pubSortSelect.value === 'nama-asc' ? 'nama-desc' : 'nama-asc';
+      } else if (field === 'id') {
+        pubSortSelect.value = pubSortSelect.value === 'id-asc' ? 'id-desc' : 'id-asc';
+      }
+      currentPage = 1;
+      renderPublicTable();
+    };
+
+    // Listener Event Pengubah Filter
+    if (pubTypeSelect) pubTypeSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
+    if (pubStatusSelect) pubStatusSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
+    if (pubSortSelect) pubSortSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
+    if (pubLimitSelect) pubLimitSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
+    if (pubSearchInput) pubSearchInput.addEventListener('input', () => { currentPage = 1; renderPublicTable(); });
+  </script>
+
+  <!-- Script Jam Realtime & Kalender -->
   <script>
     function updateClock() {
       const now = new Date();
@@ -577,11 +549,14 @@
       const witaTimeString = now.toLocaleTimeString('id-ID', witaOptions);
       const witaDateString = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' });
       
-      document.getElementById('realtimeClock').innerText = witaTimeString + " WITA";
-      document.getElementById('realtimeDate').innerText = witaDateString;
-      document.getElementById('calendarMonth').innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
+      const clockEl = document.getElementById('realtimeClock');
+      const dateEl = document.getElementById('realtimeDate');
+      const calMonthEl = document.getElementById('calendarMonth');
 
-      // Pengecekan status operasional berdasarkan waktu WITA
+      if (clockEl) clockEl.innerText = witaTimeString + " WITA";
+      if (dateEl) dateEl.innerText = witaDateString;
+      if (calMonthEl) calMonthEl.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
+
       const witaDate = new Date(now.toLocaleString('en-US', witaOptions));
       const day = witaDate.getDay();
       const hours = witaDate.getHours();
@@ -589,11 +564,12 @@
       const timeNum = hours * 100 + minutes;
 
       const badge = document.getElementById('statusBadge');
+      if (!badge) return;
       let isOpen = false;
 
-      if (day >= 1 && day <= 4) { // Senin - Kamis
+      if (day >= 1 && day <= 4) {
         if (timeNum >= 715 && timeNum <= 1400) isOpen = true;
-      } else if (day === 5) { // Jumat
+      } else if (day === 5) {
         if (timeNum >= 755 && timeNum <= 1130) isOpen = true;
       }
 
@@ -619,17 +595,14 @@
       const year = witaDate.getFullYear();
       const month = witaDate.getMonth();
 
-      // Perhitungan hari pertama dan total hari dalam bulan berjalan
       const firstDay = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
       const todayDate = witaDate.getDate();
 
-      // Menambahkan slot kosong sebelum tanggal 1
       for (let i = 0; i < firstDay; i++) {
         grid.innerHTML += `<div></div>`;
       }
 
-      // Menampilkan tanggal
       for (let d = 1; d <= totalDays; d++) {
         const isToday = d === todayDate;
         grid.innerHTML += `<div class="py-1 rounded-lg ${isToday ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-100'}">${d}</div>`;
@@ -639,13 +612,9 @@
     setInterval(updateClock, 1000);
     updateClock();
     generateCalendar();
-  </script>
 
-  <!-- Script Toggle Mobile Menu Navigasi -->
-  <script>
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
-
     if (mobileMenuBtn && mobileMenu) {
       mobileMenuBtn.addEventListener('click', () => {
         mobileMenu.classList.toggle('hidden');

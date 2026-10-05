@@ -68,43 +68,67 @@
   </div>
 
   <script type="module">
-    import { db } from './js/firebase-config.js';
-    import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { db } from './js/firebase-config.js';
+  import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    async function loadKatalog() {
+    // Memuat data buku secara real-time dari Firestore
+    function listenKatalog() {
       const grid = document.getElementById('gridBuku');
-      try {
-        const snap = await getDocs(collection(db, "katalog"));
-        let total = 0;
-        let html = "";
-        
-        snap.forEach(docSnap => {
-          const b = docSnap.data();
-          total += Number(b.ekslempar || 0);
-          html += `
-            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
-              <div>
-                <img src="${b.cover || 'https://via.placeholder.com/200x300?text=No+Cover'}" class="w-full h-48 object-cover rounded-xl mb-3">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${b.ekslempar > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                  Stok: ${b.ekslempar} Ekslempar
-                </span>
-                <h4 class="font-extrabold text-slate-900 text-sm mt-2 leading-tight">${b.judul}</h4>
-                <p class="text-xs text-slate-500 mt-1">Pengarang: ${b.pengarang}</p>
-              </div>
-              <button onclick="pinjamBuku('${b.judul}')" class="mt-4 w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2 rounded-xl text-xs transition">
-                Rencana Meminjam
-              </button>
-            </div>
-          `;
-        });
 
-        document.getElementById('countBuku').innerText = total;
-        grid.innerHTML = html || `<p class="col-span-full text-center py-8 text-slate-400">Belum ada koleksi buku di katalog.</p>`;
-      } catch (err) {
+      // Mendengarkan perubahan pada koleksi 'buku'
+      onSnapshot(collection(db, "buku"), (snap) => {
+        if (snap.empty) {
+          // Fallback jika data masih berada di koleksi lama 'katalog'
+          onSnapshot(collection(db, "katalog"), (snapKatalog) => {
+            renderBukuCards(snapKatalog);
+          });
+        } else {
+          renderBukuCards(snap);
+        }
+      }, (err) => {
+        console.error("Gagal memuat katalog:", err);
         grid.innerHTML = `<p class="col-span-full text-center py-8 text-rose-500 font-bold">Gagal memuat katalog dari basis data.</p>`;
-      }
+      });
     }
 
+    // Menampilkan kartu katalog buku
+    function renderBukuCards(snap) {
+      const grid = document.getElementById('gridBuku');
+      let total = 0;
+      let html = "";
+
+      snap.forEach(docSnap => {
+        const b = docSnap.data();
+        const stok = Number(b.stok ?? b.ekslempar ?? 0);
+        total += stok;
+
+        html += `
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-xl transition flex flex-col justify-between">
+            <div>
+              <img src="${b.cover || 'https://via.placeholder.com/200x300?text=No+Cover'}" class="w-full h-48 object-cover rounded-xl mb-3">
+              <div class="flex items-center justify-between gap-1 mb-2">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${stok > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                  Stok: ${stok} Ekslempar
+                </span>
+                ${b.bosTahap ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">BOS Tahap ${b.bosTahap}</span>` : ''}
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-sm leading-tight">${b.judul || '-'}</h4>
+              <p class="text-xs text-slate-500 mt-1">Pengarang: <span class="font-medium text-slate-700">${b.pengarang || '-'}</span></p>
+              ${b.penerbit ? `<p class="text-xs text-slate-500">Penerbit: <span class="font-medium text-slate-700">${b.penerbit}</span></p>` : ''}
+              ${b.kategori ? `<span class="inline-block mt-2 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold">${b.kategori}</span>` : ''}
+            </div>
+            <button onclick="pinjamBuku('${b.judul}')" class="mt-4 w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded-xl text-xs transition shadow-sm">
+              Rencana Meminjam
+            </button>
+          </div>
+        `;
+      });
+
+      document.getElementById('countBuku').innerText = total;
+      grid.innerHTML = html || `<p class="col-span-full text-center py-8 text-slate-400">Belum ada koleksi buku di katalog.</p>`;
+    }
+
+    // Handler Rencana Meminjam Buku
     window.pinjamBuku = async (judul) => {
       const user = JSON.parse(localStorage.getItem('userSession'));
       if (!user) {
@@ -123,7 +147,7 @@
 
     window.closeModal = () => document.getElementById('modalBukti').classList.add('hidden');
 
-    loadKatalog();
+    listenKatalog();
   </script>
 </body>
 </html>

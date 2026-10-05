@@ -582,15 +582,26 @@
           <label class="block font-bold text-slate-700 mb-1">Pengarang / Penulis</label>
           <input type="text" id="inpPengarangBuku" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
         </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Penerbit</label>
+          <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+        </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Kategori</label>
             <input type="text" id="inpKategoriBuku" placeholder="Misal: Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Jumlah Stok</label>
-            <input type="number" id="inpStokBuku" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
+            <label class="block font-bold text-slate-700 mb-1">BOS Tahap</label>
+            <select id="inpBosTahap" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none font-bold">
+              <option value="Satu">Tahap Satu</option>
+              <option value="Dua">Tahap Dua</option>
+            </select>
           </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Jumlah Stok</label>
+          <input type="number" id="inpStokBuku" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
@@ -942,6 +953,8 @@
             <th onclick="window.handleSort('kode')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Kode ${getSortIcon('kode')}</th>
             <th onclick="window.handleSort('judul')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Judul Buku ${getSortIcon('judul')}</th>
             <th onclick="window.handleSort('pengarang')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Pengarang ${getSortIcon('pengarang')}</th>
+            <th onclick="window.handleSort('penerbit')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Penerbit ${getSortIcon('penerbit')}</th>
+            <th onclick="window.handleSort('bosTahap')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">BOS Tahap ${getSortIcon('bosTahap')}</th>
             <th onclick="window.handleSort('kategori')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Kategori ${getSortIcon('kategori')}</th>
             <th onclick="window.handleSort('stok')" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition select-none">Stok ${getSortIcon('stok')}</th>
             <th class="px-4 py-3.5 text-center">Aksi</th>
@@ -953,6 +966,8 @@
             <td class="px-4 py-3.5 font-bold text-amber-600">${item.kode || '-'}</td>
             <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.judul || '-'}</td>
             <td class="px-4 py-3.5">${item.pengarang || '-'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${item.penerbit || '-'}</td>
+            <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-amber-100 text-amber-800 font-bold rounded-md">Tahap ${item.bosTahap || 'Satu'}</span></td>
             <td class="px-4 py-3.5"><span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">${item.kategori || 'Umum'}</span></td>
             <td class="px-4 py-3.5 font-bold text-blue-600">${item.stok || 0} Eks</td>
             <td class="px-4 py-3.5 text-center">
@@ -962,7 +977,6 @@
             </td>
           </tr>
         `).join('');
-
       } else if (type === 'duta') {
         titleEl.innerText = 'Daftar Duta Literasi Sekolah';
         headHtml = `
@@ -1244,18 +1258,22 @@
     });
 
     // Submit Form Tambah Buku
-    document.getElementById('formTambahBuku').addEventListener('submit', async (e) => {
+    document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const newBuku = {
-        kode: 'BK-00' + (window.dbData.buku.length + 1),
+        kode: 'BK-00' + ((window.dbData?.buku?.length || 0) + 1),
         judul: document.getElementById('inpJudulBuku').value,
         pengarang: document.getElementById('inpPengarangBuku').value,
+        penerbit: document.getElementById('inpPenerbitBuku')?.value || '',
+        bosTahap: document.getElementById('inpBosTahap')?.value || 'Satu',
         kategori: document.getElementById('inpKategoriBuku').value || 'Umum',
         stok: parseInt(document.getElementById('inpStokBuku').value) || 1,
+        ekslempar: parseInt(document.getElementById('inpStokBuku').value) || 1,
         createdAt: new Date().toISOString()
       };
       try {
         await addDoc(collection(db, 'buku'), newBuku);
+        alert("✅ Buku berhasil ditambahkan!");
         window.toggleModal('modalBuku', false);
         e.target.reset();
       } catch (err) {
