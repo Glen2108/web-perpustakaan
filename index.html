@@ -312,8 +312,13 @@
       `;
 
       let filtered = listSiswa.filter(item => {
-        const statusVal = item.status || 'Aktif';
-        const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
+        // Ambil status keanggotaan dan status keaktifan dari berbagai kemungkinan field admin
+        const statusKeanggotaanVal = (item.statusKeanggotaan || item.keanggotaan || item.tipeKeanggotaan || item.jenisKeanggotaan || item.status || 'Aktif').toString();
+        const statusAktifVal = (item.statusAktif || item.status || 'Aktif').toString();
+
+        const matchStatus = (statusFilter === 'semua') || 
+                            (statusKeanggotaanVal.toLowerCase() === statusFilter.toLowerCase()) || 
+                            (statusAktifVal.toLowerCase() === statusFilter.toLowerCase());
         
         const idAnggota = (item.id || item.memberId || '').toString().toLowerCase();
         const namaSiswa = (item.nama || '').toLowerCase();
@@ -329,11 +334,23 @@
       }
 
       pubTableBody.innerHTML = filtered.map(item => {
-        const st = item.status || 'Aktif';
+        // Membaca status keanggotaan sesuai data dashboard admin
+        const st = item.statusKeanggotaan || item.keanggotaan || item.tipeKeanggotaan || item.jenisKeanggotaan || item.status || 'Aktif';
+        const stLower = st.toString().toLowerCase();
+
+        // Penentuan gaya badge berdasarkan nilai status
         let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        if (st === 'Alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
-        if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
-        if (st === 'Standar') badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        if (stLower === 'alumni' || stLower === 'vip' || stLower === 'duta literasi') {
+          badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
+        } else if (stLower === 'non-aktif' || stLower === 'tidak aktif' || stLower === 'suspend') {
+          badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+        } else if (stLower === 'premium' || stLower === 'khusus') {
+          badgeStyle = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+        } else if (stLower === 'standar' || stLower === 'aktif' || stLower === 'siswa') {
+          badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        } else {
+          badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+        }
 
         const displayId = item.id || item.memberId || '-';
 
