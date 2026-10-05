@@ -190,6 +190,23 @@
         </div>
       </div>
 
+      <!-- Filter Pencarian & Jumlah Data Per Halaman -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="font-bold text-slate-600">Tampilkan:</label>
+          <select id="itemsPerPageSelect" onchange="window.changeItemsPerPage(this.value)" class="p-2 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="5">5 data</option>
+            <option value="10" selected>10 data</option>
+            <option value="25">25 data</option>
+            <option value="50">50 data</option>
+          </select>
+        </div>
+        <div class="relative w-full sm:w-64">
+          <input type="text" id="searchInput" oninput="window.handleSearch(this.value)" placeholder="Cari data..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs outline-none focus:ring-2 focus:ring-blue-500">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
+        </div>
+      </div>
+
       <div class="overflow-x-auto rounded-2xl border border-slate-100">
         <table class="w-full text-left text-xs">
           <thead id="tableHead" class="bg-slate-50 text-slate-600 font-extrabold uppercase border-b border-slate-100"></thead>
@@ -197,8 +214,10 @@
         </table>
       </div>
 
+      <!-- Kontrol Pagination dan Info -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 gap-3">
         <p id="tableCountInfo">Menampilkan 0 data</p>
+        <div id="paginationControls" class="flex items-center gap-1.5"></div>
       </div>
     </section>
 
@@ -522,7 +541,7 @@
     </div>
   </div>
 
-  <!-- Script Utama Modul Firestore & Event Handlers -->
+  <!-- Script Utama Modul Firestore & Event Handlers (Sorting, Pagination, Searching) -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, addDoc, updateDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -542,6 +561,15 @@
     window.dbData = { anggota: [], petugas: [], buku: [], duta: [], pinjam: [] };
     window.currentActiveTable = 'anggota';
     window.editingMemberId = null;
+
+    // State untuk Sorting, Pagination & Search
+    window.tableState = {
+      currentPage: 1,
+      itemsPerPage: 10,
+      sortColumn: '',
+      sortDirection: 'asc',
+      searchQuery: ''
+    };
 
     const collections = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
     collections.forEach(colName => {
@@ -584,6 +612,10 @@
 
     window.switchTable = function(type) {
       window.currentActiveTable = type;
+      window.tableState.currentPage = 1;
+      window.tableState.sortColumn = '';
+      window.tableState.sortDirection = 'asc';
+
       const tabs = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
       tabs.forEach(t => {
         const btn = document.getElementById('btnTab' + t.charAt(0).toUpperCase() + t.slice(1));
@@ -609,32 +641,130 @@
       window.renderTableData();
     };
 
+    // Fungsi Pengatur Sorting
+    window.handleSort = function(colKey) {
+      if (window.tableState.sortColumn === colKey) {
+        window.tableState.sortDirection = window.tableState.sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        window.tableState.sortColumn = colKey;
+        window.tableState.sortDirection = 'asc';
+      }
+      window.renderTableData();
+    };
+
+    // Fungsi Pengatur Jumlah Data Per Halaman
+    window.changeItemsPerPage = function(val) {
+      window.tableState.itemsPerPage = parseInt(val) || 10;
+      window.tableState.currentPage = 1;
+      window.renderTableData();
+    };
+
+    // Fungsi Pengatur Pencarian Data
+    window.handleSearch = function(val) {
+      window.tableState.searchQuery = (val || '').trim().toLowerCase();
+      window.tableState.currentPage = 1;
+      window.renderTableData();
+    };
+
+    // Fungsi Pindah Halaman
+    window.goToPage = function(page) {
+      window.tableState.currentPage = page;
+      window.renderTableData();
+    };
+
+    // Helper Pembuat Header Tabel Sortable
+    function getSortableHeaderHtml(label, key, extraClass = '') {
+      if (!key) return `<th class="p-3.5 ${extraClass}">${label}</th>`;
+      
+      const isCurrent = window.tableState.sortColumn === key;
+      let iconClass = 'fa-sort text-slate-300';
+      if (isCurrent) {
+        iconClass = window.tableState.sortDirection === 'asc' ? 'fa-sort-up text-blue-600' : 'fa-sort-down text-blue-600';
+      }
+      
+      return `
+        <th class="p-3.5 cursor-pointer select-none hover:bg-slate-100 transition ${extraClass}" onclick="window.handleSort('${key}')">
+          <div class="flex items-center gap-1.5 ${extraClass.includes('text-center') ? 'justify-center' : ''}">
+            <span>${label}</span>
+            <i class="fa-solid ${iconClass} text-xs"></i>
+          </div>
+        </th>
+      `;
+    }
+
     window.renderTableData = function() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
       const countInfo = document.getElementById('tableCountInfo');
+      const pagEl = document.getElementById('paginationControls');
 
       if (!thead || !tbody) return;
 
       const type = window.currentActiveTable;
-      let dataList = window.dbData[type] || [];
-      const totalData = dataList.length;
+      let dataList = [...(window.dbData[type] || [])];
 
-      if (countInfo) countInfo.innerText = `Menampilkan ${totalData} data`;
+      // 1. Filtering / Search
+      if (window.tableState.searchQuery) {
+        const q = window.tableState.searchQuery;
+        dataList = dataList.filter(item => {
+          return Object.values(item).some(val => 
+            val && String(val).toLowerCase().includes(q)
+          );
+        });
+      }
 
+      // 2. Sorting
+      if (window.tableState.sortColumn) {
+        const col = window.tableState.sortColumn;
+        const dir = window.tableState.sortDirection === 'asc' ? 1 : -1;
+        
+        dataList.sort((a, b) => {
+          let valA = a[col] ?? '';
+          let valB = b[col] ?? '';
+
+          if (col === 'id') { valA = a.id || a.memberId || ''; valB = b.id || b.memberId || ''; }
+          if (col === 'status') { valA = a.statusKeanggotaan || a.status || ''; valB = b.statusKeanggotaan || b.status || ''; }
+          if (col === 'email') { valA = a.email || a.username || ''; valB = b.email || b.username || ''; }
+          if (col === 'periode') { valA = a.tglMulai || a.periode || ''; valB = b.tglMulai || b.periode || ''; }
+
+          if (typeof valA === 'number' && typeof valB === 'number') {
+            return (valA - valB) * dir;
+          }
+          if (!isNaN(valA) && !isNaN(valB) && valA !== '' && valB !== '') {
+            return (Number(valA) - Number(valB)) * dir;
+          }
+
+          return String(valA).localeCompare(String(valB), undefined, { numeric: true, sensitivity: 'base' }) * dir;
+        });
+      }
+
+      // 3. Pagination calculation
+      const totalItems = dataList.length;
+      const itemsPerPage = window.tableState.itemsPerPage;
+      const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+      if (window.tableState.currentPage > totalPages) window.tableState.currentPage = totalPages;
+      if (window.tableState.currentPage < 1) window.tableState.currentPage = 1;
+
+      const currentPage = window.tableState.currentPage;
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+      const paginatedData = dataList.slice(startIndex, endIndex);
+
+      // Render Header & Body berdasarkan Modul
       if (type === 'anggota') {
         thead.innerHTML = `
           <tr>
-            <th class="p-3.5">ID Anggota</th>
-            <th class="p-3.5">Nama Lengkap</th>
-            <th class="p-3.5">Kelas</th>
-            <th class="p-3.5">Instansi</th>
-            <th class="p-3.5 text-center">Status</th>
+            ${getSortableHeaderHtml('ID Anggota', 'id')}
+            ${getSortableHeaderHtml('Nama Lengkap', 'nama')}
+            ${getSortableHeaderHtml('Kelas', 'kelas')}
+            ${getSortableHeaderHtml('Instansi', 'instansi')}
+            ${getSortableHeaderHtml('Status', 'status', 'text-center')}
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
-          dataList.map(item => `
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
+          paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
               <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
               <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
@@ -654,14 +784,14 @@
       } else if (type === 'petugas') {
         thead.innerHTML = `
           <tr>
-            <th class="p-3.5">Nama Petugas</th>
-            <th class="p-3.5">Email / Username</th>
-            <th class="p-3.5">Jabatan</th>
+            ${getSortableHeaderHtml('Nama Petugas', 'nama')}
+            ${getSortableHeaderHtml('Email / Username', 'email')}
+            ${getSortableHeaderHtml('Jabatan', 'jabatan')}
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-400">Belum ada data petugas.</td></tr>` :
-          dataList.map(item => `
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-400">Belum ada data petugas.</td></tr>` :
+          paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
               <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
               <td class="p-3.5 text-slate-600">${item.email || item.username || '-'}</td>
@@ -674,16 +804,16 @@
       } else if (type === 'buku') {
         thead.innerHTML = `
           <tr>
-            <th class="p-3.5">Judul Buku</th>
-            <th class="p-3.5">Pengarang</th>
-            <th class="p-3.5">Penerbit</th>
-            <th class="p-3.5">Kategori</th>
-            <th class="p-3.5 text-center">Stok</th>
+            ${getSortableHeaderHtml('Judul Buku', 'judul')}
+            ${getSortableHeaderHtml('Pengarang', 'pengarang')}
+            ${getSortableHeaderHtml('Penerbit', 'penerbit')}
+            ${getSortableHeaderHtml('Kategori', 'kategori')}
+            ${getSortableHeaderHtml('Stok', 'stok', 'text-center')}
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
-          dataList.map(item => `
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
+          paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
               <td class="p-3.5 font-bold text-slate-900">${item.judul || '-'}</td>
               <td class="p-3.5 text-slate-600">${item.pengarang || '-'}</td>
@@ -698,15 +828,15 @@
       } else if (type === 'duta') {
         thead.innerHTML = `
           <tr>
-            <th class="p-3.5">Nama Siswa</th>
-            <th class="p-3.5">Kelas</th>
-            <th class="p-3.5">Tipe / Status</th>
-            <th class="p-3.5">Periode / Tanggal</th>
+            ${getSortableHeaderHtml('Nama Siswa', 'nama')}
+            ${getSortableHeaderHtml('Kelas', 'kelas')}
+            ${getSortableHeaderHtml('Tipe / Status', 'tipe')}
+            ${getSortableHeaderHtml('Periode / Tanggal', 'periode')}
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada data Duta Literasi.</td></tr>` :
-          dataList.map(item => `
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada data Duta Literasi.</td></tr>` :
+          paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
               <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
               <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
@@ -724,15 +854,15 @@
       } else if (type === 'pinjam') {
         thead.innerHTML = `
           <tr>
-            <th class="p-3.5">Peminjam</th>
-            <th class="p-3.5">Judul Buku</th>
-            <th class="p-3.5">Tgl Pinjam</th>
-            <th class="p-3.5">Tgl Kembali</th>
+            ${getSortableHeaderHtml('Peminjam', 'peminjam')}
+            ${getSortableHeaderHtml('Judul Buku', 'buku')}
+            ${getSortableHeaderHtml('Tgl Pinjam', 'tglPinjam')}
+            ${getSortableHeaderHtml('Tgl Kembali', 'tglKembali')}
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalData === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
-          dataList.map(item => `
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
+          paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
               <td class="p-3.5 font-bold text-slate-900">${item.peminjam || '-'}</td>
               <td class="p-3.5 font-medium text-slate-700">${item.buku || '-'}</td>
@@ -743,6 +873,54 @@
               </td>
             </tr>
           `).join('');
+      }
+
+      // Render Teks Info Jumlah Data
+      if (countInfo) {
+        if (totalItems === 0) {
+          countInfo.innerText = 'Menampilkan 0 data';
+        } else {
+          countInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${totalItems} data`;
+        }
+      }
+
+      // Render Tombol Pagination
+      if (pagEl) {
+        if (totalPages <= 1) {
+          pagEl.innerHTML = '';
+        } else {
+          let pagBtns = '';
+
+          // Tombol Prev
+          pagBtns += `
+            <button onclick="window.goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              <i class="fa-solid fa-chevron-left text-[10px]"></i> Prev
+            </button>
+          `;
+
+          // Angka Halaman
+          for (let p = 1; p <= totalPages; p++) {
+            if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
+              const isActive = p === currentPage;
+              pagBtns += `
+                <button onclick="window.goToPage(${p})" class="px-3 py-1.5 rounded-lg font-bold transition ${isActive ? 'bg-blue-600 text-white' : 'border border-slate-200 text-slate-600 hover:bg-slate-100'}">
+                  ${p}
+                </button>
+              `;
+            } else if (p === currentPage - 2 || p === currentPage + 2) {
+              pagBtns += `<span class="px-1 text-slate-400">...</span>`;
+            }
+          }
+
+          // Tombol Next
+          pagBtns += `
+            <button onclick="window.goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+              Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+          `;
+
+          pagEl.innerHTML = pagBtns;
+        }
       }
     };
 
@@ -817,7 +995,6 @@
       const nisn = document.getElementById('inpPersonalId').value.trim();
       const username = document.getElementById('inpUsernameSiswa').value.trim();
 
-      // Validasi Pencegahan Data Ganda / Bentrok
       const existingMembers = window.dbData.anggota || [];
       
       const duplicateId = existingMembers.find(
@@ -957,16 +1134,46 @@
     document.getElementById('formTambahPinjam')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const today = new Date().toISOString().substring(0, 10);
-      const payload = {
-        peminjam: document.getElementById('inpPeminjam').value,
-        buku: document.getElementById('inpBukuPinjam').value,
+      const peminjamInput = document.getElementById('inpPeminjam').value.trim();
+      const judulInput = document.getElementById('inpBukuPinjam').value.trim();
+      const tglKembaliInput = document.getElementById('inpTglKembali').value;
+
+      // 1. Cari buku berdasarkan Judul di daftar koleksi (case-insensitive)
+      const targetBuku = (window.dbData.buku || []).find(
+        b => (b.judul || '').trim().toLowerCase() === judulInput.toLowerCase()
+      );
+
+      if (!targetBuku) {
+        alert(`Buku dengan judul "${judulInput}" tidak ditemukan dalam katalog! Silakan periksa kembali judul buku.`);
+        return;
+      }
+
+      const stokSaatIni = Number(targetBuku.stok ?? targetBuku.ekslempar ?? 0);
+
+      if (stokSaatIni <= 0) {
+        alert(`Stok buku "${targetBuku.judul}" sudah habis (0 ekslempar). Peminjaman tidak dapat diproses!`);
+        return;
+      }
+
+      const payloadPinjam = {
+        peminjam: peminjamInput,
+        buku: targetBuku.judul,
         tglPinjam: today,
-        tglKembali: document.getElementById('inpTglKembali').value,
+        tglKembali: tglKembaliInput,
         status: 'Dipinjam'
       };
+
       try {
-        await addDoc(collection(db, 'pinjam'), payload);
-        alert('Transaksi peminjaman berhasil dicatat!');
+        // 2. Simpan transaksi peminjaman ke koleksi 'pinjam'
+        await addDoc(collection(db, 'pinjam'), payloadPinjam);
+
+        // 3. Kurangi stok ekslempar buku terkait sebesar 1 di koleksi 'buku'
+        const stokBaru = stokSaatIni - 1;
+        await updateDoc(doc(db, 'buku', targetBuku.firestoreId), {
+          stok: stokBaru
+        });
+
+        alert(`Peminjaman berhasil dicatat! Sisa stok buku "${targetBuku.judul}" berkurang menjadi ${stokBaru} ekslempar.`);
         window.toggleModal('modalPinjam', false);
         e.target.reset();
       } catch (err) {

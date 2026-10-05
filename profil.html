@@ -123,9 +123,9 @@
           </div>
         </div>
 
-        <!-- Shortcut Peminjaman Mandiri -->
-        <a href="katalog.html" class="w-full md:w-auto text-center bg-amber-400 hover:bg-amber-300 text-brand-900 font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95">
-          <i class="fa-solid fa-magnifying-glass mr-1.5"></i> Cari & Pinjam Buku
+        <!-- Tombol "Lihat Buku yang tersedia" -->
+        <a href="katalog.html" class="w-full md:w-auto text-center bg-amber-400 hover:bg-amber-300 text-brand-900 font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-book-open"></i> Lihat Buku yang tersedia
         </a>
 
       </div>
@@ -191,14 +191,18 @@
 
       </div>
 
-      <!-- Riwayat Peminjaman Buku (Col 5) -->
+      <!-- Riwayat Peminjaman Buku & Tombol Popup Pengaduan (Col 5) -->
       <div class="lg:col-span-5 space-y-6">
         <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
               <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Peminjaman Buku
             </h3>
-            <span class="text-[11px] font-bold bg-amber-50 text-amber-700 px-2.5 py-1 rounded-lg">Realtime</span>
+            
+            <!-- Tombol Popup Pengaduan / Ide Perbaikan -->
+            <button onclick="openModalPengaduan()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-exclamation text-rose-500"></i> Pengaduan
+            </button>
           </div>
 
           <!-- List Peminjaman Buku -->
@@ -209,15 +213,78 @@
             </div>
           </div>
 
-          <a href="katalog.html" class="block text-center text-xs font-extrabold text-brand-600 hover:text-brand-500 pt-2">
-            Lihat Koleksi Lengkap Katalog <i class="fa-solid fa-chevron-right text-[10px]"></i>
-          </a>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+            <a href="katalog.html" class="font-extrabold text-brand-600 hover:text-brand-500">
+              Lihat Koleksi Lengkap Katalog <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </a>
+          </div>
         </div>
       </div>
 
     </div>
 
   </main>
+
+  <!-- Modal Popup Pengaduan & Saran -->
+  <div id="modalPengaduan" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 relative">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-black text-slate-900 leading-tight">Pengaduan & Ide Perbaikan</h3>
+            <p class="text-xs text-slate-500">Kirim kendala atau masukan ke perpustakaan</p>
+          </div>
+        </div>
+        <button onclick="closeModalPengaduan()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Form Pengaduan -->
+      <form onsubmit="kirimPengaduan(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Pengirim</label>
+          <input type="text" id="pengaduanNama" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-600 font-semibold cursor-not-allowed">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kategori Layanan</label>
+          <select id="pengaduanKategori" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <option value="Kendala Peminjaman Buku">Kendala Peminjaman Buku</option>
+            <option value="Buku Rusak / Hilang">Buku Rusak / Hilang</option>
+            <option value="Masalah Sistem Perpustakaan">Masalah Sistem Perpustakaan</option>
+            <option value="Saran / Ide Perbaikan">Saran / Ide Perbaikan Kedepan</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Detail Pengaduan / Masukan</label>
+          <textarea id="pengaduanPesan" rows="4" required placeholder="Tuliskan masalah yang dialami atau ide perbaikan secara jelas..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400"></textarea>
+        </div>
+
+        <div class="p-3 bg-blue-50 border border-blue-100 rounded-2xl text-[11px] text-blue-800 flex items-start gap-2">
+          <i class="fa-solid fa-circle-info text-blue-600 text-sm mt-0.5"></i>
+          <span>Pengaduan ini akan dikirimkan langsung ke email resmi: <strong>perpustakaan.sman4mdo@gmail.com</strong></span>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <button type="button" onclick="closeModalPengaduan()" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-600/30 transition flex items-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Pengaduan
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="bg-brand-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
@@ -229,81 +296,86 @@
 
   <!-- Script Penanganan Sesi & Tampilan Data -->
   <script type="module">
-  import { db } from './js/firebase-config.js';
-  import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { db } from './js/firebase-config.js';
+    import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-  }
-
-  function renderUserData() {
-    if (!currentUser) return;
-
-    const nama = currentUser.nama || currentUser.username || 'Siswa';
-    const initial = nama.charAt(0).toUpperCase();
-    const idAnggota = currentUser.id || '-';
-    const nisn = currentUser.nisn || '-';
-    const kelas = currentUser.kelas || 'Siswa Aktif';
-    const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
-    const status = currentUser.status || 'Standar';
-
-    document.getElementById('navAvatar').innerText = initial;
-    document.getElementById('navUserName').innerText = nama;
-    document.getElementById('navUserClass').innerText = kelas;
-
-    document.getElementById('heroAvatar').innerText = initial;
-    document.getElementById('profileNama').innerText = nama;
-    document.getElementById('profileID').innerText = nisn !== '-' ? nisn : idAnggota;
-    document.getElementById('profileKelas').innerText = kelas;
-
-    document.getElementById('detailNama').innerText = nama;
-    document.getElementById('detailMemberId').innerText = idAnggota + " / " + nisn;
-    document.getElementById('detailKelas').innerText = kelas;
-    document.getElementById('detailInstansi').innerText = instansi;
-
-    document.getElementById('cardNama').innerText = nama;
-    document.getElementById('cardNIS').innerText = "ID: " + idAnggota + " | NISN: " + nisn;
-
-    const badgeStatus = document.getElementById('badgeStatus');
-    if (badgeStatus) {
-      badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
-      badgeStatus.innerText = "• Status: " + status;
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     }
-  }
 
-  function loadUserPeminjaman() {
-    if (!currentUser) return;
-    const listEl = document.getElementById('listPeminjaman');
-    const userNama = currentUser.nama || '';
+    function renderUserData() {
+      if (!currentUser) return;
 
-    const q = query(collection(db, "pinjam"), where("peminjam", "==", userNama));
-    onSnapshot(q, (snapshot) => {
-      if (snapshot.empty) {
-        listEl.innerHTML = `
-          <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-            <i class="fa-solid fa-book-open text-2xl mb-1 text-slate-300 block"></i>
-            Belum ada riwayat peminjaman buku aktif.
-          </div>
-        `;
-        return;
+      const nama = currentUser.nama || currentUser.username || 'Siswa';
+      const initial = nama.charAt(0).toUpperCase();
+      const idAnggota = currentUser.id || '-';
+      const nisn = currentUser.nisn || '-';
+      const kelas = currentUser.kelas || 'Siswa Aktif';
+      const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
+      const status = currentUser.status || 'Standar';
+
+      document.getElementById('navAvatar').innerText = initial;
+      document.getElementById('navUserName').innerText = nama;
+      document.getElementById('navUserClass').innerText = kelas;
+
+      document.getElementById('heroAvatar').innerText = initial;
+      document.getElementById('profileNama').innerText = nama;
+      document.getElementById('profileID').innerText = nisn !== '-' ? nisn : idAnggota;
+      document.getElementById('profileKelas').innerText = kelas;
+
+      document.getElementById('detailNama').innerText = nama;
+      document.getElementById('detailMemberId').innerText = idAnggota + " / " + nisn;
+      document.getElementById('detailKelas').innerText = kelas;
+      document.getElementById('detailInstansi').innerText = instansi;
+
+      document.getElementById('cardNama').innerText = nama;
+      document.getElementById('cardNIS').innerText = "ID: " + idAnggota + " | NISN: " + nisn;
+
+      const inputPengaduanNama = document.getElementById('pengaduanNama');
+      if (inputPengaduanNama) {
+        inputPengaduanNama.value = `${nama} (${kelas} - ID: ${idAnggota})`;
       }
 
-      let html = '';
-      snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        html += `
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between text-xs">
-            <div>
-              <p class="font-extrabold text-slate-800">${data.buku || '-'}</p>
-              <p class="text-[10px] text-slate-500">Tgl Pinjam: ${data.tglPinjam || '-'} | Kembali: <span class="text-rose-600 font-bold">${data.tglKembali || '-'}</span></p>
+      const badgeStatus = document.getElementById('badgeStatus');
+      if (badgeStatus) {
+        badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+        badgeStatus.innerText = "• Status: " + status;
+      }
+    }
+
+    function loadUserPeminjaman() {
+      if (!currentUser) return;
+      const listEl = document.getElementById('listPeminjaman');
+      const userNama = currentUser.nama || '';
+
+      const q = query(collection(db, "pinjam"), where("peminjam", "==", userNama));
+      onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+          listEl.innerHTML = `
+            <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+              <i class="fa-solid fa-book-open text-2xl mb-1 text-slate-300 block"></i>
+              Belum ada riwayat peminjaman buku aktif.
             </div>
-            <span class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800">
-              ${data.status || 'Dipinjam'}
-            </span>
-          </div>
-        `;
+          `;
+          return;
+        }
+
+        let html = '';
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          html += `
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between text-xs">
+              <div>
+                <p class="font-extrabold text-slate-800">${data.buku || '-'}</p>
+                <p class="text-[10px] text-slate-500">Tgl Pinjam: ${data.tglPinjam || '-'} | Kembali: <span class="text-rose-600 font-bold">${data.tglKembali || '-'}</span></p>
+              </div>
+              <span class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                ${data.status || 'Dipinjam'}
+              </span>
+            </div>
+          `;
         });
         listEl.innerHTML = html;
       });
@@ -314,6 +386,40 @@
         localStorage.removeItem('userSession');
         window.location.href = "login-siswa.html";
       }
+    };
+
+    window.openModalPengaduan = function() {
+      const modal = document.getElementById('modalPengaduan');
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeModalPengaduan = function() {
+      const modal = document.getElementById('modalPengaduan');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.kirimPengaduan = function(e) {
+      e.preventDefault();
+      const nama = document.getElementById('pengaduanNama').value;
+      const kategori = document.getElementById('pengaduanKategori').value;
+      const pesan = document.getElementById('pengaduanPesan').value;
+
+      const emailTujuan = "perpustakaan.sman4mdo@gmail.com";
+      const subject = encodeURIComponent(`[Pengaduan Perpustakaan] ${kategori} - ${nama}`);
+      const body = encodeURIComponent(
+        `Halo Tim Perpustakaan SMAN 4 Manado,\n\n` +
+        `Berikut adalah laporan/pengaduan dari siswa:\n` +
+        `Nama/Identitas : ${nama}\n` +
+        `Kategori      : ${kategori}\n\n` +
+        `Pesan/Detail Pengaduan:\n${pesan}\n\n` +
+        `Terima kasih.`
+      );
+
+      window.location.href = `mailto:${emailTujuan}?subject=${subject}&body=${body}`;
+
+      alert("Aplikasi email Anda akan dibuka untuk mengirimkan pengaduan ke perpustakaan.sman4mdo@gmail.com");
+      window.closeModalPengaduan();
+      document.getElementById('pengaduanPesan').value = '';
     };
 
     renderUserData();
