@@ -221,7 +221,7 @@
     </div>
   </section>
 
-  <!-- Script Firestore untuk Memuat Anggota & Petugas -->
+  <!-- Script Firestore & LocalStorage Sync untuk Memuat Anggota & Petugas -->
   <script type="module">
     import { db } from './js/firebase-config.js';
     import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -235,22 +235,57 @@
     const pubTableHead = document.getElementById('pubTableHead');
     const pubTableBody = document.getElementById('pubTableBody');
 
-    // Realtime listener koleksi siswa
-    onSnapshot(collection(db, "siswa"), (snap) => {
-      listSiswa = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPublicTable();
-    }, (err) => {
-      console.warn("Gagal memuat data siswa:", err);
-      renderPublicTable();
+    // 1. Fungsi memuat data dari LocalStorage
+    function loadFromLocalStorage() {
+      try {
+        const localSiswa = localStorage.getItem('siswaData') || localStorage.getItem('perpustakaan_siswa');
+        const localPetugas = localStorage.getItem('petugasData') || localStorage.getItem('perpustakaan_petugas');
+        const localPerpustakaan = localStorage.getItem('perpustakaanData');
+
+        if (localPerpustakaan) {
+          const parsed = JSON.parse(localPerpustakaan);
+          if (parsed.siswa) listSiswa = parsed.siswa;
+          if (parsed.petugas) listPetugas = parsed.petugas;
+        } else {
+          if (localSiswa) listSiswa = JSON.parse(localSiswa);
+          if (localPetugas) listPetugas = JSON.parse(localPetugas);
+        }
+        renderPublicTable();
+      } catch (e) {
+        console.warn("Gagal memuat data dari localStorage:", e);
+      }
+    }
+
+    // Panggilan awal dari LocalStorage
+    loadFromLocalStorage();
+
+    // 2. Realtime listener storage untuk pembaruan instan antar-tab/halaman dashboard
+    window.addEventListener('storage', (e) => {
+      if (['perpustakaanData', 'siswaData', 'petugasData', 'perpustakaan_siswa', 'perpustakaan_petugas'].includes(e.key)) {
+        loadFromLocalStorage();
+      }
     });
 
-    // Realtime listener koleksi petugas
-    onSnapshot(collection(db, "petugas"), (snap) => {
-      listPetugas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPublicTable();
+    // 3. Realtime listener koleksi siswa (Firebase Firestore)
+    onSnapshot(collection(db, "siswa"), (snap) => {
+      if (!snap.empty) {
+        listSiswa = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPublicTable();
+      }
     }, (err) => {
-      console.warn("Gagal memuat data petugas:", err);
-      renderPublicTable();
+      console.warn("Gagal memuat data siswa dari Firestore:", err);
+      loadFromLocalStorage();
+    });
+
+    // 4. Realtime listener koleksi petugas (Firebase Firestore)
+    onSnapshot(collection(db, "petugas"), (snap) => {
+      if (!snap.empty) {
+        listPetugas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPublicTable();
+      }
+    }, (err) => {
+      console.warn("Gagal memuat data petugas dari Firestore:", err);
+      loadFromLocalStorage();
     });
 
     pubTypeSelect.addEventListener('change', renderPublicTable);

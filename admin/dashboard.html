@@ -530,6 +530,7 @@
   </div>
 
   <!-- SCRIPT UTAMA PERILAKU INTERAKTIF -->
+  <!-- SCRIPT UTAMA PERILAKU INTERAKTIF -->
   <script type="module">
     import { auth } from '../js/firebase-config.js';
     import { signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
@@ -540,8 +541,10 @@
       document.getElementById('adminInfoEmail').innerText = "Email Admin: " + (currentAdmin.email || '-');
     }
 
-    // Database Sederhana dalam Sesi (Dummy Data)
-    window.dbData = {
+    // Ambil data tersimpan dari localStorage jika ada
+    const savedData = localStorage.getItem('perpustakaanData');
+
+    window.dbData = savedData ? JSON.parse(savedData) : {
       anggota: [
         { id: 'AGT-001', nisn: '0051234567', nama: 'GLEN AMSTRONG', kelas: 'XII MIPA 1', status: 'STANDAR', regis: '2026-01-10', kadaluarsa: '2027-01-10' },
         { id: 'AGT-002', nisn: '0059876543', nama: 'SITI RAHMAWATI', kelas: 'XI IPS 2', status: 'ISTIMEWA', regis: '2026-02-15', kadaluarsa: '2027-02-15' }
@@ -560,6 +563,11 @@
       pinjam: [
         { id: 'TRX-101', peminjam: 'GLEN AMSTRONG', buku: 'Fisika Modern Kelas 12', tglPinjam: '2026-10-01', tglKembali: '2026-10-08', status: 'Dipinjam' }
       ]
+    };
+
+    // Fungsi menyimpan data ke localStorage
+    window.saveDataToStorage = function() {
+      localStorage.setItem('perpustakaanData', JSON.stringify(window.dbData));
     };
 
     window.currentActiveTable = 'anggota';
@@ -586,7 +594,6 @@
     window.switchTable = function(type) {
       window.currentActiveTable = type;
 
-      // Reset Highlight Kartu Modul
       const cardBorderColors = {
         anggota: 'border-blue-500',
         petugas: 'border-indigo-500',
@@ -605,7 +612,6 @@
         activeCard.classList.add(cardBorderColors[type]);
       }
 
-      // Reset Tab Bar
       const tabs = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
       tabs.forEach(t => {
         const btn = document.getElementById(`btnTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -618,17 +624,15 @@
         }
       });
 
-      // Render Tabel
       window.renderTableData();
 
-      // Scroll Lembut ke Tabel
       const section = document.getElementById('sectionTabelData');
       if (section) {
         section.scrollIntoView({ behavior: 'smooth' });
       }
     };
 
-    // Render Data Tabel Berdasarkan Tipe Aktiv
+    // Render Data Tabel Berdasarkan Tipe Aktif
     window.renderTableData = function() {
       const type = window.currentActiveTable;
       const headEl = document.getElementById('tableHead');
@@ -807,10 +811,11 @@
       countEl.innerText = `Menampilkan ${list.length} data record`;
     };
 
-    // Hapus Row Data
+    // Hapus Row Data & Simpan Perubahan
     window.deleteRowData = function(type, index) {
       if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
         window.dbData[type].splice(index, 1);
+        window.saveDataToStorage();
         window.renderTableData();
       }
     };
@@ -871,6 +876,7 @@
         kadaluarsa: document.getElementById('inpKadaluarsa').value || '2027-12-31'
       };
       window.dbData.anggota.unshift(newSiswa);
+      window.saveDataToStorage();
       window.switchTable('anggota');
       window.toggleModal('modalSiswa', false);
       e.target.reset();
@@ -887,6 +893,7 @@
         status: 'Aktif'
       };
       window.dbData.petugas.unshift(newPetugas);
+      window.saveDataToStorage();
       window.switchTable('petugas');
       window.toggleModal('modalPetugas', false);
       e.target.reset();
@@ -903,6 +910,7 @@
         stok: document.getElementById('inpStokBuku').value || 1
       };
       window.dbData.buku.unshift(newBuku);
+      window.saveDataToStorage();
       window.switchTable('buku');
       window.toggleModal('modalBuku', false);
       e.target.reset();
@@ -919,6 +927,7 @@
         status: 'Aktif'
       };
       window.dbData.duta.unshift(newDuta);
+      window.saveDataToStorage();
       window.switchTable('duta');
       window.toggleModal('modalDuta', false);
       e.target.reset();
@@ -936,6 +945,7 @@
         status: 'Dipinjam'
       };
       window.dbData.pinjam.unshift(newPinjam);
+      window.saveDataToStorage();
       window.switchTable('pinjam');
       window.toggleModal('modalPinjam', false);
       e.target.reset();
