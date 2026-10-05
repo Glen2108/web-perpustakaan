@@ -812,11 +812,44 @@
 
     document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const id = document.getElementById('inpIdAnggota').value.trim();
+      const nisn = document.getElementById('inpPersonalId').value.trim();
+      const username = document.getElementById('inpUsernameSiswa').value.trim();
+
+      // Validasi Pencegahan Data Ganda / Bentrok
+      const existingMembers = window.dbData.anggota || [];
+      
+      const duplicateId = existingMembers.find(
+        m => m.id === id && m.firestoreId !== window.editingMemberId
+      );
+      const duplicateNisn = existingMembers.find(
+        m => (m.nisn === nisn || m.personalId === nisn) && m.firestoreId !== window.editingMemberId
+      );
+      const duplicateUsername = existingMembers.find(
+        m => m.username === username && m.firestoreId !== window.editingMemberId
+      );
+
+      if (duplicateId) {
+        alert(`ID Anggota "${id}" sudah digunakan oleh ${duplicateId.nama || 'anggota lain'}. Silakan gunakan ID lain.`);
+        return;
+      }
+
+      if (duplicateNisn) {
+        alert(`NISN / Personal ID "${nisn}" sudah terdaftar atas nama ${duplicateNisn.nama || 'anggota lain'}.`);
+        return;
+      }
+
+      if (duplicateUsername) {
+        alert(`Username "${username}" sudah terpakai. Silakan buat username lain.`);
+        return;
+      }
+
       const payload = {
-        id: document.getElementById('inpIdAnggota').value,
-        nisn: document.getElementById('inpPersonalId').value,
+        id: id,
+        nisn: nisn,
         nama: document.getElementById('inpNama').value,
-        username: document.getElementById('inpUsernameSiswa').value,
+        username: username,
         password: document.getElementById('inpPasswordSiswa').value,
         kelas: document.getElementById('inpKelas').value,
         statusPerpustakaan: document.getElementById('inpStatus').value,
