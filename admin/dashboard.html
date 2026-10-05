@@ -333,6 +333,15 @@
             <input type="text" id="inpInstansi" value="SMAN 4 MANADO" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
           </div>
 
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Status Keanggotaan</label>
+            <select id="inpStatusKeanggotaan" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="Aktif">Aktif</option>
+              <option value="Alumni">Alumni</option>
+              <option value="Non-aktif">Non-aktif</option>
+            </select>
+          </div>
+
           <div class="pt-3 flex items-center justify-between gap-2">
             <button type="button" onclick="printCardSystem()" class="w-1/2 py-2.5 rounded-xl font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-md flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-print"></i> Cetak Kartu
@@ -387,7 +396,7 @@
                 <div class="flex items-end justify-between bg-white/85 p-2 rounded-xl border border-white/40 shadow-sm">
                   <div class="text-[8px] space-y-0.5 text-slate-600">
                     <p>Regis: <span id="previewRegis" class="font-bold text-slate-800">-</span></p>
-                    <p>Status: Aktif</p>
+                    <p>Status: <span id="previewStatusBelakang" class="font-bold text-slate-800">Aktif</span></p>
                   </div>
                   <div class="text-center">
                     <div class="w-20 h-6 bg-slate-900 flex items-center justify-center text-[7px] text-white tracking-widest font-mono">
@@ -567,9 +576,11 @@
     } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     // Menampilkan Informasi Admin
-    if (currentAdmin) {
-      document.getElementById('adminEmailText').innerText = currentAdmin.email || 'Admin';
-      document.getElementById('adminInfoEmail').innerText = "Email Admin: " + (currentAdmin.email || '-');
+    if (typeof currentAdmin !== 'undefined' && currentAdmin) {
+      const emailText = document.getElementById('adminEmailText');
+      const infoEmail = document.getElementById('adminInfoEmail');
+      if (emailText) emailText.innerText = currentAdmin.email || 'Admin Perpustakaan';
+      if (infoEmail) infoEmail.innerText = "Email Admin: " + (currentAdmin.email || '-');
     }
 
     // Inisialisasi Objek Data Utama
@@ -661,6 +672,8 @@
       const bodyEl = document.getElementById('tableBody');
       const titleEl = document.getElementById('tableTitle');
       const countEl = document.getElementById('tableCountInfo');
+
+      if (!headEl || !bodyEl || !titleEl || !countEl) return;
 
       let headHtml = '';
       let bodyHtml = '';
@@ -853,15 +866,16 @@
     window.previewAndPrintMember = function(memberId) {
       const item = window.dbData.anggota.find(m => m.id === memberId);
       if (item) {
-        document.getElementById('inpIdAnggota').value = item.id || '';
-        document.getElementById('inpPersonalId').value = item.nisn || '';
-        document.getElementById('inpNama').value = item.nama || '';
+        if (document.getElementById('inpIdAnggota')) document.getElementById('inpIdAnggota').value = item.id || '';
+        if (document.getElementById('inpPersonalId')) document.getElementById('inpPersonalId').value = item.nisn || '';
+        if (document.getElementById('inpNama')) document.getElementById('inpNama').value = item.nama || '';
         if (document.getElementById('inpUsernameSiswa')) document.getElementById('inpUsernameSiswa').value = item.username || '';
         if (document.getElementById('inpPasswordSiswa')) document.getElementById('inpPasswordSiswa').value = item.password || '';
-        document.getElementById('inpKelas').value = item.kelas || '';
-        document.getElementById('inpStatus').value = item.status || 'Standar';
-        document.getElementById('inpRegis').value = item.regis || '';
-        document.getElementById('inpKadaluarsa').value = item.kadaluarsa || '';
+        if (document.getElementById('inpKelas')) document.getElementById('inpKelas').value = item.kelas || '';
+        if (document.getElementById('inpStatus')) document.getElementById('inpStatus').value = item.status || 'Standar';
+        if (document.getElementById('inpStatusKeanggotaan')) document.getElementById('inpStatusKeanggotaan').value = item.statusKeanggotaan || 'Aktif';
+        if (document.getElementById('inpRegis')) document.getElementById('inpRegis').value = item.regis || '';
+        if (document.getElementById('inpKadaluarsa')) document.getElementById('inpKadaluarsa').value = item.kadaluarsa || '';
 
         window.updateCardPreview();
         window.toggleModal('modalSiswa', true);
@@ -870,23 +884,27 @@
 
     // Update Live Preview Kartu
     window.updateCardPreview = function() {
-      const idAnggota = document.getElementById('inpIdAnggota').value || 'AGT-000';
-      const personalId = document.getElementById('inpPersonalId').value || '-';
-      const nama = document.getElementById('inpNama').value || 'NAMA ANGGOTA';
-      const kelas = document.getElementById('inpKelas').value || '-';
-      const status = document.getElementById('inpStatus').value || 'Standar';
-      const regis = document.getElementById('inpRegis').value || '-';
-      const kadaluarsa = document.getElementById('inpKadaluarsa').value || '-';
-      const instansi = document.getElementById('inpInstansi').value || 'PERPUSTAKAAN SMAN 4 MANADO';
+      const idAnggota = document.getElementById('inpIdAnggota')?.value || 'AGT-000';
+      const personalId = document.getElementById('inpPersonalId')?.value || '-';
+      const nama = document.getElementById('inpNama')?.value || 'NAMA ANGGOTA';
+      const kelas = document.getElementById('inpKelas')?.value || '-';
+      const status = document.getElementById('inpStatus')?.value || 'Standar';
+      const statusKeanggotaan = document.getElementById('inpStatusKeanggotaan')?.value || 'Aktif';
+      const regis = document.getElementById('inpRegis')?.value || '-';
+      const kadaluarsa = document.getElementById('inpKadaluarsa')?.value || '-';
+      const instansi = document.getElementById('inpInstansi')?.value || 'PERPUSTAKAAN SMAN 4 MANADO';
 
-      document.getElementById('previewId').innerText = idAnggota;
-      document.getElementById('previewPersonalId').innerText = personalId;
-      document.getElementById('previewNama').innerText = nama.toUpperCase();
-      document.getElementById('previewKelas').innerText = kelas;
-      document.getElementById('previewStatus').innerText = status.toUpperCase();
-      document.getElementById('previewRegis').innerText = regis;
-      document.getElementById('previewKadaluarsa').innerText = kadaluarsa;
-      document.getElementById('previewInstansi').innerText = instansi.toUpperCase();
+      if (document.getElementById('previewId')) document.getElementById('previewId').innerText = idAnggota;
+      if (document.getElementById('previewPersonalId')) document.getElementById('previewPersonalId').innerText = personalId;
+      if (document.getElementById('previewNama')) document.getElementById('previewNama').innerText = nama.toUpperCase();
+      if (document.getElementById('previewKelas')) document.getElementById('previewKelas').innerText = kelas;
+      if (document.getElementById('previewStatus')) document.getElementById('previewStatus').innerText = status.toUpperCase();
+      if (document.getElementById('previewRegis')) document.getElementById('previewRegis').innerText = regis;
+      if (document.getElementById('previewKadaluarsa')) document.getElementById('previewKadaluarsa').innerText = kadaluarsa;
+      if (document.getElementById('previewInstansi')) document.getElementById('previewInstansi').innerText = instansi.toUpperCase();
+
+      const elBelakang = document.getElementById('previewStatusBelakang');
+      if (elBelakang) elBelakang.innerText = statusKeanggotaan;
     };
 
     // Cetak Printout
@@ -905,6 +923,7 @@
         password: document.getElementById('inpPasswordSiswa').value,
         kelas: document.getElementById('inpKelas').value,
         status: document.getElementById('inpStatus').value,
+        statusKeanggotaan: document.getElementById('inpStatusKeanggotaan') ? document.getElementById('inpStatusKeanggotaan').value : 'Aktif',
         regis: document.getElementById('inpRegis').value || new Date().toISOString().split('T')[0],
         kadaluarsa: document.getElementById('inpKadaluarsa').value || '2027-12-31',
         createdAt: new Date().toISOString()
