@@ -797,7 +797,7 @@
     }
   </script>
 
-  <!-- Skrip Deteksi Sapaan Anggota / Petugas / Admin -->
+  <!-- Skrip Deteksi & Sapaan Dinamis (Pengunjung / Siswa / Petugas / Admin) -->
   <script>
     function renderDynamicGreeting() {
       const titleEl = document.getElementById('greetingTitle');
@@ -805,44 +805,103 @@
       const actionEl = document.getElementById('greetingAction');
       if (!titleEl || !subEl || !actionEl) return;
 
-      const userSiswa = JSON.parse(localStorage.getItem('siswa_login') || sessionStorage.getItem('siswa_login') || localStorage.getItem('user_siswa') || 'null');
-      const userPetugas = JSON.parse(localStorage.getItem('petugas_login') || sessionStorage.getItem('petugas_login') || 'null');
-      const userAdmin = JSON.parse(localStorage.getItem('admin_login') || sessionStorage.getItem('admin_login') || 'null');
-      const genericUser = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || localStorage.getItem('currentUser') || 'null');
+      // 1. Ambil Data Sesi dari LocalStorage & SessionStorage (Mencakup semua kemungkinan key)
+      const userSessionData = JSON.parse(
+        localStorage.getItem('userSession') || 
+        sessionStorage.getItem('userSession') || 
+        localStorage.getItem('siswa_login') || 
+        sessionStorage.getItem('siswa_login') || 
+        'null'
+      );
 
-      const currentUser = userSiswa || userPetugas || userAdmin || genericUser;
+      const adminSessionData = JSON.parse(
+        localStorage.getItem('adminSession') || 
+        sessionStorage.getItem('adminSession') || 
+        localStorage.getItem('admin_login') || 
+        sessionStorage.getItem('admin_login') || 
+        'null'
+      );
+
+      const petugasSessionData = JSON.parse(
+        localStorage.getItem('petugasSession') || 
+        sessionStorage.getItem('petugasSession') || 
+        localStorage.getItem('petugas_login') || 
+        sessionStorage.getItem('petugas_login') || 
+        'null'
+      );
+
+      const genericUser = JSON.parse(
+        localStorage.getItem('user') || 
+        sessionStorage.getItem('user') || 
+        localStorage.getItem('currentUser') || 
+        'null'
+      );
+
+      // Prioritas Pengguna Aktif
+      const currentUser = userSessionData || petugasSessionData || adminSessionData || genericUser;
 
       if (currentUser) {
+        // Ambil Nama Pengguna
         const nama = currentUser.nama || currentUser.nama_lengkap || currentUser.name || currentUser.username || 'Pengguna';
-
+        
+        // Tentukan Role/Peran
         let role = (currentUser.role || '').toLowerCase();
-        if (userSiswa) role = 'siswa';
-        if (userPetugas) role = 'petugas';
-        if (userAdmin) role = 'admin';
+        if (adminSessionData || role === 'admin' || currentUser.email === 'admin@sman4manado.sch.id') role = 'admin';
+        else if (petugasSessionData || role === 'petugas') role = 'petugas';
+        else role = 'siswa';
 
+        // -------------------------------------------------------------
+        // KONDISI 1: JIKA PETUGAS ATAU ADMIN TELAH LOGIN
+        // -------------------------------------------------------------
         if (role === 'admin' || role === 'petugas') {
-          const roleLabel = role === 'admin' ? 'Admin' : 'Petugas Perpustakaan';
-          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400">${nama}</span> (${roleLabel})! 👋`;
-          subEl.innerText = 'Semangat melayani sirkulasi buku dan kegiatan literasi di Perpustakaan Sekolah.';
+          const roleBadge = role === 'admin' ? 'Administrator' : 'Petugas Perpustakaan';
+          
+          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400 font-black">${nama}</span> (${roleBadge})! 👋`;
+          subEl.innerText = 'Semangat melayani sirkulasi buku, kelola anggota, dan pendataan literasi sekolah.';
           
           actionEl.innerHTML = `
-            <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-              <i class="fa-solid fa-gauge"></i> Kelola Layanan
-            </a>
+            <div class="flex items-center gap-2">
+              <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+                <i class="fa-solid fa-gauge-high"></i> Dashboard Panel
+              </a>
+            </div>
           `;
-        } else {
-          titleEl.innerHTML = `Halo <span class="text-amber-400">${nama}</span>, bagaimana kabarmu hari ini? 👋`;
-          subEl.innerText = 'Yuk, sempatkan membaca hari ini dan manfaatkan fasilitas Perpustakaan Sekolah!';
-          
-          actionEl.innerHTML = '';
+        } 
+        // -------------------------------------------------------------
+        // KONDISI 2: JIKA SISWA / ANGGOTA TELAH LOGIN
+        // -------------------------------------------------------------
+        else {
+          const isAlumni = (currentUser.statusKeanggotaan || currentUser.status || '').toLowerCase() === 'alumni';
+          const statusText = isAlumni ? 'Alumni SMAN 4 Manado' : (currentUser.kelas ? `Kelas ${currentUser.kelas}` : 'Anggota Aktif');
+
+          titleEl.innerHTML = `Halo <span class="text-amber-400 font-black">${nama}</span> (${statusText}), selamat datang kembali! 👋`;
+          subEl.innerText = isAlumni 
+            ? 'Senang melihat Anda berkunjung kembali! Sapa Kepala Perpustakaan atau jelajahi koleksi buku terbaru.'
+            : 'Yuk, sempatkan membaca hari ini dan manfaatkan layanan sirkulasi Perpustakaan Sekolah!';
+
+          actionEl.innerHTML = `
+            <div class="flex items-center gap-2">
+              <a href="profil.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+                <i class="fa-solid fa-circle-user"></i> Profil Saya
+              </a>
+              <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition">
+                <i class="fa-solid fa-book"></i> Katalog Buku
+              </a>
+            </div>
+          `;
         }
-      } else {
+      } 
+      // -------------------------------------------------------------
+      // KONDISI 3: JIKA PENGGUNA BELUM LOGIN (PENGUNJUNG / TAMU)
+      // -------------------------------------------------------------
+      else {
         titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
         subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
+        
         actionEl.innerHTML = `
           <div class="flex items-center gap-2">
             <a href="login-siswa.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-              <i class="fa-solid fa-user-plus"></i> Ayo Mendaftar / Login
+              <i class="fa-solid fa-right-to-bracket"></i> Ayo Mendaftar / Login
             </a>
             <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition">
               <i class="fa-solid fa-book"></i> Katalog Buku
@@ -852,11 +911,15 @@
       }
     }
 
+    // Jalankan Sapaan saat Halaman Dimuat & dengarkan Perubahan Storage
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', renderDynamicGreeting);
     } else {
       renderDynamicGreeting();
     }
+
+    // Pembaruan Realtime jika status login berubah
+    window.addEventListener('storage', renderDynamicGreeting);
   </script>
 </body>
 </html>
