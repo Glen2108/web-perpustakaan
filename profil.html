@@ -109,7 +109,7 @@
               <span id="badgeStatus" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
                 • Anggota Aktif
               </span>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
+              <span id="badgeSubStatus" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
                 Siswa SMAN 4 Manado
               </span>
             </div>
@@ -123,10 +123,15 @@
           </div>
         </div>
 
-        <!-- Tombol "Lihat Buku yang tersedia" -->
-        <a href="katalog.html" class="w-full md:w-auto text-center bg-amber-400 hover:bg-amber-300 text-brand-900 font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-book-open"></i> Lihat Buku yang tersedia
-        </a>
+        <!-- Tombol Aksi Hero -->
+        <div class="w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
+          <button id="btnHeroRencana" onclick="openModalRencana()" class="w-full sm:w-auto text-center bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp text-base"></i> <span id="lblBtnHeroRencana">Buat Rencana Pinjam</span>
+          </button>
+          <a href="katalog.html" class="w-full sm:w-auto text-center bg-amber-400 hover:bg-amber-300 text-brand-900 font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-book-open"></i> Lihat Koleksi Buku
+          </a>
+        </div>
 
       </div>
     </div>
@@ -139,9 +144,15 @@
         
         <!-- Informasi Rincian Akun -->
         <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-4">
-          <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
-            <i class="fa-solid fa-user-gear text-brand-600"></i> Detail Keanggotaan Siswa
-          </h3>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-gear text-brand-600"></i> Detail Keanggotaan Siswa
+            </h3>
+            <!-- Tombol Ubah Password -->
+            <button onclick="openModalUbahPassword()" class="bg-brand-600 hover:bg-brand-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md">
+              <i class="fa-solid fa-key"></i> Ubah Password
+            </button>
+          </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
@@ -185,7 +196,7 @@
             </div>
           </div>
           <p class="text-[10px] text-slate-400 text-center pt-2 italic">
-            Tunjukkan kartu digital ini saat melakukan peminjaman buku fisik di perpustakaan.
+            Tunjukkan kartu digital ini saat berkunjung ke perpustakaan.
           </p>
         </div>
 
@@ -199,10 +210,18 @@
               <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Peminjaman Buku
             </h3>
             
-            <!-- Tombol Popup Pengaduan / Ide Perbaikan -->
-            <button onclick="openModalPengaduan()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-              <i class="fa-solid fa-circle-exclamation text-rose-500"></i> Pengaduan
-            </button>
+            <div class="flex items-center gap-2">
+              <!-- Tombol Rencana Pinjam / Sapa Kepala Perpustakaan -->
+              <button onclick="openModalRencana()" class="bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                <i class="fa-solid fa-heart text-amber-600" id="iconRencanaSide"></i>
+                <span id="lblBtnSideRencana">Rencana Pinjam</span>
+              </button>
+
+              <!-- Tombol Popup Pengaduan -->
+              <button onclick="openModalPengaduan()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                <i class="fa-solid fa-circle-exclamation text-rose-500"></i> Pengaduan
+              </button>
+            </div>
           </div>
 
           <!-- List Peminjaman Buku -->
@@ -223,6 +242,56 @@
     </div>
   </main>
 
+  <!-- Modal Rencana Peminjaman / Sapaan Alumni (WhatsApp) -->
+  <div id="modalRencanaPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 id="modalRencanaTitle" class="font-black text-slate-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-calendar-check text-emerald-600" id="modalRencanaIcon"></i> <span id="modalRencanaHeadingText">Form Rencana Peminjaman Buku</span>
+        </h3>
+        <button onclick="closeModalRencana()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="formRencanaPinjam" onsubmit="kirimRencanaWA(event)" class="space-y-3 text-xs">
+        
+        <!-- Area Form untuk Siswa Aktif -->
+        <div id="areaFormSiswaAktif" class="space-y-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Judul Buku / Topik</label>
+            <input type="text" id="inpRencanaJudul" placeholder="Contoh: Laskar Pelangi / Biologi Kelas XII" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Rencana Tanggal Pinjam</label>
+            <input type="date" id="inpRencanaTgl" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Catatan / Keterangan (Opsional)</label>
+            <textarea id="inpRencanaCatatan" rows="2" placeholder="Catatan tambahan untuk petugas perpustakaan..." class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+          </div>
+        </div>
+
+        <!-- Area Form untuk Alumni (Sapaan Kerinduan) -->
+        <div id="areaFormAlumni" class="space-y-3 hidden">
+          <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 text-[11px] leading-relaxed">
+            <i class="fa-solid fa-face-smile text-amber-600 mr-1"></i>
+            Halo Alumni SMAN 4 Manado! Fitur ini khusus untuk menyapa dan menyampaikan kerinduan Anda kepada Kepala Perpustakaan & Pengelola Perpustakaan.
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Pesan Sapaan / Kerinduan</label>
+            <textarea id="inpSapaanAlumni" rows="4" placeholder="Tuliskan pesan sapaan, kesan, atau kerinduan Anda untuk Kepala Perpustakaan SMAN 4 Manado..." class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModalRencana()" class="px-4 py-2 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md flex items-center gap-1.5 transition">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Kirim via WhatsApp
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Modal Pengaduan / Masukan -->
   <div id="modalPengaduan" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4">
@@ -240,6 +309,32 @@
         <div class="flex items-center justify-end gap-2 pt-2">
           <button type="button" onclick="closeModalPengaduan()" class="px-4 py-2 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
           <button type="submit" class="px-4 py-2 rounded-xl font-bold bg-rose-600 text-white shadow-md">Kirim Pengaduan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Ubah Password -->
+  <div id="modalUbahPassword" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-key text-brand-600"></i> Ubah Password Akun
+        </h3>
+        <button onclick="closeModalUbahPassword()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formUbahPassword" onsubmit="handleUbahPassword(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Password Baru</label>
+          <input type="password" id="inpPassBaru" required placeholder="Masukkan password baru..." class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Konfirmasi Password Baru</label>
+          <input type="password" id="inpPassKonfirm" required placeholder="Ulangi password baru..." class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModalUbahPassword()" class="px-4 py-2 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" id="btnSimpanPassword" class="px-4 py-2 rounded-xl font-bold bg-brand-600 text-white shadow-md hover:bg-brand-500 transition">Simpan Password</button>
         </div>
       </form>
     </div>
@@ -268,7 +363,7 @@
       <div id="areaFormRequest" class="space-y-4 text-left pt-2">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1.5">Alasan / Pesan Pengajuan (Opsional)</label>
-          <textarea id="pesanRequestBuka" rows="3" placeholder="Tuliskan alasan pengajuan buka akun (contoh: Sudah menyelesaikan administrasi perpustakaan)..." class="w-full text-xs p-3 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+          <textarea id="pesanRequestBuka" rows="3" placeholder="Tuliskan alasan pengajuan buka akun..." class="w-full text-xs p-3 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
         </div>
 
         <button id="btnKirimRequest" onclick="window.kirimRequestBukaAkun()" class="w-full py-3 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-lg shadow-rose-600/30 transition flex items-center justify-center gap-2">
@@ -276,7 +371,7 @@
         </button>
       </div>
 
-      <!-- Status Pending Message (Tampil jika request berstatus 'Pending') -->
+      <!-- Status Pending Message -->
       <div id="areaStatusPending" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs text-left space-y-2">
         <div class="flex items-center gap-2 font-extrabold text-amber-800">
           <i class="fa-solid fa-clock-rotate-left text-base text-amber-600 animate-spin"></i>
@@ -306,13 +401,151 @@
   <!-- Script Penanganan Sesi, Realtime Kunci & Firestore -->
   <script type="module">
     import { db } from './js/firebase-config.js';
-    import { collection, query, where, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, query, where, onSnapshot, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     // Global Handlers
     window.handleLogout = function() {
       if (confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?")) {
         localStorage.removeItem('userSession');
         window.location.href = "login-siswa.html";
+      }
+    };
+
+    // Helper Cek Status Alumni
+    function isAlumniUser() {
+      const st = (currentUser?.statusKeanggotaan || currentUser?.status || '').toLowerCase();
+      return st === 'alumni';
+    }
+
+    // Modal Rencana / Sapaan WA Handler
+    window.openModalRencana = function() {
+      const isAlumni = isAlumniUser();
+      
+      const areaAktif = document.getElementById('areaFormSiswaAktif');
+      const areaAlumni = document.getElementById('areaFormAlumni');
+      const headingText = document.getElementById('modalRencanaHeadingText');
+      const modalIcon = document.getElementById('modalRencanaIcon');
+
+      if (isAlumni) {
+        if (areaAktif) areaAktif.classList.add('hidden');
+        if (areaAlumni) areaAlumni.classList.remove('hidden');
+        if (headingText) headingText.innerText = "Sapa Kepala Perpustakaan (Alumni)";
+        if (modalIcon) modalIcon.className = "fa-solid fa-heart text-amber-500";
+        
+        document.getElementById('inpRencanaJudul')?.removeAttribute('required');
+        document.getElementById('inpRencanaTgl')?.removeAttribute('required');
+        document.getElementById('inpSapaanAlumni')?.setAttribute('required', 'true');
+      } else {
+        if (areaAktif) areaAktif.classList.remove('hidden');
+        if (areaAlumni) areaAlumni.classList.add('hidden');
+        if (headingText) headingText.innerText = "Form Rencana Peminjaman Buku";
+        if (modalIcon) modalIcon.className = "fa-solid fa-calendar-check text-emerald-600";
+
+        document.getElementById('inpRencanaJudul')?.setAttribute('required', 'true');
+        document.getElementById('inpRencanaTgl')?.setAttribute('required', 'true');
+        document.getElementById('inpSapaanAlumni')?.removeAttribute('required');
+      }
+
+      document.getElementById('modalRencanaPinjam')?.classList.remove('hidden');
+    };
+
+    window.closeModalRencana = function() {
+      document.getElementById('modalRencanaPinjam')?.classList.add('hidden');
+    };
+
+    window.kirimRencanaWA = function(e) {
+      e.preventDefault();
+      const nomorAdmin = "6285242917488";
+      const nama = currentUser?.nama || currentUser?.username || 'Siswa';
+      const nis = currentUser?.nisn || currentUser?.id || '-';
+      const kelas = currentUser?.kelas || '-';
+
+      let pesanWA = "";
+
+      if (isAlumniUser()) {
+        const pesanSapaan = document.getElementById('inpSapaanAlumni')?.value.trim() || 'Salam hangat untuk Bapak/Ibu Kepala Perpustakaan SMAN 4 Manado!';
+        
+        pesanWA = `Halo Ibu/Bapak Kepala Perpustakaan SMAN 4 Manado,\n\nSaya *${nama}* (Alumni SMAN 4 Manado / ${nis}).\n\n*Pesan Sapaan / Silaturahmi Alumni*:\n"${pesanSapaan}"\n\nSalam hangat dan sukses selalu untuk Perpustakaan SMAN 4 Manado!`;
+      } else {
+        const judulBuku = document.getElementById('inpRencanaJudul')?.value.trim();
+        const tglPinjam = document.getElementById('inpRencanaTgl')?.value;
+        const catatan = document.getElementById('inpRencanaCatatan')?.value.trim() || '-';
+
+        pesanWA = `Halo Admin / Kepala Perpustakaan SMAN 4 Manado,\n\nSaya ingin mengajukan *Rencana Peminjaman Buku* dengan rincian berikut:\n\n• *Nama*: ${nama}\n• *NIS / ID*: ${nis}\n• *Kelas*: ${kelas}\n• *Judul Buku / Topik*: ${judulBuku}\n• *Rencana Tgl Pinjam*: ${tglPinjam}\n• *Catatan*: ${catatan}\n\nMohon informasi ketersediaan buku dan prosedurnya. Terima kasih!`;
+      }
+
+      const urlWA = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesanWA)}`;
+
+      window.open(urlWA, '_blank');
+      closeModalRencana();
+      e.target.reset();
+    };
+
+    window.openModalUbahPassword = function() {
+      document.getElementById('modalUbahPassword')?.classList.remove('hidden');
+    };
+
+    window.closeModalUbahPassword = function() {
+      document.getElementById('modalUbahPassword')?.classList.add('hidden');
+    };
+
+    window.handleUbahPassword = async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSimpanPassword');
+      const passBaru = document.getElementById('inpPassBaru').value.trim();
+      const passKonf = document.getElementById('inpPassKonfirm').value.trim();
+
+      if (passBaru !== passKonf) {
+        alert('Konfirmasi password tidak cocok!');
+        return;
+      }
+
+      if (passBaru.length < 4) {
+        alert('Password minimal 4 karakter!');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = 'Menyimpan...';
+      }
+
+      try {
+        const usernameVal = currentUser.username || '';
+        const idVal = currentUser.id || currentUser.memberId || '';
+
+        let q = query(collection(db, "anggota"), where("username", "==", usernameVal));
+        let snap = await getDocs(q);
+
+        if (snap.empty && idVal) {
+          q = query(collection(db, "anggota"), where("id", "==", idVal));
+          snap = await getDocs(q);
+        }
+
+        if (!snap.empty) {
+          const docId = snap.docs[0].id;
+          const refDoc = doc(db, "anggota", docId);
+
+          await updateDoc(refDoc, {
+            password: passBaru
+          });
+
+          currentUser.password = passBaru;
+          localStorage.setItem('userSession', JSON.stringify(currentUser));
+
+          alert('Password berhasil diperbarui!');
+          closeModalUbahPassword();
+          document.getElementById('formUbahPassword').reset();
+        } else {
+          alert('Data akun siswa tidak ditemukan di database!');
+        }
+      } catch (err) {
+        alert('Gagal mengubah password: ' + err.message);
+      } font-medium {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = 'Simpan Password';
+        }
       }
     };
 
@@ -334,23 +567,39 @@
       const nisn = currentUser.nisn || '-';
       const kelas = currentUser.kelas || 'Siswa Aktif';
       const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
+      const isAlumni = isAlumniUser();
 
       document.getElementById('navAvatar').innerText = initial;
       document.getElementById('navUserName').innerText = nama;
-      document.getElementById('navUserClass').innerText = kelas;
+      document.getElementById('navUserClass').innerText = isAlumni ? 'Alumni' : kelas;
 
       document.getElementById('heroAvatar').innerText = initial;
       document.getElementById('profileNama').innerText = nama;
       document.getElementById('profileID').innerText = nisn !== '-' ? nisn : idAnggota;
-      document.getElementById('profileKelas').innerText = kelas;
+      document.getElementById('profileKelas').innerText = isAlumni ? 'Alumni SMAN 4 Manado' : kelas;
 
       document.getElementById('detailNama').innerText = nama;
       document.getElementById('detailMemberId').innerText = idAnggota + " / " + nisn;
-      document.getElementById('detailKelas').innerText = kelas;
+      document.getElementById('detailKelas').innerText = isAlumni ? 'Alumni' : kelas;
       document.getElementById('detailInstansi').innerText = instansi;
 
       document.getElementById('cardNama').innerText = nama;
       document.getElementById('cardNIS').innerText = "ID: " + idAnggota + " | NISN: " + nisn;
+
+      // Penyesuaian Label Tombol & Badge Jika Status Alumni
+      const lblBtnHero = document.getElementById('lblBtnHeroRencana');
+      const lblBtnSide = document.getElementById('lblBtnSideRencana');
+      const badgeSub = document.getElementById('badgeSubStatus');
+
+      if (isAlumni) {
+        if (lblBtnHero) lblBtnHero.innerText = "Sapa Kepala Perpustakaan";
+        if (lblBtnSide) lblBtnSide.innerText = "Sapa Kapus";
+        if (badgeSub) badgeSub.innerText = "Alumni SMAN 4 Manado";
+      } else {
+        if (lblBtnHero) lblBtnHero.innerText = "Buat Rencana Pinjam";
+        if (lblBtnSide) lblBtnSide.innerText = "Rencana Pinjam";
+        if (badgeSub) badgeSub.innerText = "Siswa SMAN 4 Manado";
+      }
 
       const badge = document.getElementById('badgeStatus');
       if (badge && currentUser.statusKeanggotaan) {
@@ -371,7 +620,7 @@
           listEl.innerHTML = `
             <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
               <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
-              Belum ada riwayat peminjaman buku.
+              ${isAlumniUser() ? 'Tidak ada riwayat peminjaman buku.' : 'Belum ada riwayat peminjaman buku.'}
             </div>`;
           return;
         }
@@ -463,7 +712,10 @@
         if (modalKunci) modalKunci.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
         if (badgeStatus) {
-          badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+          const isAlumni = (statusKeanggotaan.toLowerCase() === 'alumni');
+          badgeStatus.className = isAlumni 
+            ? "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400/20 text-amber-300 border border-amber-400/30"
+            : "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
           badgeStatus.innerText = "• Status: " + statusKeanggotaan;
         }
       }
@@ -521,7 +773,7 @@
       try {
         await addDoc(collection(db, "pengaduan"), {
           peminjam: currentUser?.nama || 'Siswa',
-          kelas: currentUser?.kelas || '-',
+          kelas: currentUser?.kelas || 'Alumni',
           pesan: pesan,
           tgl: new Date().toISOString()
         });
