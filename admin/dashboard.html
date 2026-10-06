@@ -44,6 +44,12 @@
     const currentAdmin = JSON.parse(adminSession || '{}');
   </script>
 
+  <!-- Tombol Popup Request Buka Akun -->
+  <button onclick="openModalRequestBukaAkun()" class="relative bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg transition flex items-center gap-2">
+    <i class="fa-solid fa-key text-slate-900"></i>
+    <span>Request Buka Akun</span>
+    <span id="badgeRequestCount" class="bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black hidden">0</span>
+  </button>
   <!-- Header -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -562,11 +568,47 @@
       </form>
     </div>
   </div>
+  <!-- Modal Popup Request Buka Kunci Profil Siswa -->
+  <div id="modalRequestBukaAkun" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 relative max-h-[90vh] flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-key"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-black text-slate-900 leading-tight">Request Buka Kunci Profil Siswa</h3>
+            <p class="text-xs text-slate-500">Daftar permohonan pembukaan akun dari siswa berstatus Non-aktif</p>
+          </div>
+        </div>
+        <button onclick="closeModalRequestBukaAkun()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Request List Container -->
+      <div id="listRequestBukaAkun" class="overflow-y-auto space-y-3 flex-grow pr-1">
+        <div class="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+          <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
+          Belum ada permohonan buka akun yang pending.
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end shrink-0">
+        <button onclick="closeModalRequestBukaAkun()" class="px-5 py-2.5 rounded-xl font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Script Utama Modul Firestore & Event Handlers (Sorting, Pagination, Searching) -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
-    import { collection, addDoc, updateDoc, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     if (typeof currentAdmin !== 'undefined' && currentAdmin) {
       const emailText = document.getElementById('adminEmailText');
@@ -574,6 +616,150 @@
       if (emailText) emailText.innerText = currentAdmin.email || 'Admin Perpustakaan';
       if (infoEmail) infoEmail.innerText = "Email Admin: " + (currentAdmin.email || '-');
     }
+
+    // Listening Realtime Permohonan Buka Akun
+    function initRequestBukaAkunListener() {
+      const qReq = query(collection(db, "request_buka_akun"), where("status", "==", "Pending"));
+      onSnapshot(qReq, (snapshot) => {
+        const requests = [];
+        snapshot.forEach(docSnap => {
+          requests.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          });
+        });
+
+        updateRequestBadge(requests.length);
+        renderRequestList(requests);
+      });
+    }
+    function updateRequestBadge(count) {
+      const badge = document.getElementById('badgeRequestCount');
+      if (badge) {
+        if (count > 0) {
+          badge.innerText = count;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+    function renderRequestList(requests) {
+      const listEl = document.getElementById('listRequestBukaAkun');
+      if (!listEl) return;
+
+      if (requests.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
+            Belum ada permohonan buka akun yang pending.
+          </div>
+        `;
+        return;
+      }
+      let html = '';
+  requests.forEach(req => {
+    html += `
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="font-black text-slate-900 text-sm">${req.nama || '-'}</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">${req.kelas || '-'}</span>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            Username: <strong class="text-slate-700">${req.username || '-'}</strong> | ID: <strong class="text-slate-700">${req.idAnggota || '-'}</strong>
+          </p>
+          <p class="text-[11px] text-slate-600 bg-white p-2 rounded-xl border border-slate-200/60 italic">
+            "${req.alasan || 'Tidak ada pesan'}"
+          </p>
+          <p class="text-[10px] text-slate-400">
+            <i class="fa-solid fa-clock mr-1"></i> Diajukan pada: ${req.tglFormatted || '-'}
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="window.setujuiBukaAkun('${req.id}', '${req.username || ''}', '${req.idAnggota || ''}')" class="px-3 py-2 rounded-xl font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-lock-open"></i> Setujui & Aktifkan
+          </button>
+          <button onclick="window.tolakBukaAkun('${req.id}', '${req.username || ''}')" class="px-3 py-2 rounded-xl font-bold bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 transition">
+            <i class="fa-solid fa-xmark"></i> Tolak
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  listEl.innerHTML = html;
+}
+
+window.openModalRequestBukaAkun = function() {
+  const modal = document.getElementById('modalRequestBukaAkun');
+  if (modal) modal.classList.remove('hidden');
+};
+
+window.closeModalRequestBukaAkun = function() {
+  const modal = document.getElementById('modalRequestBukaAkun');
+  if (modal) modal.classList.add('hidden');
+};
+
+window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
+  if (!confirm(`Apakah Anda yakin ingin membuka kunci & mengaktifkan kembali akun ${username}?`)) return;
+
+  try {
+    // 1. Update status permohonan menjadi Disetujui
+    await updateDoc(doc(db, "request_buka_akun", reqId), {
+      status: "Disetujui",
+      tglDisetujui: new Date().toISOString()
+    });
+
+    // 2. Cari dokumen siswa di koleksi 'anggota' dan update statusKeanggotaan ke 'Aktif'
+    let studentDocId = null;
+    if (username) {
+      const qUser = query(collection(db, "anggota"), where("username", "==", username));
+      const snapUser = await getDocs(qUser);
+      if (!snapUser.empty) {
+        studentDocId = snapUser.docs[0].id;
+      }
+    }
+
+    if (!studentDocId && idAnggota) {
+      const qId = query(collection(db, "anggota"), where("id", "==", idAnggota));
+      const snapId = await getDocs(qId);
+      if (!snapId.empty) {
+        studentDocId = snapId.docs[0].id;
+      }
+    }
+
+    if (studentDocId) {
+      await updateDoc(doc(db, "anggota", studentDocId), {
+        statusKeanggotaan: "Aktif",
+        status: "Aktif"
+      });
+      alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka secara otomatis.`);
+      } else {
+        alert(`Permohonan disetujui, namun data siswa tidak ditemukan pada koleksi 'anggota'.`);
+      }
+
+    } catch (err) {
+      alert("Gagal memproses persetujuan: " + err.message);
+    }
+  };
+
+  window.tolakBukaAkun = async function(reqId, username) {
+    if (!confirm(`Tolak permohonan buka akun dari ${username}?`)) return;
+
+    try {
+      await updateDoc(doc(db, "request_buka_akun", reqId), {
+        status: "Ditolak",
+        tglDitolak: new Date().toISOString()
+      });
+      alert("Permohonan telah ditolak.");
+    } catch (err) {
+      alert("Gagal menolak permohonan: " + err.message);
+    }
+  };
+
+  // Panggil listener saat dashboard admin dimuat
+  initRequestBukaAkunListener();
 
     window.handleAdminLogout = function() {
       localStorage.removeItem('adminSession');

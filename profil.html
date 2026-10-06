@@ -26,7 +26,7 @@
     if (!sessionData) {
       window.location.href = "login-siswa.html";
     }
-    const currentUser = JSON.parse(sessionData);
+    const currentUser = sessionData ? JSON.parse(sessionData) : null;
   </script>
 
   <!-- Header / Navigation -->
@@ -208,8 +208,8 @@
           <!-- List Peminjaman Buku -->
           <div id="listPeminjaman" class="space-y-3">
             <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-              <i class="fa-solid fa-book-open text-2xl mb-1 text-slate-300 block"></i>
-              Belum ada riwayat peminjaman buku aktif.
+              <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
+              Belum ada riwayat peminjaman buku.
             </div>
           </div>
 
@@ -220,69 +220,78 @@
           </div>
         </div>
       </div>
-
     </div>
-
   </main>
 
-  <!-- Modal Popup Pengaduan & Saran -->
-  <div id="modalPengaduan" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 relative">
-      
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
-            <i class="fa-solid fa-headset"></i>
-          </div>
-          <div>
-            <h3 class="text-lg font-black text-slate-900 leading-tight">Pengaduan & Ide Perbaikan</h3>
-            <p class="text-xs text-slate-500">Kirim kendala atau masukan ke perpustakaan</p>
-          </div>
+  <!-- Modal Pengaduan / Masukan -->
+  <div id="modalPengaduan" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-black text-slate-900 text-sm flex items-center gap-2">
+          <i class="fa-solid fa-circle-exclamation text-rose-500"></i> Form Pengaduan / Masukan
+        </h3>
+        <button onclick="closeModalPengaduan()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formPengaduan" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Pesan / Pengaduan</label>
+          <textarea id="inpPesanPengaduan" rows="4" required placeholder="Tuliskan masukan atau kendala Anda..." class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-rose-500"></textarea>
         </div>
-        <button onclick="closeModalPengaduan()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition">
-          <i class="fa-solid fa-xmark text-lg"></i>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModalPengaduan()" class="px-4 py-2 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 rounded-xl font-bold bg-rose-600 text-white shadow-md">Kirim Pengaduan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Kunci Profil Siswa (Status Non-aktif) -->
+  <div id="modalKunciAkun" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-rose-100 space-y-6 text-center relative overflow-hidden">
+      
+      <!-- Icon Accent -->
+      <div class="w-20 h-20 mx-auto rounded-3xl bg-rose-100 text-rose-600 flex items-center justify-center text-3xl font-bold shadow-inner">
+        <i class="fa-solid fa-user-lock"></i>
+      </div>
+
+      <div class="space-y-2">
+        <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-rose-100 text-rose-700 border border-rose-200">
+          <i class="fa-solid fa-circle-exclamation mr-1"></i> Profil Terkunci / Non-Aktif
+        </span>
+        <h3 class="text-xl font-black text-slate-900 tracking-tight">Akses Profil Dibatasi</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Status keanggotaan Anda saat ini <strong class="text-rose-600 font-bold">Non-aktif</strong>. Silakan ajukan permohonan pembukaan kunci profil ke Admin Perpustakaan.
+        </p>
+      </div>
+
+      <!-- Form Pengajuan Buka Akun -->
+      <div id="areaFormRequest" class="space-y-4 text-left pt-2">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Alasan / Pesan Pengajuan (Opsional)</label>
+          <textarea id="pesanRequestBuka" rows="3" placeholder="Tuliskan alasan pengajuan buka akun (contoh: Sudah menyelesaikan administrasi perpustakaan)..." class="w-full text-xs p-3 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+        </div>
+
+        <button id="btnKirimRequest" onclick="window.kirimRequestBukaAkun()" class="w-full py-3 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-lg shadow-rose-600/30 transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-key"></i> Kirim Request Buka Akun ke Admin
         </button>
       </div>
 
-      <!-- Form Pengaduan -->
-      <form onsubmit="kirimPengaduan(event)" class="space-y-4 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Pengirim</label>
-          <input type="text" id="pengaduanNama" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-600 font-semibold cursor-not-allowed">
+      <!-- Status Pending Message (Tampil jika request berstatus 'Pending') -->
+      <div id="areaStatusPending" class="hidden p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs text-left space-y-2">
+        <div class="flex items-center gap-2 font-extrabold text-amber-800">
+          <i class="fa-solid fa-clock-rotate-left text-base text-amber-600 animate-spin"></i>
+          <span>Request Buka Akun Sedang Diproses</span>
         </div>
+        <p class="text-[11px] text-amber-700 leading-normal">
+          Permintaan pembukaan kunci akun Anda telah dikirimkan ke Admin Perpustakaan pada <span id="tglRequestTerkirim" class="font-bold">-</span>. Mohon tunggu persetujuan dari pihak Admin.
+        </p>
+      </div>
 
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Kategori Layanan</label>
-          <select id="pengaduanKategori" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
-            <option value="Kendala Peminjaman Buku">Kendala Peminjaman Buku</option>
-            <option value="Buku Rusak / Hilang">Buku Rusak / Hilang</option>
-            <option value="Masalah Sistem Perpustakaan">Masalah Sistem Perpustakaan</option>
-            <option value="Saran / Ide Perbaikan">Saran / Ide Perbaikan Kedepan</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Detail Pengaduan / Masukan</label>
-          <textarea id="pengaduanPesan" rows="4" required placeholder="Tuliskan masalah yang dialami atau ide perbaikan secara jelas..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none placeholder:text-slate-400"></textarea>
-        </div>
-
-        <div class="p-3 bg-blue-50 border border-blue-100 rounded-2xl text-[11px] text-blue-800 flex items-start gap-2">
-          <i class="fa-solid fa-circle-info text-blue-600 text-sm mt-0.5"></i>
-          <span>Pengaduan ini akan dikirimkan langsung ke email resmi: <strong>perpustakaan.sman4mdo@gmail.com</strong></span>
-        </div>
-
-        <div class="flex items-center justify-end gap-3 pt-2">
-          <button type="button" onclick="closeModalPengaduan()" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition">
-            Batal
-          </button>
-          <button type="submit" class="px-5 py-2.5 rounded-xl font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-600/30 transition flex items-center gap-2">
-            <i class="fa-solid fa-paper-plane"></i> Kirim Pengaduan
-          </button>
-        </div>
-      </form>
-
+      <div class="pt-2 border-t border-slate-100 flex items-center justify-center">
+        <button onclick="handleLogout()" class="text-xs font-bold text-slate-400 hover:text-rose-600 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-right-from-bracket"></i> Keluar dari Sesi Login
+        </button>
+      </div>
     </div>
   </div>
 
@@ -294,17 +303,28 @@
     </div>
   </footer>
 
-  <!-- Script Penanganan Sesi & Tampilan Data -->
+  <!-- Script Penanganan Sesi, Realtime Kunci & Firestore -->
   <script type="module">
     import { db } from './js/firebase-config.js';
-    import { collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, query, where, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenuBtn && mobileMenu) {
-      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    }
+    // Global Handlers
+    window.handleLogout = function() {
+      if (confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?")) {
+        localStorage.removeItem('userSession');
+        window.location.href = "login-siswa.html";
+      }
+    };
 
+    window.openModalPengaduan = function() {
+      document.getElementById('modalPengaduan')?.classList.remove('hidden');
+    };
+
+    window.closeModalPengaduan = function() {
+      document.getElementById('modalPengaduan')?.classList.add('hidden');
+    };
+
+    // Render Data Pengguna
     function renderUserData() {
       if (!currentUser) return;
 
@@ -314,7 +334,6 @@
       const nisn = currentUser.nisn || '-';
       const kelas = currentUser.kelas || 'Siswa Aktif';
       const instansi = currentUser.instansi || 'SMA Negeri 4 Manado';
-      const status = currentUser.status || 'Standar';
 
       document.getElementById('navAvatar').innerText = initial;
       document.getElementById('navUserName').innerText = nama;
@@ -333,18 +352,13 @@
       document.getElementById('cardNama').innerText = nama;
       document.getElementById('cardNIS').innerText = "ID: " + idAnggota + " | NISN: " + nisn;
 
-      const inputPengaduanNama = document.getElementById('pengaduanNama');
-      if (inputPengaduanNama) {
-        inputPengaduanNama.value = `${nama} (${kelas} - ID: ${idAnggota})`;
-      }
-
-      const badgeStatus = document.getElementById('badgeStatus');
-      if (badgeStatus) {
-        badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
-        badgeStatus.innerText = "• Status: " + status;
+      const badge = document.getElementById('badgeStatus');
+      if (badge && currentUser.statusKeanggotaan) {
+        badge.innerText = "• Status: " + currentUser.statusKeanggotaan;
       }
     }
 
+    // Memuat Riwayat Peminjaman Buku Realtime
     function loadUserPeminjaman() {
       if (!currentUser) return;
       const listEl = document.getElementById('listPeminjaman');
@@ -352,13 +366,13 @@
 
       const q = query(collection(db, "pinjam"), where("peminjam", "==", userNama));
       onSnapshot(q, (snapshot) => {
+        if (!listEl) return;
         if (snapshot.empty) {
           listEl.innerHTML = `
             <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-              <i class="fa-solid fa-book-open text-2xl mb-1 text-slate-300 block"></i>
-              Belum ada riwayat peminjaman buku aktif.
-            </div>
-          `;
+              <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
+              Belum ada riwayat peminjaman buku.
+            </div>`;
           return;
         }
 
@@ -371,58 +385,157 @@
                 <p class="font-extrabold text-slate-800">${data.buku || '-'}</p>
                 <p class="text-[10px] text-slate-500">Tgl Pinjam: ${data.tglPinjam || '-'} | Kembali: <span class="text-rose-600 font-bold">${data.tglKembali || '-'}</span></p>
               </div>
-              <span class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800">
+              <span class="px-2 py-1 rounded-lg text-[10px] font-bold ${data.status === 'Dipinjam' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
                 ${data.status || 'Dipinjam'}
               </span>
-            </div>
-          `;
+            </div>`;
         });
         listEl.innerHTML = html;
       });
     }
 
-    window.handleLogout = function() {
-      if (confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?")) {
-        localStorage.removeItem('userSession');
-        window.location.href = "login-siswa.html";
+    // Monitoring Status Keanggotaan & Realtime Lock Control
+    function monitorStudentStatus() {
+      if (!currentUser) return;
+
+      const usernameVal = currentUser.username || '';
+      const idVal = currentUser.id || currentUser.memberId || '';
+
+      const qAnggota = query(collection(db, "anggota"), where("username", "==", usernameVal));
+      onSnapshot(qAnggota, (snapshot) => {
+        let userData = null;
+        if (!snapshot.empty) {
+          userData = snapshot.docs[0].data();
+        } else if (idVal) {
+          const qById = query(collection(db, "anggota"), where("id", "==", idVal));
+          onSnapshot(qById, (snapId) => {
+            if (!snapId.empty) {
+              checkAndApplyLockStatus(snapId.docs[0].data());
+            } else {
+              checkAndApplyLockStatus(currentUser);
+            }
+          });
+          return;
+        }
+
+        if (userData) {
+          checkAndApplyLockStatus(userData);
+        } else {
+          checkAndApplyLockStatus(currentUser);
+        }
+      });
+
+      const qReq = query(
+        collection(db, "request_buka_akun"),
+        where("username", "==", usernameVal),
+        where("status", "==", "Pending")
+      );
+      onSnapshot(qReq, (reqSnap) => {
+        const areaForm = document.getElementById('areaFormRequest');
+        const areaPending = document.getElementById('areaStatusPending');
+        const tglTerkirim = document.getElementById('tglRequestTerkirim');
+
+        if (!reqSnap.empty) {
+          const reqData = reqSnap.docs[0].data();
+          if (areaForm) areaForm.classList.add('hidden');
+          if (areaPending) areaPending.classList.remove('hidden');
+          if (tglTerkirim) tglTerkirim.innerText = reqData.tglFormatted || 'baru saja';
+        } else {
+          if (areaForm) areaForm.classList.remove('hidden');
+          if (areaPending) areaPending.classList.add('hidden');
+        }
+      });
+    }
+
+    function checkAndApplyLockStatus(data) {
+      const modalKunci = document.getElementById('modalKunciAkun');
+      const badgeStatus = document.getElementById('badgeStatus');
+      const statusKeanggotaan = data.statusKeanggotaan || data.status || 'Aktif';
+
+      if (statusKeanggotaan === 'Non-aktif') {
+        if (modalKunci) modalKunci.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        if (badgeStatus) {
+          badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500/20 text-rose-300 border border-rose-500/30";
+          badgeStatus.innerText = "• Status: Non-aktif (Terkunci)";
+        }
+      } else {
+        if (modalKunci) modalKunci.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        if (badgeStatus) {
+          badgeStatus.className = "px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+          badgeStatus.innerText = "• Status: " + statusKeanggotaan;
+        }
+      }
+    }
+
+    window.kirimRequestBukaAkun = async function() {
+      if (!currentUser) return;
+
+      const btn = document.getElementById('btnKirimRequest');
+      const pesanInput = document.getElementById('pesanRequestBuka')?.value || '';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim Request...';
+      }
+
+      try {
+        const tglNow = new Date();
+        const tglFormatted = tglNow.toLocaleDateString('id-ID', {
+          day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        await addDoc(collection(db, "request_buka_akun"), {
+          idAnggota: currentUser.id || currentUser.memberId || '-',
+          nama: currentUser.nama || currentUser.username || 'Siswa',
+          username: currentUser.username || '-',
+          kelas: currentUser.kelas || '-',
+          alasan: pesanInput.trim() || 'Permohonan pembukaan kunci profil siswa.',
+          tglRequest: tglNow.toISOString(),
+          tglFormatted: tglFormatted,
+          status: 'Pending'
+        });
+
+        alert("Permohonan buka akun berhasil dikirim ke Admin Perpustakaan!");
+      } catch (err) {
+        alert("Gagal mengirim request: " + err.message);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-key"></i> Kirim Request Buka Akun ke Admin';
+        }
       }
     };
 
-    window.openModalPengaduan = function() {
-      const modal = document.getElementById('modalPengaduan');
-      if (modal) modal.classList.remove('hidden');
-    };
+    // Toggle Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    }
 
-    window.closeModalPengaduan = function() {
-      const modal = document.getElementById('modalPengaduan');
-      if (modal) modal.classList.add('hidden');
-    };
-
-    window.kirimPengaduan = function(e) {
+    // Submit Form Pengaduan
+    document.getElementById('formPengaduan')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const nama = document.getElementById('pengaduanNama').value;
-      const kategori = document.getElementById('pengaduanKategori').value;
-      const pesan = document.getElementById('pengaduanPesan').value;
+      const pesan = document.getElementById('inpPesanPengaduan').value.trim();
+      try {
+        await addDoc(collection(db, "pengaduan"), {
+          peminjam: currentUser?.nama || 'Siswa',
+          kelas: currentUser?.kelas || '-',
+          pesan: pesan,
+          tgl: new Date().toISOString()
+        });
+        alert('Pengaduan berhasil dikirim!');
+        window.closeModalPengaduan();
+        e.target.reset();
+      } catch (err) {
+        alert('Gagal mengirim pengaduan: ' + err.message);
+      }
+    });
 
-      const emailTujuan = "perpustakaan.sman4mdo@gmail.com";
-      const subject = encodeURIComponent(`[Pengaduan Perpustakaan] ${kategori} - ${nama}`);
-      const body = encodeURIComponent(
-        `Halo Tim Perpustakaan SMAN 4 Manado,\n\n` +
-        `Berikut adalah laporan/pengaduan dari siswa:\n` +
-        `Nama/Identitas : ${nama}\n` +
-        `Kategori      : ${kategori}\n\n` +
-        `Pesan/Detail Pengaduan:\n${pesan}\n\n` +
-        `Terima kasih.`
-      );
-
-      window.location.href = `mailto:${emailTujuan}?subject=${subject}&body=${body}`;
-
-      alert("Aplikasi email Anda akan dibuka untuk mengirimkan pengaduan ke perpustakaan.sman4mdo@gmail.com");
-      window.closeModalPengaduan();
-      document.getElementById('pengaduanPesan').value = '';
-    };
-
+    // Inisialisasi
     renderUserData();
+    monitorStudentStatus();
     loadUserPeminjaman();
   </script>
 </body>
