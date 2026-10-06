@@ -12,7 +12,17 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-          colors: { brand: { 800: '#1e3a8a', 900: '#0f172a', 600: '#2563eb', 500: '#3b82f6' } }
+          colors: { brand: { 800: '#1e3a8a', 900: '#0f172a', 600: '#2563eb', 500: '#3b82f6' } },
+          keyframes: {
+            waving: {
+              '0%, 100%': { transform: 'rotate(0deg)' },
+              '20%, 60%': { transform: 'rotate(14deg)' },
+              '40%, 80%': { transform: 'rotate(-10deg)' },
+            },
+          },
+          animation: {
+            'waving-hand': 'waving 1.8s infinite',
+          },
         }
       }
     }
@@ -78,6 +88,28 @@
       </a>
     </div>
   </header>
+
+  <!-- Banner Sapaan Dinamis -->
+  <div class="bg-brand-900/90 border-b border-slate-800/80 text-white py-3.5 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div class="flex items-center gap-3">
+        <div class="text-3xl shrink-0 animate-waving-hand origin-bottom-right select-none">
+          👋
+        </div>
+        <div>
+          <p id="greetingTitle" class="font-extrabold text-sm text-amber-300">
+            Memuat sapaan...
+          </p>
+          <p id="greetingSub" class="text-xs text-slate-300 mt-0.5">
+            Selamat datang di Perpustakaan Digital SMA Negeri 4 Manado.
+          </p>
+        </div>
+      </div>
+      <div id="greetingAction" class="shrink-0">
+        <!-- Tombol aksi dirender secara otomatis melalui JS -->
+      </div>
+    </div>
+  </div>
 
   <!-- Hero Section -->
   <section class="bg-gradient-to-b from-brand-900 via-slate-900 to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
@@ -269,8 +301,7 @@
 
       <div class="overflow-x-auto rounded-2xl border border-slate-200">
         <table class="w-full text-left text-xs text-slate-700">
-          <thead class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider select-none">
-            <tr id="pubTableHead"></tr>
+          <thead id="pubTableHead" class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider select-none">
           </thead>
           <tbody id="pubTableBody" class="divide-y divide-slate-100 bg-white">
             <tr>
@@ -730,6 +761,60 @@
         `;
       }).join('');
     }
+  </script>
+
+  <!-- Skrip Deteksi Sapaan Anggota / Petugas / Umum -->
+  <script>
+    function renderDynamicGreeting() {
+      const titleEl = document.getElementById('greetingTitle');
+      const subEl = document.getElementById('greetingSub');
+      const actionEl = document.getElementById('greetingAction');
+      if (!titleEl || !subEl || !actionEl) return;
+
+      // Cek sesi login anggota/siswa, petugas, atau admin
+      const userSiswa = JSON.parse(localStorage.getItem('siswa_login') || sessionStorage.getItem('siswa_login') || localStorage.getItem('user_siswa') || 'null');
+      const userPetugas = JSON.parse(localStorage.getItem('petugas_login') || sessionStorage.getItem('petugas_login') || localStorage.getItem('admin_login') || 'null');
+      const genericUser = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || 'null');
+
+      if (userSiswa || (genericUser && genericUser.role === 'siswa')) {
+        // Status: Siswa / Anggota Terdaftar
+        const nama = (userSiswa?.nama || genericUser?.nama || 'Anggota').split(' ')[0];
+        titleEl.innerHTML = `Halo <span class="text-amber-400">${nama}</span>, bagaimana kabarmu hari ini? 👋`;
+        subEl.innerText = 'Yuk, sempatkan membaca hari ini dan ajak teman-temanmu berkunjung ke Gedung Perpustakaan Sekolah!';
+        actionEl.innerHTML = `
+          <a href="katalog.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+            <i class="fa-solid fa-book-open"></i> Cari & Pinjam Buku
+          </a>
+        `;
+      } else if (userPetugas || (genericUser && (genericUser.role === 'admin' || genericUser.role === 'petugas'))) {
+        // Status: Petugas / Admin
+        const nama = (userPetugas?.nama || genericUser?.nama || 'Petugas').split(' ')[0];
+        const roleLabel = (userPetugas?.role || genericUser?.role || 'Petugas') === 'admin' ? 'Admin' : 'Petugas Perpustakaan';
+        titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400">${nama}</span> (${roleLabel})! 📚`;
+        subEl.innerText = 'Semangat melayani sirkulasi buku dan kegiatan literasi siswa di Gedung Perpustakaan Sekolah.';
+        actionEl.innerHTML = `
+          <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+            <i class="fa-solid fa-gauge"></i> Kelola Layanan
+          </a>
+        `;
+      } else {
+        // Status: Pengunjung Umum (Belum Login / Belum Terdaftar)
+        titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
+        subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
+        actionEl.innerHTML = `
+          <div class="flex items-center gap-2">
+            <a href="login-siswa.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+              <i class="fa-solid fa-user-plus"></i> Ayo Mendaftar / Login
+            </a>
+            <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition">
+              <i class="fa-solid fa-book"></i> Katalog Buku
+            </a>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderDynamicGreeting);
   </script>
 </body>
 </html>

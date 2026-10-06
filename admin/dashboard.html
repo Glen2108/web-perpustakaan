@@ -44,12 +44,6 @@
     const currentAdmin = JSON.parse(adminSession || '{}');
   </script>
 
-  <!-- Tombol Popup Request Buka Akun -->
-  <button onclick="openModalRequestBukaAkun()" class="relative bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg transition flex items-center gap-2">
-    <i class="fa-solid fa-key text-slate-900"></i>
-    <span>Request Buka Akun</span>
-    <span id="badgeRequestCount" class="bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black hidden">0</span>
-  </button>
   <!-- Header -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -64,6 +58,13 @@
       </a>
 
       <div class="flex items-center gap-3">
+        <!-- Tombol Popup Request Buka Akun -->
+        <button onclick="openModalRequestBukaAkun()" class="relative bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-key"></i>
+          <span>Request Buka Akun</span>
+          <span id="badgeRequestCount" class="bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black hidden">0</span>
+        </button>
+
         <div class="hidden sm:flex items-center gap-3 bg-slate-800 px-3.5 py-1.5 rounded-2xl border border-slate-700">
           <div class="w-7 h-7 rounded-lg bg-indigo-500 text-white font-black flex items-center justify-center text-xs">A</div>
           <div class="text-left">
@@ -264,7 +265,12 @@
             </div>
             <div>
               <label class="block font-bold text-blue-900 mb-1">Password Login</label>
-              <input type="password" id="inpPasswordSiswa" required placeholder="••••••••" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+              <div class="relative">
+                <input type="password" id="inpPasswordSiswa" required placeholder="••••••••" class="w-full p-2.5 pr-9 bg-white rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="button" onclick="window.togglePasswordVisibility('inpPasswordSiswa', 'eyeIconSiswa')" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none">
+                  <i id="eyeIconSiswa" class="fa-solid fa-eye"></i>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -322,7 +328,7 @@
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Status Keanggotaan</label>
-            <select id="inpStatusKeanggotaan" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
+            <select id="inpStatusKeanggotaan" onchange="updateCardPreview(); window.handleStatusKeanggotaanChange()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
               <option value="Aktif">Aktif</option>
               <option value="Alumni">Alumni</option>
               <option value="Non-aktif">Non-aktif</option>
@@ -413,7 +419,12 @@
           </div>
           <div>
             <label class="block font-bold text-indigo-900 mb-1">Password</label>
-            <input type="password" id="inpPasswordPetugas" required placeholder="••••••••" class="w-full p-2.5 bg-white rounded-xl border border-slate-200 outline-none">
+            <div class="relative">
+              <input type="password" id="inpPasswordPetugas" required placeholder="••••••••" class="w-full p-2.5 pr-9 bg-white rounded-xl border border-slate-200 outline-none">
+              <button type="button" onclick="window.togglePasswordVisibility('inpPasswordPetugas', 'eyeIconPetugas')" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none">
+                <i id="eyeIconPetugas" class="fa-solid fa-eye"></i>
+              </button>
+            </div>
           </div>
         </div>
         <div>
@@ -454,20 +465,9 @@
             <input type="text" id="inpKategoriBuku" placeholder="Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">BOS Tahap</label>
-            <select id="inpBosTahap" class="w-full p-3 rounded-xl border border-slate-200 outline-none font-bold">
-              <option value="Satu">Tahap Satu</option>
-              <option value="Dua">Tahap Dua</option>
-            </select>
+            <label class="block font-bold text-slate-700 mb-1">Stok</label>
+            <input type="number" id="inpStokBuku" value="1" min="1" class="w-full p-3 rounded-xl border border-slate-200 outline-none font-bold text-slate-800">
           </div>
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Jumlah Stok</label>
-          <input type="number" id="inpStokBuku" min="1" value="1" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">URL Cover Buku</label>
-          <input type="url" id="inpCoverUrl" placeholder="https://..." class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
@@ -491,11 +491,11 @@
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-          <input type="text" id="inpKelasCalonDuta" required placeholder="XI IPA 2" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="text" id="inpKelasCalonDuta" required placeholder="Contoh: XI-2" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Visi Singkat</label>
-          <textarea id="inpVisiCalonDuta" rows="2" placeholder="Visi kampanye..." class="w-full p-3 rounded-xl border border-slate-200 outline-none"></textarea>
+          <label class="block font-bold text-slate-700 mb-1">Visi / Program</label>
+          <textarea id="inpVisiCalonDuta" rows="2" placeholder="Visi calon duta..." class="w-full p-3 rounded-xl border border-slate-200 outline-none"></textarea>
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai</label>
@@ -513,52 +513,52 @@
   <div id="modalDutaTerpilih" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)</h3>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-award text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)</h3>
         <button onclick="toggleModal('modalDutaTerpilih', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahDutaTerpilih" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Siswa</label>
-          <input type="text" id="inpNamaDutaTerpilih" required placeholder="Nama siswa" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Nama Siswa Terpilih</label>
+          <input type="text" id="inpNamaDutaTerpilih" required placeholder="Nama lengkap" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Kelas</label>
-          <input type="text" id="inpKelasDutaTerpilih" required placeholder="XI IPA 1" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="text" id="inpKelasDutaTerpilih" required placeholder="Contoh: XII-1" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Prestasi</label>
-          <input type="text" id="inpPrestasiDutaTerpilih" placeholder="Juara 1 Lomba Resensi Buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Prestasi / Alasan</label>
+          <textarea id="inpPrestasiDutaTerpilih" rows="2" placeholder="Prestasi/Catatan..." class="w-full p-3 rounded-xl border border-slate-200 outline-none"></textarea>
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai Jabatan</label>
+          <label class="block font-bold text-slate-700 mb-1">Tanggal Mulai Periode</label>
           <input type="date" id="inpTglMulaiTerpilih" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="toggleModal('modalDutaTerpilih', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Tetapkan Duta Terpilih</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Tetapkan Duta</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal 5: Pinjam -->
+  <!-- Modal 5: Catat Peminjaman -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-handshake text-emerald-600"></i> Catat Peminjaman</h3>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-handshake text-emerald-600"></i> Catat Transaksi Peminjaman</h3>
         <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahPinjam" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam</label>
-          <input type="text" id="inpPeminjam" required placeholder="Nama siswa" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam / NISN</label>
+          <input type="text" id="inpPeminjam" required placeholder="Nama siswa atau NISN" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
-          <input type="text" id="inpBukuPinjam" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="text" id="inpBukuPinjam" required placeholder="Judul buku yang dipinjam" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Tanggal Pengembalian</label>
+          <label class="block font-bold text-slate-700 mb-1">Tanggal Rencana Kembali</label>
           <input type="date" id="inpTglKembali" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
@@ -568,44 +568,30 @@
       </form>
     </div>
   </div>
-  <!-- Modal Popup Request Buka Kunci Profil Siswa -->
-  <div id="modalRequestBukaAkun" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 space-y-5 relative max-h-[90vh] flex flex-col">
-      
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between border-b border-slate-100 pb-4 shrink-0">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
-            <i class="fa-solid fa-key"></i>
-          </div>
-          <div>
-            <h3 class="text-lg font-black text-slate-900 leading-tight">Request Buka Kunci Profil Siswa</h3>
-            <p class="text-xs text-slate-500">Daftar permohonan pembukaan akun dari siswa berstatus Non-aktif</p>
-          </div>
-        </div>
-        <button onclick="closeModalRequestBukaAkun()" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
+
+  <!-- Modal Request Buka Akun -->
+  <div id="modalRequestBukaAkun" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between border-b pb-3 shrink-0">
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-500"></i> Permohonan Buka Akun Terkunci
+        </h3>
+        <button onclick="closeModalRequestBukaAkun()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Request List Container -->
-      <div id="listRequestBukaAkun" class="overflow-y-auto space-y-3 flex-grow pr-1">
-        <div class="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-          <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300 block"></i>
-          Belum ada permohonan buka akun yang pending.
-        </div>
+      <div id="listRequestBukaAkun" class="overflow-y-auto space-y-3 pr-1 flex-grow">
+        <!-- List request di-render via JavaScript secara realtime -->
       </div>
 
-      <!-- Modal Footer -->
-      <div class="pt-3 border-t border-slate-100 flex items-center justify-end shrink-0">
-        <button onclick="closeModalRequestBukaAkun()" class="px-5 py-2.5 rounded-xl font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition">
+      <div class="pt-3 border-t flex justify-end shrink-0">
+        <button onclick="closeModalRequestBukaAkun()" class="px-5 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition text-xs">
           Tutup
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Script Utama Modul Firestore & Event Handlers (Sorting, Pagination, Searching) -->
+  <!-- Script Firebase & Logika Aplikasi -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -617,7 +603,7 @@
       if (infoEmail) infoEmail.innerText = "Email Admin: " + (currentAdmin.email || '-');
     }
 
-    // Listening Realtime Permohonan Buka Akun
+    // Realtime Listener Permohonan Buka Akun
     function initRequestBukaAkunListener() {
       const qReq = query(collection(db, "request_buka_akun"), where("status", "==", "Pending"));
       onSnapshot(qReq, (snapshot) => {
@@ -631,8 +617,11 @@
 
         updateRequestBadge(requests.length);
         renderRequestList(requests);
+      }, (err) => {
+        console.error("Error listening to request_buka_akun:", err);
       });
     }
+
     function updateRequestBadge(count) {
       const badge = document.getElementById('badgeRequestCount');
       if (badge) {
@@ -644,6 +633,7 @@
         }
       }
     }
+
     function renderRequestList(requests) {
       const listEl = document.getElementById('listRequestBukaAkun');
       if (!listEl) return;
@@ -657,109 +647,106 @@
         `;
         return;
       }
+
       let html = '';
-  requests.forEach(req => {
-    html += `
-      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="font-black text-slate-900 text-sm">${req.nama || '-'}</span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">${req.kelas || '-'}</span>
+      requests.forEach(req => {
+        html += `
+          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-black text-slate-900 text-sm">${req.nama || '-'}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">${req.kelas || '-'}</span>
+              </div>
+              <p class="text-[11px] text-slate-500">
+                Username: <strong class="text-slate-700">${req.username || '-'}</strong> | ID: <strong class="text-slate-700">${req.idAnggota || '-'}</strong>
+              </p>
+              <p class="text-[11px] text-slate-600 bg-white p-2 rounded-xl border border-slate-200/60 italic">
+                "${req.alasan || 'Tidak ada pesan'}"
+              </p>
+              <p class="text-[10px] text-slate-400">
+                <i class="fa-solid fa-clock mr-1"></i> Diajukan pada: ${req.tglFormatted || '-'}
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="window.setujuiBukaAkun('${req.id}', '${req.username || ''}', '${req.idAnggota || ''}')" class="px-3 py-2 rounded-xl font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-lock-open"></i> Setujui & Aktifkan
+              </button>
+              <button onclick="window.tolakBukaAkun('${req.id}', '${req.username || ''}')" class="px-3 py-2 rounded-xl font-bold bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 transition">
+                <i class="fa-solid fa-xmark"></i> Tolak
+              </button>
+            </div>
           </div>
-          <p class="text-[11px] text-slate-500">
-            Username: <strong class="text-slate-700">${req.username || '-'}</strong> | ID: <strong class="text-slate-700">${req.idAnggota || '-'}</strong>
-          </p>
-          <p class="text-[11px] text-slate-600 bg-white p-2 rounded-xl border border-slate-200/60 italic">
-            "${req.alasan || 'Tidak ada pesan'}"
-          </p>
-          <p class="text-[10px] text-slate-400">
-            <i class="fa-solid fa-clock mr-1"></i> Diajukan pada: ${req.tglFormatted || '-'}
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2 shrink-0">
-          <button onclick="window.setujuiBukaAkun('${req.id}', '${req.username || ''}', '${req.idAnggota || ''}')" class="px-3 py-2 rounded-xl font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
-            <i class="fa-solid fa-lock-open"></i> Setujui & Aktifkan
-          </button>
-          <button onclick="window.tolakBukaAkun('${req.id}', '${req.username || ''}')" class="px-3 py-2 rounded-xl font-bold bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 transition">
-            <i class="fa-solid fa-xmark"></i> Tolak
-          </button>
-        </div>
-      </div>
-    `;
-  });
-  listEl.innerHTML = html;
-}
-
-window.openModalRequestBukaAkun = function() {
-  const modal = document.getElementById('modalRequestBukaAkun');
-  if (modal) modal.classList.remove('hidden');
-};
-
-window.closeModalRequestBukaAkun = function() {
-  const modal = document.getElementById('modalRequestBukaAkun');
-  if (modal) modal.classList.add('hidden');
-};
-
-window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
-  if (!confirm(`Apakah Anda yakin ingin membuka kunci & mengaktifkan kembali akun ${username}?`)) return;
-
-  try {
-    // 1. Update status permohonan menjadi Disetujui
-    await updateDoc(doc(db, "request_buka_akun", reqId), {
-      status: "Disetujui",
-      tglDisetujui: new Date().toISOString()
-    });
-
-    // 2. Cari dokumen siswa di koleksi 'anggota' dan update statusKeanggotaan ke 'Aktif'
-    let studentDocId = null;
-    if (username) {
-      const qUser = query(collection(db, "anggota"), where("username", "==", username));
-      const snapUser = await getDocs(qUser);
-      if (!snapUser.empty) {
-        studentDocId = snapUser.docs[0].id;
-      }
-    }
-
-    if (!studentDocId && idAnggota) {
-      const qId = query(collection(db, "anggota"), where("id", "==", idAnggota));
-      const snapId = await getDocs(qId);
-      if (!snapId.empty) {
-        studentDocId = snapId.docs[0].id;
-      }
-    }
-
-    if (studentDocId) {
-      await updateDoc(doc(db, "anggota", studentDocId), {
-        statusKeanggotaan: "Aktif",
-        status: "Aktif"
+        `;
       });
-      alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka secara otomatis.`);
-      } else {
-        alert(`Permohonan disetujui, namun data siswa tidak ditemukan pada koleksi 'anggota'.`);
+      listEl.innerHTML = html;
+    }
+
+    window.openModalRequestBukaAkun = function() {
+      const modal = document.getElementById('modalRequestBukaAkun');
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeModalRequestBukaAkun = function() {
+      const modal = document.getElementById('modalRequestBukaAkun');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
+      if (!confirm(`Apakah Anda yakin ingin membuka kunci & mengaktifkan kembali akun ${username}?`)) return;
+
+      try {
+        await updateDoc(doc(db, "request_buka_akun", reqId), {
+          status: "Disetujui",
+          tglDisetujui: new Date().toISOString()
+        });
+
+        let studentDocId = null;
+        if (username) {
+          const qUser = query(collection(db, "anggota"), where("username", "==", username));
+          const snapUser = await getDocs(qUser);
+          if (!snapUser.empty) {
+            studentDocId = snapUser.docs[0].id;
+          }
+        }
+
+        if (!studentDocId && idAnggota) {
+          const qId = query(collection(db, "anggota"), where("id", "==", idAnggota));
+          const snapId = await getDocs(qId);
+          if (!snapId.empty) {
+            studentDocId = snapId.docs[0].id;
+          }
+        }
+
+        if (studentDocId) {
+          await updateDoc(doc(db, "anggota", studentDocId), {
+            statusKeanggotaan: "Aktif",
+            status: "Aktif"
+          });
+          alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka secara otomatis.`);
+        } else {
+          alert(`Permohonan disetujui, namun data siswa tidak ditemukan pada koleksi 'anggota'.`);
+        }
+      } catch (err) {
+        alert("Gagal memproses persetujuan: " + err.message);
       }
+    };
 
-    } catch (err) {
-      alert("Gagal memproses persetujuan: " + err.message);
-    }
-  };
+    window.tolakBukaAkun = async function(reqId, username) {
+      if (!confirm(`Tolak permohonan buka akun dari ${username}?`)) return;
 
-  window.tolakBukaAkun = async function(reqId, username) {
-    if (!confirm(`Tolak permohonan buka akun dari ${username}?`)) return;
+      try {
+        await updateDoc(doc(db, "request_buka_akun", reqId), {
+          status: "Ditolak",
+          tglDitolak: new Date().toISOString()
+        });
+        alert("Permohonan telah ditolak.");
+      } catch (err) {
+        alert("Gagal menolak permohonan: " + err.message);
+      }
+    };
 
-    try {
-      await updateDoc(doc(db, "request_buka_akun", reqId), {
-        status: "Ditolak",
-        tglDitolak: new Date().toISOString()
-      });
-      alert("Permohonan telah ditolak.");
-    } catch (err) {
-      alert("Gagal menolak permohonan: " + err.message);
-    }
-  };
-
-  // Panggil listener saat dashboard admin dimuat
-  initRequestBukaAkunListener();
+    initRequestBukaAkunListener();
 
     window.handleAdminLogout = function() {
       localStorage.removeItem('adminSession');
@@ -770,7 +757,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
     window.currentActiveTable = 'anggota';
     window.editingMemberId = null;
 
-    // State untuk Sorting, Pagination & Search
     window.tableState = {
       currentPage: 1,
       itemsPerPage: 10,
@@ -786,16 +772,15 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       let gradeCode = '';
       let minSeq = 1;
 
-      // Urutan 26 (tahun) 0 (angka sendiri) 10/11/12 (kelas) XX (urut)
       if (selectedKelas.startsWith('X-')) {
         gradeCode = '10';
-        minSeq = 18; // terhitung dari 2601017 -> lanjut 18
+        minSeq = 18;
       } else if (selectedKelas.startsWith('XI-')) {
         gradeCode = '11';
-        minSeq = 12; // terhitung dari 2601111 -> lanjut 12
+        minSeq = 12;
       } else if (selectedKelas.startsWith('XII-')) {
         gradeCode = '12';
-        minSeq = 19; // terhitung dari 2601218 -> lanjut 19
+        minSeq = 19;
       }
 
       if (!gradeCode) return;
@@ -847,13 +832,14 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
         }));
         window.renderTableData();
 
-        // Regenerate ID jika modal anggota sedang dibuka dalam posisi tambah data baru
         if (window.currentActiveTable === 'anggota' && !window.editingMemberId) {
           const currentKelas = document.getElementById('inpKelas')?.value;
           if (currentKelas) {
             window.generateAutoIds(currentKelas);
           }
         }
+      }, (err) => {
+        console.error(`Error listening collection ${colName}:`, err);
       });
     });
 
@@ -874,6 +860,9 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       window.editingMemberId = null;
       const form = document.getElementById('formTambahSiswa');
       if (form) form.reset();
+
+      const inpKelas = document.getElementById('inpKelas');
+      if (inpKelas) inpKelas.required = true;
 
       const titleEl = document.getElementById('modalSiswaTitle');
       if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-address-card text-blue-600"></i> Tambah Anggota & Akun Login Siswa';
@@ -916,7 +905,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       window.renderTableData();
     };
 
-    // Fungsi Pengatur Sorting
     window.handleSort = function(colKey) {
       if (window.tableState.sortColumn === colKey) {
         window.tableState.sortDirection = window.tableState.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -927,27 +915,23 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       window.renderTableData();
     };
 
-    // Fungsi Pengatur Jumlah Data Per Halaman
     window.changeItemsPerPage = function(val) {
       window.tableState.itemsPerPage = parseInt(val) || 10;
       window.tableState.currentPage = 1;
       window.renderTableData();
     };
 
-    // Fungsi Pengatur Pencarian Data
     window.handleSearch = function(val) {
       window.tableState.searchQuery = (val || '').trim().toLowerCase();
       window.tableState.currentPage = 1;
       window.renderTableData();
     };
 
-    // Fungsi Pindah Halaman
     window.goToPage = function(page) {
       window.tableState.currentPage = page;
       window.renderTableData();
     };
 
-    // Helper Pembuat Header Tabel Sortable
     function getSortableHeaderHtml(label, key, extraClass = '') {
       if (!key) return `<th class="p-3.5 ${extraClass}">${label}</th>`;
       
@@ -978,7 +962,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       const type = window.currentActiveTable;
       let dataList = [...(window.dbData[type] || [])];
 
-      // 1. Filtering / Search
       if (window.tableState.searchQuery) {
         const q = window.tableState.searchQuery;
         dataList = dataList.filter(item => {
@@ -988,7 +971,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
         });
       }
 
-      // 2. Sorting
       if (window.tableState.sortColumn) {
         const col = window.tableState.sortColumn;
         const dir = window.tableState.sortDirection === 'asc' ? 1 : -1;
@@ -1013,7 +995,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
         });
       }
 
-      // 3. Pagination calculation
       const totalItems = dataList.length;
       const itemsPerPage = window.tableState.itemsPerPage;
       const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
@@ -1026,7 +1007,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
       const paginatedData = dataList.slice(startIndex, endIndex);
 
-      // Render Header & Body berdasarkan Modul
       if (type === 'anggota') {
         thead.innerHTML = `
           <tr>
@@ -1150,7 +1130,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
           `).join('');
       }
 
-      // Render Teks Info Jumlah Data
       if (countInfo) {
         if (totalItems === 0) {
           countInfo.innerText = 'Menampilkan 0 data';
@@ -1159,21 +1138,18 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
         }
       }
 
-      // Render Tombol Pagination
       if (pagEl) {
         if (totalPages <= 1) {
           pagEl.innerHTML = '';
         } else {
           let pagBtns = '';
 
-          // Tombol Prev
           pagBtns += `
             <button onclick="window.goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
               <i class="fa-solid fa-chevron-left text-[10px]"></i> Prev
             </button>
           `;
 
-          // Angka Halaman
           for (let p = 1; p <= totalPages; p++) {
             if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
               const isActive = p === currentPage;
@@ -1187,7 +1163,6 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
             }
           }
 
-          // Tombol Next
           pagBtns += `
             <button onclick="window.goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
               Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
@@ -1225,6 +1200,33 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       window.print();
     };
 
+    window.togglePasswordVisibility = function(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!input || !icon) return;
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    };
+
+    window.handleStatusKeanggotaanChange = function() {
+      const statusVal = document.getElementById('inpStatusKeanggotaan')?.value;
+      const inpKelas = document.getElementById('inpKelas');
+      if (!inpKelas) return;
+
+      if (statusVal === 'Alumni') {
+        inpKelas.value = '';
+        inpKelas.required = false;
+      } else {
+        inpKelas.required = true;
+      }
+    };
+
     window.editAnggota = function(docId) {
       const item = window.dbData.anggota.find(a => a.firestoreId === docId);
       if (!item) return;
@@ -1235,8 +1237,20 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       if (document.getElementById('inpNama')) document.getElementById('inpNama').value = item.nama || '';
       if (document.getElementById('inpUsernameSiswa')) document.getElementById('inpUsernameSiswa').value = item.username || '';
       if (document.getElementById('inpPasswordSiswa')) document.getElementById('inpPasswordSiswa').value = item.password || '';
-      if (document.getElementById('inpKelas')) document.getElementById('inpKelas').value = item.kelas || '';
-      if (document.getElementById('inpStatus')) document.getElementById('inpStatus').value = item.statusPerpustakaan || 'Standar';
+      
+      const isAlumni = (item.statusKeanggotaan === 'Alumni');
+      const inpKelas = document.getElementById('inpKelas');
+      if (inpKelas) {
+        if (isAlumni) {
+          inpKelas.value = '';
+          inpKelas.required = false;
+        } else {
+          inpKelas.value = item.kelas || '';
+          inpKelas.required = true;
+        }
+      }
+
+      if (document.getElementById('inpStatus')) document.getElementById('inpStatus').value = item.statusPerpustakaan || item.status || 'Standar';
       if (document.getElementById('inpRegis')) document.getElementById('inpRegis').value = item.tglRegis || '';
       if (document.getElementById('inpKadaluarsa')) document.getElementById('inpKadaluarsa').value = item.tglKadaluarsa || '';
       if (document.getElementById('inpInstansi')) document.getElementById('inpInstansi').value = item.instansi || 'SMAN 4 MANADO';
@@ -1252,95 +1266,66 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
       window.toggleModal('modalSiswa', true);
     };
 
-    window.deleteRecord = async function(collectionName, docId) {
-      if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-        try {
-          await deleteDoc(doc(db, collectionName, docId));
-          alert('Data berhasil dihapus.');
-        } catch (err) {
-          alert('Gagal menghapus data: ' + err.message);
-        }
+    window.deleteRecord = async function(colName, firestoreId) {
+      if (!confirm(`Apakah Anda yakin ingin menghapus data ini dari ${colName}?`)) return;
+      try {
+        await deleteDoc(doc(db, colName, firestoreId));
+        alert('Data berhasil dihapus!');
+      } catch (err) {
+        alert('Gagal menghapus data: ' + err.message);
       }
     };
 
+    // Submit Event Listeners untuk semua Form Modal
     document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const id = document.getElementById('inpIdAnggota').value.trim();
-      const nisn = document.getElementById('inpPersonalId').value.trim();
-      const username = document.getElementById('inpUsernameSiswa').value.trim();
-
-      const existingMembers = window.dbData.anggota || [];
-      
-      const duplicateId = existingMembers.find(
-        m => m.id === id && m.firestoreId !== window.editingMemberId
-      );
-      const duplicateNisn = existingMembers.find(
-        m => (m.nisn === nisn || m.personalId === nisn) && m.firestoreId !== window.editingMemberId
-      );
-      const duplicateUsername = existingMembers.find(
-        m => m.username === username && m.firestoreId !== window.editingMemberId
-      );
-
-      if (duplicateId) {
-        alert(`ID Anggota "${id}" sudah digunakan oleh ${duplicateId.nama || 'anggota lain'}. Silakan gunakan ID lain.`);
-        return;
-      }
-
-      if (duplicateNisn) {
-        alert(`NISN / Personal ID "${nisn}" sudah terdaftar atas nama ${duplicateNisn.nama || 'anggota lain'}.`);
-        return;
-      }
-
-      if (duplicateUsername) {
-        alert(`Username "${username}" sudah terpakai. Silakan buat username lain.`);
-        return;
-      }
-
       const payload = {
-        id: id,
-        nisn: nisn,
-        nama: document.getElementById('inpNama').value,
-        username: username,
-        password: document.getElementById('inpPasswordSiswa').value,
-        kelas: document.getElementById('inpKelas').value,
-        statusPerpustakaan: document.getElementById('inpStatus').value,
-        tglRegis: document.getElementById('inpRegis').value,
-        tglKadaluarsa: document.getElementById('inpKadaluarsa').value,
-        instansi: document.getElementById('inpInstansi').value,
-        statusKeanggotaan: document.getElementById('inpStatusKeanggotaan').value
+        id: document.getElementById('inpIdAnggota')?.value || '',
+        personalId: document.getElementById('inpPersonalId')?.value || '',
+        nisn: document.getElementById('inpPersonalId')?.value || '',
+        nama: document.getElementById('inpNama')?.value || '',
+        username: document.getElementById('inpUsernameSiswa')?.value || '',
+        password: document.getElementById('inpPasswordSiswa')?.value || '',
+        kelas: document.getElementById('inpKelas')?.value || '',
+        statusPerpustakaan: document.getElementById('inpStatus')?.value || 'Standar',
+        status: document.getElementById('inpStatus')?.value || 'Standar',
+        tglRegis: document.getElementById('inpRegis')?.value || '',
+        tglKadaluarsa: document.getElementById('inpKadaluarsa')?.value || '',
+        instansi: document.getElementById('inpInstansi')?.value || 'SMAN 4 MANADO',
+        statusKeanggotaan: document.getElementById('inpStatusKeanggotaan')?.value || 'Aktif'
       };
 
       try {
         if (window.editingMemberId) {
-          await updateDoc(doc(db, 'anggota', window.editingMemberId), payload);
+          await updateDoc(doc(db, "anggota", window.editingMemberId), payload);
           alert('Data anggota berhasil diperbarui!');
         } else {
-          await addDoc(collection(db, 'anggota'), payload);
-          alert('Data anggota baru berhasil disimpan!');
+          await addDoc(collection(db, "anggota"), payload);
+          alert('Anggota baru berhasil ditambahkan!');
         }
-        window.editingMemberId = null;
         window.toggleModal('modalSiswa', false);
+        document.getElementById('formTambahSiswa')?.reset();
+        window.editingMemberId = null;
       } catch (err) {
-        alert('Gagal menyimpan data: ' + err.message);
+        alert('Gagal menyimpan data anggota: ' + err.message);
       }
     });
 
     document.getElementById('formTambahPetugas')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
-        nama: document.getElementById('inpNamaPetugas').value,
-        email: document.getElementById('inpEmailPetugas').value,
-        username: document.getElementById('inpUsernamePetugas').value,
-        password: document.getElementById('inpPasswordPetugas').value,
-        jabatan: document.getElementById('inpJabatanPetugas').value,
-        status: 'Aktif'
+        nama: document.getElementById('inpNamaPetugas')?.value || '',
+        email: document.getElementById('inpEmailPetugas')?.value || '',
+        username: document.getElementById('inpUsernamePetugas')?.value || '',
+        password: document.getElementById('inpPasswordPetugas')?.value || '',
+        jabatan: document.getElementById('inpJabatanPetugas')?.value || 'Petugas'
       };
+
       try {
-        await addDoc(collection(db, 'petugas'), payload);
-        alert('Petugas berhasil didaftarkan!');
+        await addDoc(collection(db, "petugas"), payload);
+        alert('Petugas baru berhasil ditambahkan!');
         window.toggleModal('modalPetugas', false);
-        e.target.reset();
+        document.getElementById('formTambahPetugas')?.reset();
       } catch (err) {
         alert('Gagal menambahkan petugas: ' + err.message);
       }
@@ -1349,19 +1334,18 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
     document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
-        judul: document.getElementById('inpJudulBuku').value,
-        pengarang: document.getElementById('inpPengarangBuku').value,
-        penerbit: document.getElementById('inpPenerbitBuku').value,
-        kategori: document.getElementById('inpKategoriBuku').value,
-        bosTahap: document.getElementById('inpBosTahap').value,
-        stok: parseInt(document.getElementById('inpStokBuku').value) || 1,
-        coverUrl: document.getElementById('inpCoverUrl').value || ''
+        judul: document.getElementById('inpJudulBuku')?.value || '',
+        pengarang: document.getElementById('inpPengarangBuku')?.value || '',
+        penerbit: document.getElementById('inpPenerbitBuku')?.value || '',
+        kategori: document.getElementById('inpKategoriBuku')?.value || 'Pelajaran',
+        stok: parseInt(document.getElementById('inpStokBuku')?.value || '1', 10)
       };
+
       try {
-        await addDoc(collection(db, 'buku'), payload);
+        await addDoc(collection(db, "buku"), payload);
         alert('Koleksi buku berhasil ditambahkan!');
         window.toggleModal('modalBuku', false);
-        e.target.reset();
+        document.getElementById('formTambahBuku')?.reset();
       } catch (err) {
         alert('Gagal menambahkan buku: ' + err.message);
       }
@@ -1370,92 +1354,63 @@ window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
     document.getElementById('formTambahCalonDuta')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
-        nama: document.getElementById('inpNamaCalonDuta').value,
-        kelas: document.getElementById('inpKelasCalonDuta').value,
-        visi: document.getElementById('inpVisiCalonDuta').value,
-        tglMulai: document.getElementById('inpTglMulaiCalon').value,
-        tipe: 'Calon Duta',
-        durasi: '7 Hari'
+        nama: document.getElementById('inpNamaCalonDuta')?.value || '',
+        kelas: document.getElementById('inpKelasCalonDuta')?.value || '',
+        visi: document.getElementById('inpVisiCalonDuta')?.value || '',
+        tglMulai: document.getElementById('inpTglMulaiCalon')?.value || '',
+        tipe: 'Calon Duta'
       };
+
       try {
-        await addDoc(collection(db, 'duta'), payload);
+        await addDoc(collection(db, "duta"), payload);
         alert('Calon Duta Literasi berhasil ditambahkan!');
         window.toggleModal('modalCalonDuta', false);
-        e.target.reset();
+        document.getElementById('formTambahCalonDuta')?.reset();
       } catch (err) {
-        alert('Gagal menambahkan calon duta: ' + err.message);
+        alert('Gagal menyimpan Calon Duta: ' + err.message);
       }
     });
 
     document.getElementById('formTambahDutaTerpilih')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
-        nama: document.getElementById('inpNamaDutaTerpilih').value,
-        kelas: document.getElementById('inpKelasDutaTerpilih').value,
-        prestasi: document.getElementById('inpPrestasiDutaTerpilih').value,
-        tglMulai: document.getElementById('inpTglMulaiTerpilih').value,
-        tipe: 'Terpilih',
-        durasi: '2 Bulan'
+        nama: document.getElementById('inpNamaDutaTerpilih')?.value || '',
+        kelas: document.getElementById('inpKelasDutaTerpilih')?.value || '',
+        prestasi: document.getElementById('inpPrestasiDutaTerpilih')?.value || '',
+        tglMulai: document.getElementById('inpTglMulaiTerpilih')?.value || '',
+        tipe: 'Terpilih'
       };
+
       try {
-        await addDoc(collection(db, 'duta'), payload);
-        alert('Duta Literasi Terpilih berhasil ditetapkan!');
+        await addDoc(collection(db, "duta"), payload);
+        alert('Duta Terpilih berhasil ditetapkan!');
         window.toggleModal('modalDutaTerpilih', false);
-        e.target.reset();
+        document.getElementById('formTambahDutaTerpilih')?.reset();
       } catch (err) {
-        alert('Gagal menetapkan duta terpilih: ' + err.message);
+        alert('Gagal menetapkan Duta Terpilih: ' + err.message);
       }
     });
 
     document.getElementById('formTambahPinjam')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const today = new Date().toISOString().substring(0, 10);
-      const peminjamInput = document.getElementById('inpPeminjam').value.trim();
-      const judulInput = document.getElementById('inpBukuPinjam').value.trim();
-      const tglKembaliInput = document.getElementById('inpTglKembali').value;
-
-      // 1. Cari buku berdasarkan Judul di daftar koleksi (case-insensitive)
-      const targetBuku = (window.dbData.buku || []).find(
-        b => (b.judul || '').trim().toLowerCase() === judulInput.toLowerCase()
-      );
-
-      if (!targetBuku) {
-        alert(`Buku dengan judul "${judulInput}" tidak ditemukan dalam katalog! Silakan periksa kembali judul buku.`);
-        return;
-      }
-
-      const stokSaatIni = Number(targetBuku.stok ?? targetBuku.ekslempar ?? 0);
-
-      if (stokSaatIni <= 0) {
-        alert(`Stok buku "${targetBuku.judul}" sudah habis (0 ekslempar). Peminjaman tidak dapat diproses!`);
-        return;
-      }
-
-      const payloadPinjam = {
-        peminjam: peminjamInput,
-        buku: targetBuku.judul,
-        tglPinjam: today,
-        tglKembali: tglKembaliInput,
-        status: 'Dipinjam'
+      const todayStr = new Date().toISOString().split('T')[0];
+      const payload = {
+        peminjam: document.getElementById('inpPeminjam')?.value || '',
+        buku: document.getElementById('inpBukuPinjam')?.value || '',
+        tglPinjam: todayStr,
+        tglKembali: document.getElementById('inpTglKembali')?.value || ''
       };
 
       try {
-        // 2. Simpan transaksi peminjaman ke koleksi 'pinjam'
-        await addDoc(collection(db, 'pinjam'), payloadPinjam);
-
-        // 3. Kurangi stok ekslempar buku terkait sebesar 1 di koleksi 'buku'
-        const stokBaru = stokSaatIni - 1;
-        await updateDoc(doc(db, 'buku', targetBuku.firestoreId), {
-          stok: stokBaru
-        });
-
-        alert(`Peminjaman berhasil dicatat! Sisa stok buku "${targetBuku.judul}" berkurang menjadi ${stokBaru} ekslempar.`);
+        await addDoc(collection(db, "pinjam"), payload);
+        alert('Transaksi peminjaman berhasil dicatat!');
         window.toggleModal('modalPinjam', false);
-        e.target.reset();
+        document.getElementById('formTambahPinjam')?.reset();
       } catch (err) {
         alert('Gagal mencatat peminjaman: ' + err.message);
       }
     });
+
   </script>
 </body>
 </html>
