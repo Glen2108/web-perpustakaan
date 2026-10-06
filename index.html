@@ -763,7 +763,7 @@
     }
   </script>
 
-  <!-- Skrip Deteksi Sapaan Anggota / Petugas / Umum -->
+  <!-- Skrip Deteksi Sapaan Anggota / Petugas / Admin -->
   <script>
     function renderDynamicGreeting() {
       const titleEl = document.getElementById('greetingTitle');
@@ -771,34 +771,45 @@
       const actionEl = document.getElementById('greetingAction');
       if (!titleEl || !subEl || !actionEl) return;
 
-      // Cek sesi login anggota/siswa, petugas, atau admin
+      // Membaca data login pengguna dari penyimpanan lokal atau sesi
       const userSiswa = JSON.parse(localStorage.getItem('siswa_login') || sessionStorage.getItem('siswa_login') || localStorage.getItem('user_siswa') || 'null');
-      const userPetugas = JSON.parse(localStorage.getItem('petugas_login') || sessionStorage.getItem('petugas_login') || localStorage.getItem('admin_login') || 'null');
-      const genericUser = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || 'null');
+      const userPetugas = JSON.parse(localStorage.getItem('petugas_login') || sessionStorage.getItem('petugas_login') || 'null');
+      const userAdmin = JSON.parse(localStorage.getItem('admin_login') || sessionStorage.getItem('admin_login') || 'null');
+      const genericUser = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || localStorage.getItem('currentUser') || 'null');
 
-      if (userSiswa || (genericUser && genericUser.role === 'siswa')) {
-        // Status: Siswa / Anggota Terdaftar
-        const nama = (userSiswa?.nama || genericUser?.nama || 'Anggota').split(' ')[0];
-        titleEl.innerHTML = `Halo <span class="text-amber-400">${nama}</span>, bagaimana kabarmu hari ini? 👋`;
-        subEl.innerText = 'Yuk, sempatkan membaca hari ini dan ajak teman-temanmu berkunjung ke Gedung Perpustakaan Sekolah!';
-        actionEl.innerHTML = `
-          <a href="katalog.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-            <i class="fa-solid fa-book-open"></i> Cari & Pinjam Buku
-          </a>
-        `;
-      } else if (userPetugas || (genericUser && (genericUser.role === 'admin' || genericUser.role === 'petugas'))) {
-        // Status: Petugas / Admin
-        const nama = (userPetugas?.nama || genericUser?.nama || 'Petugas').split(' ')[0];
-        const roleLabel = (userPetugas?.role || genericUser?.role || 'Petugas') === 'admin' ? 'Admin' : 'Petugas Perpustakaan';
-        titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400">${nama}</span> (${roleLabel})! 📚`;
-        subEl.innerText = 'Semangat melayani sirkulasi buku dan kegiatan literasi siswa di Gedung Perpustakaan Sekolah.';
-        actionEl.innerHTML = `
-          <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-            <i class="fa-solid fa-gauge"></i> Kelola Layanan
-          </a>
-        `;
+      const currentUser = userSiswa || userPetugas || userAdmin || genericUser;
+
+      if (currentUser) {
+        // Ambil nama lengkap atau username pengguna
+        const nama = currentUser.nama || currentUser.nama_lengkap || currentUser.name || currentUser.username || 'Pengguna';
+
+        // Tentukan peran pengguna
+        let role = (currentUser.role || '').toLowerCase();
+        if (userSiswa) role = 'siswa';
+        if (userPetugas) role = 'petugas';
+        if (userAdmin) role = 'admin';
+
+        if (role === 'admin' || role === 'petugas') {
+          const roleLabel = role === 'admin' ? 'Admin' : 'Petugas Perpustakaan';
+          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400">${nama}</span> (${roleLabel})! 🫡`;
+          subEl.innerText = 'Semangat melayani sirkulasi buku dan kegiatan literasi di Perpustakaan Sekolah.';
+          
+          // Sembunyikan tombol pendaftaran & katalog, ganti dengan navigasi panel kontrol
+          actionEl.innerHTML = `
+            <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
+              <i class="fa-solid fa-gauge"></i> Kelola Layanan
+            </a>
+          `;
+        } else {
+          // Sapaan khusus untuk Siswa / Anggota
+          titleEl.innerHTML = `Halo <span class="text-amber-400">${nama}</span>, bagaimana kabarmu hari ini? 👋`;
+          subEl.innerText = 'Yuk, sempatkan membaca hari ini dan manfaatkan fasilitas Perpustakaan Sekolah!';
+          
+          // Sembunyikan tombol Ayo Mendaftar dan Katalog Buku setelah login
+          actionEl.innerHTML = '';
+        }
       } else {
-        // Status: Pengunjung Umum (Belum Login / Belum Terdaftar)
+        // Tampilan untuk Pengunjung yang Belum Login
         titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
         subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
         actionEl.innerHTML = `
