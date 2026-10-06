@@ -367,26 +367,28 @@
       }
     });
 
-    onSnapshot(collection(db, "anggota"), (snap) => {
-      if (!snap.empty) {
-        listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-        renderPublicTable();
-      }
-    }, (err) => {
-      onSnapshot(collection(db, "siswa"), (snapSiswa) => {
-        if (!snapSiswa.empty) {
-          listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
+    if (db) {
+      onSnapshot(collection(db, "anggota"), (snap) => {
+        if (!snap.empty) {
+          listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+          renderPublicTable();
+        }
+      }, (err) => {
+        onSnapshot(collection(db, "siswa"), (snapSiswa) => {
+          if (!snapSiswa.empty) {
+            listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
+            renderPublicTable();
+          }
+        });
+      });
+
+      onSnapshot(collection(db, "petugas"), (snap) => {
+        if (!snap.empty) {
+          listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
           renderPublicTable();
         }
       });
-    });
-
-    onSnapshot(collection(db, "petugas"), (snap) => {
-      if (!snap.empty) {
-        listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-        renderPublicTable();
-      }
-    });
+    }
 
     function renderPublicTable() {
       if (!pubTypeSelect || !pubTableHead || !pubTableBody) return;
@@ -546,29 +548,60 @@
 
   <!-- Script Jam & Kalender Realtime -->
   <script>
+    function getWitaTimeComponents() {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Makassar',
+        year: 'numeric', month: 'numeric', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        weekday: 'short',
+        hour12: false
+      });
+      const parts = formatter.formatToParts(now);
+      const res = {};
+      parts.forEach(p => res[p.type] = p.value);
+      
+      const dayMap = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
+      return {
+        year: parseInt(res.year),
+        month: parseInt(res.month) - 1,
+        day: parseInt(res.day),
+        hours: parseInt(res.hour === '24' ? 0 : res.hour),
+        minutes: parseInt(res.minute),
+        seconds: parseInt(res.second),
+        weekday: dayMap[res.weekday] ?? now.getDay()
+      };
+    }
+
     function updateClock() {
       const now = new Date();
-      const witaOptions = { timeZone: 'Asia/Makassar' };
       const clockEl = document.getElementById('realtimeClock');
       const dateEl = document.getElementById('realtimeDate');
       const calMonthEl = document.getElementById('calendarMonth');
 
-      if (clockEl) clockEl.innerText = now.toLocaleTimeString('id-ID', witaOptions) + " WITA";
-      if (dateEl) dateEl.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' });
-      if (calMonthEl) calMonthEl.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
+      if (clockEl) {
+        clockEl.innerText = now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar' }) + " WITA";
+      }
+      if (dateEl) {
+        dateEl.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' });
+      }
+      if (calMonthEl) {
+        calMonthEl.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
+      }
 
-      const witaDate = new Date(now.toLocaleString('en-US', witaOptions));
-      const day = witaDate.getDay();
-      const hours = witaDate.getHours();
-      const minutes = witaDate.getMinutes();
-      const timeNum = hours * 100 + minutes;
+      const wita = getWitaTimeComponents();
+      const day = wita.weekday;
+      const timeNum = wita.hours * 100 + wita.minutes;
 
       const badge = document.getElementById('statusBadge');
       if (!badge) return;
       let isOpen = false;
 
-      if (day >= 1 && day <= 4) { if (timeNum >= 715 && timeNum <= 1400) isOpen = true; }
-      else if (day === 5) { if (timeNum >= 755 && timeNum <= 1130) isOpen = true; }
+      if (day >= 1 && day <= 4) { 
+        if (timeNum >= 715 && timeNum <= 1400) isOpen = true; 
+      } else if (day === 5) { 
+        if (timeNum >= 755 && timeNum <= 1130) isOpen = true; 
+      }
 
       if (isOpen) {
         badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/40";
@@ -586,13 +619,12 @@
       const days = ['Mg', 'Sn', 'Sl', 'Rb', 'Km', 'Jm', 'Sb'];
       days.forEach(d => grid.innerHTML += `<div class="font-extrabold text-slate-400 py-1">${d}</div>`);
       
-      const now = new Date();
-      const witaDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Makassar' }));
-      const year = witaDate.getFullYear();
-      const month = witaDate.getMonth();
+      const wita = getWitaTimeComponents();
+      const year = wita.year;
+      const month = wita.month;
       const firstDay = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
-      const todayDate = witaDate.getDate();
+      const todayDate = wita.day;
 
       for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
       for (let d = 1; d <= totalDays; d++) {
@@ -620,16 +652,18 @@
     let rawAnggotaData = [];
     let selectedMonth = 'all';
 
-    onSnapshot(collection(db, 'pinjam'), (snapshot) => {
-      rawPinjamData = snapshot.docs.map(doc => doc.data());
-      populateMonthOptions();
-      renderLeaderboard();
-    });
+    if (db) {
+      onSnapshot(collection(db, 'pinjam'), (snapshot) => {
+        rawPinjamData = snapshot.docs.map(doc => doc.data());
+        populateMonthOptions();
+        renderLeaderboard();
+      });
 
-    onSnapshot(collection(db, 'anggota'), (snapshot) => {
-      rawAnggotaData = snapshot.docs.map(doc => doc.data());
-      renderLeaderboard();
-    });
+      onSnapshot(collection(db, 'anggota'), (snapshot) => {
+        rawAnggotaData = snapshot.docs.map(doc => doc.data());
+        renderLeaderboard();
+      });
+    }
 
     function populateMonthOptions() {
       const selectEl = document.getElementById('filterBulanPeminjam');
@@ -771,7 +805,6 @@
       const actionEl = document.getElementById('greetingAction');
       if (!titleEl || !subEl || !actionEl) return;
 
-      // Membaca data login pengguna dari penyimpanan lokal atau sesi
       const userSiswa = JSON.parse(localStorage.getItem('siswa_login') || sessionStorage.getItem('siswa_login') || localStorage.getItem('user_siswa') || 'null');
       const userPetugas = JSON.parse(localStorage.getItem('petugas_login') || sessionStorage.getItem('petugas_login') || 'null');
       const userAdmin = JSON.parse(localStorage.getItem('admin_login') || sessionStorage.getItem('admin_login') || 'null');
@@ -780,10 +813,8 @@
       const currentUser = userSiswa || userPetugas || userAdmin || genericUser;
 
       if (currentUser) {
-        // Ambil nama lengkap atau username pengguna
         const nama = currentUser.nama || currentUser.nama_lengkap || currentUser.name || currentUser.username || 'Pengguna';
 
-        // Tentukan peran pengguna
         let role = (currentUser.role || '').toLowerCase();
         if (userSiswa) role = 'siswa';
         if (userPetugas) role = 'petugas';
@@ -791,25 +822,21 @@
 
         if (role === 'admin' || role === 'petugas') {
           const roleLabel = role === 'admin' ? 'Admin' : 'Petugas Perpustakaan';
-          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400">${nama}</span> (${roleLabel})! 🫡`;
+          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400">${nama}</span> (${roleLabel})! 👋`;
           subEl.innerText = 'Semangat melayani sirkulasi buku dan kegiatan literasi di Perpustakaan Sekolah.';
           
-          // Sembunyikan tombol pendaftaran & katalog, ganti dengan navigasi panel kontrol
           actionEl.innerHTML = `
             <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
               <i class="fa-solid fa-gauge"></i> Kelola Layanan
             </a>
           `;
         } else {
-          // Sapaan khusus untuk Siswa / Anggota
           titleEl.innerHTML = `Halo <span class="text-amber-400">${nama}</span>, bagaimana kabarmu hari ini? 👋`;
           subEl.innerText = 'Yuk, sempatkan membaca hari ini dan manfaatkan fasilitas Perpustakaan Sekolah!';
           
-          // Sembunyikan tombol Ayo Mendaftar dan Katalog Buku setelah login
           actionEl.innerHTML = '';
         }
       } else {
-        // Tampilan untuk Pengunjung yang Belum Login
         titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
         subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
         actionEl.innerHTML = `
@@ -825,7 +852,11 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', renderDynamicGreeting);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderDynamicGreeting);
+    } else {
+      renderDynamicGreeting();
+    }
   </script>
 </body>
 </html>
