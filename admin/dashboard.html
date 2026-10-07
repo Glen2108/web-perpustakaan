@@ -459,6 +459,10 @@
           <label class="block font-bold text-slate-700 mb-1">Penerbit</label>
           <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">URL / Link Cover Buku</label>
+          <input type="url" id="inpCoverBuku" placeholder="https://example.com/cover-buku.jpg" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+        </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Kategori</label>
@@ -792,7 +796,7 @@
 
       existingMembers.forEach(m => {
         const rawVal = String(m.nisn || m.personalId || m.id || '');
-        const match = rawVal.match(new RegExp('260' + gradeCode + '(\\d+)'));
+        const match = rawVal.match(new RegExp('260' + gradeCode + '(\d+)'));
         if (match && match[1]) {
           const seq = parseInt(match[1], 10);
           if (seq > maxSeq) {
@@ -1059,6 +1063,7 @@
       } else if (type === 'buku') {
         thead.innerHTML = `
           <tr>
+            <th class="p-3.5 text-center w-12">Cover</th>
             ${getSortableHeaderHtml('Judul Buku', 'judul')}
             ${getSortableHeaderHtml('Pengarang', 'pengarang')}
             ${getSortableHeaderHtml('Penerbit', 'penerbit')}
@@ -1067,9 +1072,12 @@
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="7" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
           paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+              <td class="p-2 text-center">
+                <img src="${item.cover || item.coverUrl || 'https://via.placeholder.com/60x80?text=No+Cover'}" class="w-8 h-11 object-cover rounded shadow-sm border mx-auto">
+              </td>
               <td class="p-3.5 font-bold text-slate-900">${item.judul || '-'}</td>
               <td class="p-3.5 text-slate-600">${item.pengarang || '-'}</td>
               <td class="p-3.5 text-slate-500">${item.penerbit || '-'}</td>
@@ -1333,10 +1341,13 @@
 
     document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const coverUrl = document.getElementById('inpCoverBuku')?.value || '';
       const payload = {
         judul: document.getElementById('inpJudulBuku')?.value || '',
         pengarang: document.getElementById('inpPengarangBuku')?.value || '',
         penerbit: document.getElementById('inpPenerbitBuku')?.value || '',
+        cover: coverUrl,
+        coverUrl: coverUrl,
         kategori: document.getElementById('inpKategoriBuku')?.value || 'Pelajaran',
         stok: parseInt(document.getElementById('inpStokBuku')?.value || '1', 10)
       };
