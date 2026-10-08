@@ -554,7 +554,7 @@
     </div>
   </div>
 
-  <!-- Modal 5: Catat Peminjaman -->
+  <!-- Modal 5: Catat Peminjaman (Diperbarui Input WhatsApp) -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -571,6 +571,10 @@
           <select id="inpPeminjam" required class="w-full p-3 rounded-xl border border-slate-200 outline-none bg-white font-semibold text-slate-800">
             <option value="" disabled selected>-- Pilih Anggota Terdaftar --</option>
           </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nomor WhatsApp Peminjam</label>
+          <input type="tel" id="inpWaPinjam" required placeholder="Contoh: 081234567890" class="w-full p-3 rounded-xl border border-slate-200 outline-none font-semibold text-slate-800">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
@@ -620,6 +624,16 @@
       const infoEmail = document.getElementById('adminInfoEmail');
       if (emailText) emailText.innerText = currentAdmin.email || 'Admin Perpustakaan';
       if (infoEmail) infoEmail.innerText = "Email Admin: " + (currentAdmin.email || '-');
+    }
+
+    // Helper Format Nomor WhatsApp ke Standar Internasional (628...)
+    function formatWaNumber(phone) {
+      if (!phone) return '';
+      let cleaned = String(phone).replace(/\D/g, '');
+      if (cleaned.startsWith('0')) {
+        cleaned = '62' + cleaned.slice(1);
+      }
+      return cleaned;
     }
 
     // Realtime Listener Permohonan Buka Akun
@@ -799,11 +813,22 @@
           const nama = m.nama || 'Tanpa Nama';
           const kelas = m.kelas ? ` (${m.kelas})` : '';
           const idAgt = m.id || m.personalId ? ` - ${m.id || m.personalId}` : '';
-          options += `<option value="${nama}">${nama}${kelas}${idAgt}</option>`;
+          const noWa = m.noWa || m.telepon || m.hp || '';
+          options += `<option value="${nama}" data-wa="${noWa}">${nama}${kelas}${idAgt}</option>`;
         });
       }
       selectEl.innerHTML = options;
     };
+
+    // Otomatis isikan Nomor WA saat nama anggota dipilih
+    document.getElementById('inpPeminjam')?.addEventListener('change', (e) => {
+      const selectedOption = e.target.options[e.target.selectedIndex];
+      const waVal = selectedOption.getAttribute('data-wa') || '';
+      const inpWa = document.getElementById('inpWaPinjam');
+      if (inpWa && waVal) {
+        inpWa.value = waVal;
+      }
+    });
 
     // Fungsi Generate ID Anggota & Personal ID Otomatis
     window.generateAutoIds = function(selectedKelas) {
@@ -1049,7 +1074,14 @@
         dataList.forEach(item => {
           const key = item.peminjam || 'Tanpa Nama';
           if (!groupedMap[key]) {
-            groupedMap[key] = { peminjam: key, items: [] };
+            groupedMap[key] = { 
+              peminjam: key, 
+              noWa: item.noWa || '',
+              items: [] 
+            };
+          }
+          if (!groupedMap[key].noWa && item.noWa) {
+            groupedMap[key].noWa = item.noWa;
           }
           groupedMap[key].items.push(item);
         });
@@ -1174,45 +1206,113 @@
       } else if (type === 'pinjam') {
         thead.innerHTML = `
           <tr>
-            <th class="p-3.5 w-1/3">Peminjam</th>
-            <th class="p-3.5">Daftar Buku & Tanggal Pinjam / Kembali</th>
-            <th class="p-3.5 text-center w-24">Total</th>
+            <th class="p-3.5 w-1/3">Peminjam & Kontak WA</th>
+            <th class="p-3.5">Daftar Buku & Pengingat Jatuh Tempo</th>
+            <th class="p-3.5 text-center w-20">Total</th>
           </tr>
         `;
 
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
         tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="3" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
-          paginatedData.map(group => `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100 align-top">
-              <td class="p-3.5 font-bold text-slate-900">
-                <div class="text-sm font-extrabold text-slate-900">${group.peminjam}</div>
-                <span class="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
-                  ${group.items.length} Buku Dipinjam
-                </span>
-              </td>
-              <td class="p-3.5">
-                <div class="space-y-2">
-                  ${group.items.map(item => `
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-slate-50 rounded-2xl border border-slate-200/70 gap-2">
-                      <div class="font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-book-bookmark text-emerald-600"></i>
-                        <span>${item.buku || '-'}</span>
-                      </div>
-                      <div class="flex items-center gap-2 sm:gap-3 text-slate-500 text-[11px] shrink-0">
-                        <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
-                        <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali || '-'}</strong></span>
-                        <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" title="Hapus transaksi buku ini" class="px-2.5 py-1 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
+          paginatedData.map(group => {
+            const formattedPhone = formatWaNumber(group.noWa);
+
+            return `
+              <tr class="hover:bg-slate-50 transition border-b border-slate-100 align-top">
+                <td class="p-3.5 font-bold text-slate-900 space-y-1">
+                  <div class="text-sm font-extrabold text-slate-900">${group.peminjam}</div>
+                  
+                  ${group.noWa ? `
+                    <div class="text-[11px] text-emerald-700 font-bold flex items-center gap-1.5">
+                      <i class="fa-brands fa-whatsapp text-emerald-600"></i> ${group.noWa}
                     </div>
-                  `).join('')}
-                </div>
-              </td>
-              <td class="p-3.5 text-center font-black text-slate-700">
-                ${group.items.length}
-              </td>
-            </tr>
-          `).join('');
+                  ` : `
+                    <div class="text-[10px] text-slate-400 italic">Nomor WA belum diisi</div>
+                  `}
+
+                  <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
+                    ${group.items.length} Buku Dipinjam
+                  </span>
+                </td>
+
+                <td class="p-3.5">
+                  <div class="space-y-2">
+                    ${group.items.map(item => {
+                      const itemWa = formatWaNumber(item.noWa || group.noWa);
+                      
+                      let statusBadge = '';
+                      let waActionBtn = '';
+
+                      if (item.tglKembali) {
+                        const tglKembaliDate = new Date(item.tglKembali);
+                        tglKembaliDate.setHours(0,0,0,0);
+                        const diffTime = tglKembaliDate - today;
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        if (diffDays < 0) {
+                          // JATUH TEMPO / TERLAMBAT
+                          const daysLate = Math.abs(diffDays);
+                          statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-rose-100 text-rose-700 border border-rose-200"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Terlambat ${daysLate} hari</span>`;
+
+                          if (itemWa) {
+                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,\n\nMengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado telah *JATUH TEMPO* pada tanggal *${item.tglKembali}* (Terlambat${daysLate} hari).\n\nMohon segera mengembalikan buku tersebut ke perpustakaan. Terima kasih!`);
+                            waActionBtn = `
+                              <a href="https://wa.me/${itemWa}?text=${msg}" target="_blank" title="Kirim Pengingat Jatuh Tempo via WA" class="px-2.5 py-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] transition flex items-center gap-1 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-xs"></i> Ingatkan (Jatuh Tempo)
+                              </a>
+                            `;
+                          }
+                        } else if (diffDays <= 2) {
+                          // DEKAT JATUH TEMPO (0 - 2 HARI)
+                          const labelText = diffDays === 0 ? 'Hari Ini Jatuh Tempo' : `Sisa ${diffDays} Hari`;
+                          statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-clock mr-1"></i>${labelText}</span>`;
+
+                          if (itemWa) {
+                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,\n\nMengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado *SUDAH DEKAT JATUH TEMPO* pada tanggal *${item.tglKembali}*.\n\nMohon untuk bersiap mengembalikan buku tepat waktu. Terima kasih!`);
+                            waActionBtn = `
+                              <a href="https://wa.me/${itemWa}?text=${msg}" target="_blank" title="Kirim Pengingat Dekat Jatuh Tempo via WA" class="px-2.5 py-1 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold text-[10px] transition flex items-center gap-1 shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-xs"></i> Ingatkan (Mendekati)
+                              </a>
+                            `;
+                          }
+                        } else {
+                          // MASIH AKTIF
+                          statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-circle-check mr-1"></i>Aktif (${diffDays} hari lagi)</span>`;
+                        }
+                      }
+
+                      return `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-slate-50 rounded-2xl border border-slate-200/70 gap-2">
+                          <div class="space-y-1">
+                            <div class="font-bold text-slate-800 flex items-center gap-2">
+                              <i class="fa-solid fa-book-bookmark text-emerald-600"></i>
+                              <span>${item.buku || '-'}</span>
+                            </div>
+                            <div>${statusBadge}</div>
+                          </div>
+
+                          <div class="flex items-center gap-2 sm:gap-3 text-slate-500 text-[11px] shrink-0">
+                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
+                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali \vert{}\vert{} '-'}</strong></span>${waActionBtn}
+
+                            <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" title="Hapus transaksi buku ini" class="px-2 py-1 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition">
+                              <i class="fa-solid fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </td>
+
+                <td class="p-3.5 text-center font-black text-slate-700">
+                  ${group.items.length}
+                </td>
+              </tr>
+            `;
+          }).join('');
       }
 
       if (countInfo) {
@@ -1498,6 +1598,7 @@
       const todayStr = new Date().toISOString().split('T')[0];
       const payload = {
         peminjam: document.getElementById('inpPeminjam')?.value || '',
+        noWa: document.getElementById('inpWaPinjam')?.value || '',
         buku: document.getElementById('inpBukuPinjam')?.value || '',
         tglPinjam: todayStr,
         tglKembali: document.getElementById('inpTglKembali')?.value || ''
