@@ -1295,7 +1295,7 @@
 
                           <div class="flex items-center gap-2 sm:gap-3 text-slate-500 text-[11px] shrink-0">
                             <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
-                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali \vert{}\vert{} '-'}</strong></span>${waActionBtn}
+                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali || '-'}</strong></span>${waActionBtn}
 
                             <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" title="Hapus transaksi buku ini" class="px-2 py-1 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition">
                               <i class="fa-solid fa-trash"></i>
