@@ -439,7 +439,7 @@
     </div>
   </div>
 
-  <!-- Modal 3: Buku -->
+  <!-- Modal 3: Buku (Diperbarui Opsi Link URL & Upload Gambar File) -->
   <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -464,10 +464,12 @@
           <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
 
-        <!-- Field Input URL Cover Buku -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">URL / Link Cover Buku</label>
-          <input type="url" id="inpCoverBuku" placeholder="https://example.com/cover-buku.jpg" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+        <!-- Opsi Cover Buku: Link URL atau Upload Gambar -->
+        <div class="space-y-1.5">
+          <label class="block font-bold text-slate-700">Cover Buku</label>
+          <input type="url" id="inpCoverBuku" placeholder="Link URL Gambar (https://...)" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <div class="text-center text-[10px] text-slate-400 font-bold uppercase my-1">- ATAU UPLOAD FILE -</div>
+          <input type="file" id="inpCoverFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200 cursor-pointer border border-slate-200 rounded-xl p-1 bg-slate-50">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -556,13 +558,19 @@
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
-        <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-handshake text-emerald-600"></i> Catat Transaksi Peminjaman</h3>
-        <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-handshake text-emerald-600"></i> Catat Transaksi Peminjaman
+        </h3>
+        <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
       <form id="formTambahPinjam" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam / NISN</label>
-          <input type="text" id="inpPeminjam" required placeholder="Nama siswa atau NISN" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <label class="block font-bold text-slate-700 mb-1">Nama Peminjam (Anggota Terdaftar)</label>
+          <select id="inpPeminjam" required class="w-full p-3 rounded-xl border border-slate-200 outline-none bg-white font-semibold text-slate-800">
+            <option value="" disabled selected>-- Pilih Anggota Terdaftar --</option>
+          </select>
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
@@ -776,6 +784,27 @@
       searchQuery: ''
     };
 
+    // Memuat daftar nama anggota terdaftar ke dropdown modal Peminjaman
+    window.populateSelectAnggota = function() {
+      const selectEl = document.getElementById('inpPeminjam');
+      if (!selectEl) return;
+
+      const anggotaList = window.dbData.anggota || [];
+      let options = `<option value="" disabled selected>-- Pilih Anggota Terdaftar --</option>`;
+
+      if (anggotaList.length === 0) {
+        options += `<option value="" disabled>Belum ada data anggota</option>`;
+      } else {
+        anggotaList.forEach(m => {
+          const nama = m.nama || 'Tanpa Nama';
+          const kelas = m.kelas ? ` (${m.kelas})` : '';
+          const idAgt = m.id || m.personalId ? ` - ${m.id || m.personalId}` : '';
+          options += `<option value="${nama}">${nama}${kelas}${idAgt}</option>`;
+        });
+      }
+      selectEl.innerHTML = options;
+    };
+
     // Fungsi Generate ID Anggota & Personal ID Otomatis
     window.generateAutoIds = function(selectedKelas) {
       if (!selectedKelas) return;
@@ -841,6 +870,11 @@
           firestoreId: docSnap.id,
           ...docSnap.data()
         }));
+
+        if (colName === 'anggota') {
+          window.populateSelectAnggota();
+        }
+
         window.renderTableData();
 
         if (window.currentActiveTable === 'anggota' && !window.editingMemberId) {
@@ -863,6 +897,9 @@
     };
 
     window.openModalWithTable = function(modalId, tableType) {
+      if (modalId === 'modalPinjam') {
+        window.populateSelectAnggota();
+      }
       window.switchTable(tableType);
       window.toggleModal(modalId, true);
     };
@@ -1006,6 +1043,19 @@
         });
       }
 
+      // Khusus mode Peminjaman: Kelompokkan data per nama peminjam SEBELUM kalkulasi pagination
+      if (type === 'pinjam') {
+        const groupedMap = {};
+        dataList.forEach(item => {
+          const key = item.peminjam || 'Tanpa Nama';
+          if (!groupedMap[key]) {
+            groupedMap[key] = { peminjam: key, items: [] };
+          }
+          groupedMap[key].items.push(item);
+        });
+        dataList = Object.values(groupedMap);
+      }
+
       const totalItems = dataList.length;
       const itemsPerPage = window.tableState.itemsPerPage;
       const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
@@ -1124,22 +1174,42 @@
       } else if (type === 'pinjam') {
         thead.innerHTML = `
           <tr>
-            ${getSortableHeaderHtml('Peminjam', 'peminjam')}
-            ${getSortableHeaderHtml('Judul Buku', 'buku')}
-            ${getSortableHeaderHtml('Tgl Pinjam', 'tglPinjam')}
-            ${getSortableHeaderHtml('Tgl Kembali', 'tglKembali')}
-            <th class="p-3.5 text-center">Aksi</th>
+            <th class="p-3.5 w-1/3">Peminjam</th>
+            <th class="p-3.5">Daftar Buku & Tanggal Pinjam / Kembali</th>
+            <th class="p-3.5 text-center w-24">Total</th>
           </tr>
         `;
-        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
-          paginatedData.map(item => `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-              <td class="p-3.5 font-bold text-slate-900">${item.peminjam || '-'}</td>
-              <td class="p-3.5 font-medium text-slate-700">${item.buku || '-'}</td>
-              <td class="p-3.5 text-slate-500">${item.tglPinjam || '-'}</td>
-              <td class="p-3.5 text-slate-500">${item.tglKembali || '-'}</td>
-              <td class="p-3.5 text-center">
-                <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
+
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="3" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
+          paginatedData.map(group => `
+            <tr class="hover:bg-slate-50 transition border-b border-slate-100 align-top">
+              <td class="p-3.5 font-bold text-slate-900">
+                <div class="text-sm font-extrabold text-slate-900">${group.peminjam}</div>
+                <span class="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
+                  ${group.items.length} Buku Dipinjam
+                </span>
+              </td>
+              <td class="p-3.5">
+                <div class="space-y-2">
+                  ${group.items.map(item => `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-slate-50 rounded-2xl border border-slate-200/70 gap-2">
+                      <div class="font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-emerald-600"></i>
+                        <span>${item.buku || '-'}</span>
+                      </div>
+                      <div class="flex items-center gap-2 sm:gap-3 text-slate-500 text-[11px] shrink-0">
+                        <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
+                        <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali || '-'}</strong></span>
+                        <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" title="Hapus transaksi buku ini" class="px-2.5 py-1 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </td>
+              <td class="p-3.5 text-center font-black text-slate-700">
+                ${group.items.length}
               </td>
             </tr>
           `).join('');
@@ -1346,9 +1416,23 @@
       }
     });
 
+    // Form Tambah Buku (Mendukung URL Gambar & Upload File)
     document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const coverUrl = document.getElementById('inpCoverBuku')?.value || '';
+      
+      let coverUrl = document.getElementById('inpCoverBuku')?.value || '';
+      const fileInput = document.getElementById('inpCoverFile');
+
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        coverUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (event) => resolve(event.target.result);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(file);
+        });
+      }
+
       const payload = {
         judul: document.getElementById('inpJudulBuku')?.value || '',
         pengarang: document.getElementById('inpPengarangBuku')?.value || '',
