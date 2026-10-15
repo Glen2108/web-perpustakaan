@@ -33,16 +33,33 @@
       .no-print { display: none !important; }
     }
   </style>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
+  <!-- Script Verifikasi Sesi & Tampilan Dasar (Tersedia Secara Langsung) -->
   <script>
     const adminSession = localStorage.getItem('adminSession');
     if (!adminSession) {
       window.location.href = "login.html";
     }
     const currentAdmin = JSON.parse(adminSession || '{}');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (currentAdmin && currentAdmin.email) {
+        const emailText = document.getElementById('adminEmailText');
+        const infoEmail = document.getElementById('adminInfoEmail');
+        if (emailText) emailText.innerText = currentAdmin.email;
+        if (infoEmail) infoEmail.innerText = "Email Admin: " + currentAdmin.email;
+      }
+    });
+
+    function handleAdminLogout() {
+      if (confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
+        localStorage.removeItem('adminSession');
+        window.location.href = "login.html";
+      }
+    }
   </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
   <!-- Header -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
@@ -439,7 +456,7 @@
     </div>
   </div>
 
-  <!-- Modal 3: Buku (Diperbarui Opsi Link URL & Upload Gambar File) -->
+  <!-- Modal 3: Buku -->
   <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -464,7 +481,6 @@
           <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
 
-        <!-- Opsi Cover Buku: Link URL atau Upload Gambar -->
         <div class="space-y-1.5">
           <label class="block font-bold text-slate-700">Cover Buku</label>
           <input type="url" id="inpCoverBuku" placeholder="Link URL Gambar (https://...)" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
@@ -554,7 +570,7 @@
     </div>
   </div>
 
-  <!-- Modal 5: Catat Peminjaman (Diperbarui Input WhatsApp) -->
+  <!-- Modal 5: Catat Peminjaman -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -614,19 +630,12 @@
     </div>
   </div>
 
-  <!-- Script Firebase & Logika Aplikasi -->
+  <!-- Script Firebase & Logika Utama Aplikasi -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    if (typeof currentAdmin !== 'undefined' && currentAdmin) {
-      const emailText = document.getElementById('adminEmailText');
-      const infoEmail = document.getElementById('adminInfoEmail');
-      if (emailText) emailText.innerText = currentAdmin.email || 'Admin Perpustakaan';
-      if (infoEmail) infoEmail.innerText = "Email Admin: " + (currentAdmin.email || '-');
-    }
-
-    // Helper Format Nomor WhatsApp ke Standar Internasional (628...)
+    // Format Nomor WhatsApp ke Standar Internasional (628...)
     function formatWaNumber(phone) {
       if (!phone) return '';
       let cleaned = String(phone).replace(/\D/g, '');
@@ -702,7 +711,7 @@
             </div>
 
             <div class="flex items-center gap-2 shrink-0">
-              <button onclick="window.setujuiBukaAkun('${req.id}', '${req.username || ''}', '${req.idAnggota || ''}')" class="px-3 py-2 rounded-xl font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+              <button onclick="window.setujuiBukaAkun('${req.id}', '${req.username || ''}', '${req.idAnggota || ''}')" class="px-3 py-2 rounded-xl font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition flex items-center gap-1.5">
                 <i class="fa-solid fa-lock-open"></i> Setujui & Aktifkan
               </button>
               <button onclick="window.tolakBukaAkun('${req.id}', '${req.username || ''}')" class="px-3 py-2 rounded-xl font-bold bg-slate-200 hover:bg-rose-100 text-slate-700 hover:text-rose-700 transition">
@@ -756,7 +765,7 @@
             statusKeanggotaan: "Aktif",
             status: "Aktif"
           });
-          alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka secara otomatis.`);
+          alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka.`);
         } else {
           alert(`Permohonan disetujui, namun data siswa tidak ditemukan pada koleksi 'anggota'.`);
         }
@@ -780,11 +789,6 @@
     };
 
     initRequestBukaAkunListener();
-
-    window.handleAdminLogout = function() {
-      localStorage.removeItem('adminSession');
-      window.location.href = "login.html";
-    };
 
     window.dbData = { anggota: [], petugas: [], buku: [], duta: [], pinjam: [] };
     window.currentActiveTable = 'anggota';
@@ -825,7 +829,6 @@
       }
     };
 
-    // Memuat daftar nama anggota terdaftar ke dropdown modal Peminjaman
     window.populateSelectAnggota = function() {
       const selectEl = document.getElementById('inpPeminjam');
       if (!selectEl) return;
@@ -847,7 +850,6 @@
       selectEl.innerHTML = options;
     };
 
-    // Otomatis isikan Nomor WA saat nama anggota dipilih
     document.getElementById('inpPeminjam')?.addEventListener('change', (e) => {
       const selectedOption = e.target.options[e.target.selectedIndex];
       const waVal = selectedOption.getAttribute('data-wa') || '';
@@ -857,29 +859,20 @@
       }
     });
 
-    // Fungsi Generate ID Anggota & Personal ID Otomatis
     window.generateAutoIds = function(selectedKelas) {
       if (!selectedKelas) return;
 
       let gradeCode = '';
       let minSeq = 1;
 
-      if (selectedKelas.startsWith('X-')) {
-        gradeCode = '10';
-        minSeq = 18;
-      } else if (selectedKelas.startsWith('XI-')) {
-        gradeCode = '11';
-        minSeq = 12;
-      } else if (selectedKelas.startsWith('XII-')) {
-        gradeCode = '12';
-        minSeq = 19;
-      }
+      if (selectedKelas.startsWith('X-')) { gradeCode = '10'; minSeq = 18; }
+      else if (selectedKelas.startsWith('XI-')) { gradeCode = '11'; minSeq = 12; }
+      else if (selectedKelas.startsWith('XII-')) { gradeCode = '12'; minSeq = 19; }
 
       if (!gradeCode) return;
 
       const prefix = '260' + gradeCode;
       const existingMembers = window.dbData.anggota || [];
-
       let maxSeq = minSeq - 1;
 
       existingMembers.forEach(m => {
@@ -887,9 +880,7 @@
         const match = rawVal.match(new RegExp('260' + gradeCode + '(\\d+)'));
         if (match && match[1]) {
           const seq = parseInt(match[1], 10);
-          if (seq > maxSeq) {
-            maxSeq = seq;
-          }
+          if (seq > maxSeq) maxSeq = seq;
         }
       });
 
@@ -910,9 +901,7 @@
 
     window.handleKelasChange = function() {
       const kelasVal = document.getElementById('inpKelas')?.value;
-      if (kelasVal) {
-        window.generateAutoIds(kelasVal);
-      }
+      if (kelasVal) window.generateAutoIds(kelasVal);
     };
 
     const collections = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
@@ -923,17 +912,12 @@
           ...docSnap.data()
         }));
 
-        if (colName === 'anggota') {
-          window.populateSelectAnggota();
-        }
-
+        if (colName === 'anggota') window.populateSelectAnggota();
         window.renderTableData();
 
         if (window.currentActiveTable === 'anggota' && !window.editingMemberId) {
           const currentKelas = document.getElementById('inpKelas')?.value;
-          if (currentKelas) {
-            window.generateAutoIds(currentKelas);
-          }
+          if (currentKelas) window.generateAutoIds(currentKelas);
         }
       }, (err) => {
         console.error(`Error listening collection ${colName}:`, err);
@@ -949,9 +933,7 @@
     };
 
     window.openModalWithTable = function(modalId, tableType) {
-      if (modalId === 'modalPinjam') {
-        window.populateSelectAnggota();
-      }
+      if (modalId === 'modalPinjam') window.populateSelectAnggota();
       window.switchTable(tableType);
       window.toggleModal(modalId, true);
     };
@@ -984,11 +966,9 @@
       tabs.forEach(t => {
         const btn = document.getElementById('btnTab' + t.charAt(0).toUpperCase() + t.slice(1));
         if (btn) {
-          if (t === type) {
-            btn.className = 'px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition font-bold';
-          } else {
-            btn.className = 'px-3.5 py-2 rounded-xl hover:text-slate-900 transition font-bold';
-          }
+          btn.className = (t === type)
+            ? 'px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition font-bold'
+            : 'px-3.5 py-2 rounded-xl hover:text-slate-900 transition font-bold';
         }
       });
 
@@ -1051,7 +1031,7 @@
       `;
     }
 
-    // FUNGSI RENDER TABLE DATA LENGKAP & INTEGRATED
+    // FUNGSI RENDER TABLE DATA
     window.renderTableData = function() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
@@ -1085,32 +1065,21 @@
           if (col === 'email') { valA = a.email || a.username || ''; valB = b.email || b.username || ''; }
           if (col === 'periode') { valA = a.tglMulai || a.periode || ''; valB = b.tglMulai || b.periode || ''; }
 
-          if (typeof valA === 'number' && typeof valB === 'number') {
-            return (valA - valB) * dir;
-          }
-          if (!isNaN(valA) && !isNaN(valB) && valA !== '' && valB !== '') {
-            return (Number(valA) - Number(valB)) * dir;
-          }
+          if (typeof valA === 'number' && typeof valB === 'number') return (valA - valB) * dir;
+          if (!isNaN(valA) && !isNaN(valB) && valA !== '' && valB !== '') return (Number(valA) - Number(valB)) * dir;
 
           return String(valA).localeCompare(String(valB), undefined, { numeric: true, sensitivity: 'base' }) * dir;
         });
       }
 
-      // Khusus mode Peminjaman: Kelompokkan data per nama peminjam SEBELUM kalkulasi pagination
       if (type === 'pinjam') {
         const groupedMap = {};
         dataList.forEach(item => {
           const key = item.peminjam || 'Tanpa Nama';
           if (!groupedMap[key]) {
-            groupedMap[key] = { 
-              peminjam: key, 
-              noWa: item.noWa || '',
-              items: [] 
-            };
+            groupedMap[key] = { peminjam: key, noWa: item.noWa || '', items: [] };
           }
-          if (!groupedMap[key].noWa && item.noWa) {
-            groupedMap[key].noWa = item.noWa;
-          }
+          if (!groupedMap[key].noWa && item.noWa) groupedMap[key].noWa = item.noWa;
           groupedMap[key].items.push(item);
         });
         dataList = Object.values(groupedMap);
@@ -1507,7 +1476,7 @@
       }
     };
 
-    // Submit Event Listeners untuk semua Form Modal
+    // Form Submit Event Listeners
     document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
@@ -1562,7 +1531,6 @@
       }
     });
 
-    // Form Tambah Buku (Mendukung URL Gambar & Upload File)
     document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       
