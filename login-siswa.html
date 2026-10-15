@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Siswa - Perpustakaan SMAN 4 Manado</title>
+  <title>Login & Pendaftaran Siswa - Perpustakaan SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,11 +20,10 @@
 </head>
 <body class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 min-h-screen flex items-center justify-center p-4 font-sans text-slate-100 relative overflow-hidden">
 
-  <!-- Glowing backdrop blobs untuk memperkuat efek transparansi kaca -->
   <div class="absolute -top-32 -left-32 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
   <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
-  <!-- Cek Otomatis Sesi Login (Persistent Session) -->
+  <!-- Cek Otomatis Sesi Login -->
   <script>
     if (localStorage.getItem('userSession')) {
       window.location.href = "profil.html";
@@ -32,26 +31,23 @@
   </script>
 
   <div class="w-full max-w-md space-y-4 relative z-10">
-    <!-- Tombol Kembali ke Beranda Utama -->
     <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-amber-400 transition">
       <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda Perpustakaan
     </a>
 
-    <!-- Kartu Login Transparan (Glassmorphism) -->
+    <!-- Kartu Login Utama -->
     <div class="bg-slate-900/40 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/10 space-y-6">
       
-      <!-- Header Logo & Judul -->
       <div class="text-center space-y-2">
         <div class="w-14 h-14 bg-gradient-to-tr from-amber-400 to-amber-200 text-slate-900 rounded-2xl flex items-center justify-center font-black text-2xl mx-auto shadow-lg shadow-amber-500/20">
           <i class="fa-solid fa-graduation-cap"></i>
         </div>
         <h2 class="text-2xl font-black text-white tracking-tight">Portal Siswa</h2>
         <p class="text-xs text-slate-300 max-w-xs mx-auto">
-          Masukkan Username/NIS dan Kata Sandi resmi yang telah diberikan oleh petugas perpustakaan.
+          Masukkan Username/NISN dan Kata Sandi Anda.
         </p>
       </div>
 
-      <!-- Pesan Alert / Error -->
       <div id="alertBox" class="hidden p-3.5 rounded-xl text-xs font-bold bg-rose-500/10 border border-rose-500/30 text-rose-300 items-center gap-2">
         <i class="fa-solid fa-circle-exclamation shrink-0 text-base"></i>
         <span id="alertMsg">Username atau Password salah!</span>
@@ -61,10 +57,10 @@
       <form id="formLoginSiswa" class="space-y-4">
         <div>
           <label class="block text-xs font-extrabold text-slate-300 mb-1.5 uppercase tracking-wider">
-            Username / NIS
+            Username / NISN
           </label>
           <div class="relative">
-            <input type="text" id="userVal" required placeholder="Contoh: 20241001" 
+            <input type="text" id="userVal" required placeholder="Contoh: 2601201" 
                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-700/60 bg-slate-900/60 text-white placeholder-slate-500 text-xs font-semibold focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 outline-none transition">
             <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
           </div>
@@ -90,18 +86,131 @@
         </button>
       </form>
 
-      <!-- Footer Bantuan -->
-      <div class="pt-4 border-t border-slate-800/80 text-center text-[11px] text-slate-400">
-        Lupa password atau akun bermasalah? <br>
-        <span class="font-bold text-amber-300">Hubungi Petugas Perpustakaan SMAN 4 Manado</span>
+      <!-- Tombol Pendaftaran Mandiri -->
+      <div class="pt-4 border-t border-slate-800/80 text-center space-y-2">
+        <p class="text-xs text-slate-400">Belum memiliki akun perpustakaan?</p>
+        <button onclick="openModalDaftar()" class="w-full py-2.5 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-extrabold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-id-card"></i> Ajukan Pendaftaran Anggota Mandiri
+        </button>
       </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL POPUP FORMULIR PENDAFTARAN ANGGOTA MANDIRI -->
+  <div id="modalDaftarMandiri" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-slate-900 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/10 text-white space-y-5 my-8">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="font-extrabold text-base text-amber-400 flex items-center gap-2">
+            <i class="fa-solid fa-user-plus"></i> Formulir Pengajuan Keanggotaan
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">Isi data diri untuk verifikasi oleh petugas perpustakaan.</p>
+        </div>
+        <button onclick="closeModalDaftar()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="formDaftarMandiri" class="space-y-3.5 text-xs">
+        
+        <!-- Pilihan Kelas (Menentukan ID, NISN, & Tgl Kadaluarsa) -->
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Kelas <span class="text-amber-400">*</span></label>
+          <select id="regKelas" required onchange="handleSelectKelas(this.value)" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-bold">
+            <option value="" disabled selected>-- Pilih Kelas Anda --</option>
+            <optgroup label="Kelas X (10)">
+              <option value="X-1">X-1</option>
+              <option value="X-2">X-2</option>
+              <option value="X-3">X-3</option>
+              <option value="X-4">X-4</option>
+            </optgroup>
+            <optgroup label="Kelas XI (11)">
+              <option value="XI-1">XI-1</option>
+              <option value="XI-2">XI-2</option>
+              <option value="XI-3">XI-3</option>
+              <option value="XI-4">XI-4</option>
+              <option value="XI-5">XI-5</option>
+            </optgroup>
+            <optgroup label="Kelas XII (12)">
+              <option value="XII-1">XII-1</option>
+              <option value="XII-2">XII-2</option>
+              <option value="XII-3">XII-3</option>
+              <option value="XII-4">XII-4</option>
+              <option value="XII-5">XII-5</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Kode ID Anggota & Personal ID Otomatis -->
+        <div class="grid grid-cols-2 gap-3 bg-slate-800/60 p-3 rounded-2xl border border-slate-700">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 mb-1">ID Anggota (Sistem)</label>
+            <input type="text" id="regIdAnggota" readonly placeholder="Pilih kelas..." class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-amber-300 font-mono font-bold">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 mb-1">Personal ID / NISN (Sistem)</label>
+            <input type="text" id="regPersonalId" readonly placeholder="Pilih kelas..." class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-amber-300 font-mono font-bold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Nama Lengkap Siswa <span class="text-amber-400">*</span></label>
+          <input type="text" id="regNama" required placeholder="Masukkan nama sesuai presensi" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+        </div>
+
+        <!-- Username & Password untuk Akun Siswa -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Username Login <span class="text-amber-400">*</span></label>
+            <input type="text" id="regUsername" required placeholder="username.siswa" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Password <span class="text-amber-400">*</span></label>
+            <input type="password" id="regPassword" required placeholder="••••••••" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+          </div>
+        </div>
+
+        <!-- Status & Masa Berlaku Otomatis Sistem -->
+        <div class="grid grid-cols-2 gap-3 text-[11px]">
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Tanggal Registrasi</label>
+            <input type="text" id="regTglRegis" readonly class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-300 font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Masa Kadaluarsa (Kelulusan)</label>
+            <input type="text" id="regTglKadaluarsa" readonly placeholder="Otomatis sistem" class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-amber-400 font-bold">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-[11px]">
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Status Perpustakaan</label>
+            <input type="text" value="Standar" readonly class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-300 font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Instansi</label>
+            <input type="text" value="SMAN 4 MANADO" readonly class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-300 font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Status Keanggotaan</label>
+            <input type="text" value="Pending" readonly class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-emerald-400 font-bold">
+          </div>
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-800">
+          <button type="button" onclick="closeModalDaftar()" class="px-4 py-2.5 rounded-xl font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Batal</button>
+          <button type="submit" id="btnSubmitDaftar" class="px-5 py-2.5 rounded-xl font-extrabold bg-amber-400 hover:bg-amber-300 text-slate-900 shadow-md transition flex items-center gap-1.5">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan
+          </button>
+        </div>
+      </form>
 
     </div>
   </div>
 
   <script type="module">
   import { db } from './js/firebase-config.js';
-  import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const form = document.getElementById('formLoginSiswa');
   const alertBox = document.getElementById('alertBox');
@@ -112,12 +221,133 @@
   const togglePass = document.getElementById('togglePass');
   const passVal = document.getElementById('passVal');
 
+  let existingMembers = [];
+
+  // Ambil data anggota eksis untuk perhitungan penomoran ID otomatis
+  async function fetchMembersForAutoId() {
+    try {
+      const snap = await getDocs(collection(db, "anggota"));
+      existingMembers = snap.docs.map(d => d.data());
+    } catch (e) {
+      console.warn("Gagal mengambil data anggota untuk ID otomatis:", e);
+    }
+  }
+  fetchMembersForAutoId();
+
+  // Buka & Tutup Modal Pendaftaran Mandiri
+  window.openModalDaftar = function() {
+    document.getElementById('modalDaftarMandiri').classList.remove('hidden');
+    
+    // Set Tanggal Regis Realtime Hari Ini
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    document.getElementById('regTglRegis').value = formattedToday;
+  };
+
+  window.closeModalDaftar = function() {
+    document.getElementById('modalDaftarMandiri').classList.add('hidden');
+    document.getElementById('formDaftarMandiri').reset();
+  };
+
+  // Logika Pemilihan Kelas: Penentuan ID, Personal ID, dan Tanggal Kadaluarsa
+  window.handleSelectKelas = function(selectedKelas) {
+    if (!selectedKelas) return;
+
+    let gradeCode = '';
+    let minSeq = 1;
+    let expiryYear = 2026;
+
+    if (selectedKelas.startsWith('X-')) {
+      gradeCode = '10';
+      minSeq = 18;
+      expiryYear = 2029; // Kelas X lulus Mei 2029
+    } else if (selectedKelas.startsWith('XI-')) {
+      gradeCode = '11';
+      minSeq = 12;
+      expiryYear = 2028; // Kelas XI lulus Mei 2028
+    } else if (selectedKelas.startsWith('XII-')) {
+      gradeCode = '12';
+      minSeq = 19;
+      expiryYear = 2027; // Kelas XII lulus Mei 2027
+    }
+
+    // 1. Hitung Tanggal Kadaluarsa Kelulusan (31 Mei)
+    document.getElementById('regTglKadaluarsa').value = `${expiryYear}-05-31`;
+
+    // 2. Hitung Kode ID & Personal ID Otomatis
+    const prefix = '260' + gradeCode;
+    let maxSeq = minSeq - 1;
+
+    existingMembers.forEach(m => {
+      const rawVal = String(m.nisn || m.personalId || m.id || '');
+      const match = rawVal.match(new RegExp('260' + gradeCode + '(\\d+)'));
+      if (match && match[1]) {
+        const seq = parseInt(match[1], 10);
+        if (seq > maxSeq) maxSeq = seq;
+      }
+    });
+
+    const nextSeq = maxSeq + 1;
+    const seqStr = String(nextSeq).padStart(2, '0');
+    const generatedCode = prefix + seqStr;
+
+    document.getElementById('regPersonalId').value = generatedCode;
+    document.getElementById('regIdAnggota').value = 'AGT-' + generatedCode;
+  };
+
+  // Submit Formulir Pendaftaran Mandiri
+  document.getElementById('formDaftarMandiri')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitDaftar');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+
+    const tglKadaluarsaVal = document.getElementById('regTglKadaluarsa').value;
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    // Cek Apakah tanggal kadaluarsa sudah terlewati (Otomatis Alumni jika lewat)
+    let statusKeanggotaanFinal = 'Aktif';
+    if (todayStr > tglKadaluarsaVal) {
+      statusKeanggotaanFinal = 'Alumni';
+    }
+
+    const payload = {
+      id: document.getElementById('regIdAnggota').value,
+      personalId: document.getElementById('regPersonalId').value,
+      nisn: document.getElementById('regPersonalId').value,
+      nama: document.getElementById('regNama').value.trim(),
+      username: document.getElementById('regUsername').value.trim(),
+      password: document.getElementById('regPassword').value.trim(),
+      kelas: document.getElementById('regKelas').value,
+      statusPerpustakaan: 'Standar',
+      status: 'Standar',
+      tglRegis: document.getElementById('regTglRegis').value,
+      tglKadaluarsa: tglKadaluarsaVal,
+      instansi: 'SMAN 4 MANADO',
+      statusKeanggotaan: statusKeanggotaanFinal
+    };
+
+    try {
+      await addDoc(collection(db, "anggota"), payload);
+      alert('Pengajuan keanggotaan berhasil dikirim! Akun Anda telah terdaftar dan aktif di sistem.');
+      closeModalDaftar();
+      fetchMembersForAutoId();
+    } catch (err) {
+      alert('Gagal mengirim pengajuan: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan';
+    }
+  });
+
+  // Toggle Tampilkan Password Login
   togglePass.addEventListener('click', () => {
     const isPass = passVal.type === 'password';
     passVal.type = isPass ? 'text' : 'password';
     togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
   });
 
+  // Event Submit Login Siswa
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     alertBox.classList.add('hidden');
@@ -132,7 +362,6 @@
     try {
       const colRef = collection(db, "anggota");
       
-      // Pencarian fleksibel: Username, NISN, atau ID Anggota
       let q = query(colRef, where("username", "==", u), where("password", "==", p));
       let snap = await getDocs(q);
 
