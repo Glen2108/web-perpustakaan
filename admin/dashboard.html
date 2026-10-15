@@ -798,6 +798,33 @@
       searchQuery: ''
     };
 
+    // Fungsi global persetujuan & penolakan pendaftaran siswa
+    window.setujuiAnggota = async function(firestoreId, nama) {
+      if (!confirm(`Setujui pendaftaran anggota untuk ${nama}?`)) return;
+      try {
+        await updateDoc(doc(db, "anggota", firestoreId), {
+          statusKeanggotaan: 'Aktif',
+          status: 'Aktif'
+        });
+        alert(`Pendaftaran ${nama} berhasil disetujui! Siswa kini dapat login.`);
+      } catch (err) {
+        alert("Gagal menyetujui: " + err.message);
+      }
+    };
+
+    window.tolakAnggota = async function(firestoreId, nama) {
+      if (!confirm(`Tolak pendaftaran anggota untuk ${nama}?`)) return;
+      try {
+        await updateDoc(doc(db, "anggota", firestoreId), {
+          statusKeanggotaan: 'Ditolak',
+          status: 'Ditolak'
+        });
+        alert(`Pendaftaran ${nama} telah ditolak.`);
+      } catch (err) {
+        alert("Gagal menolak: " + err.message);
+      }
+    };
+
     // Memuat daftar nama anggota terdaftar ke dropdown modal Peminjaman
     window.populateSelectAnggota = function() {
       const selectEl = document.getElementById('inpPeminjam');
@@ -1024,6 +1051,7 @@
       `;
     }
 
+    // FUNGSI RENDER TABLE DATA LENGKAP & INTEGRATED
     window.renderTableData = function() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
@@ -1108,27 +1136,51 @@
             ${getSortableHeaderHtml('Kelas', 'kelas')}
             ${getSortableHeaderHtml('Instansi', 'instansi')}
             ${getSortableHeaderHtml('Status', 'status', 'text-center')}
-            <th class="p-3.5 text-center">Aksi</th>
+            <th class="p-3.5 text-center">Aksi / Persetujuan</th>
           </tr>
         `;
         tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
-          paginatedData.map(item => `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-              <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
-              <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
-              <td class="p-3.5">${item.kelas || '-'}</td>
-              <td class="p-3.5 text-slate-500">${item.instansi || 'SMAN 4 MANADO'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${item.statusKeanggotaan === 'Non-aktif' ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">
-                  ${item.statusKeanggotaan || item.status || 'Aktif'}
-                </span>
-              </td>
-              <td class="p-3.5 text-center space-x-1">
-                <button onclick="window.editAnggota('${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 font-bold hover:bg-blue-100"><i class="fa-solid fa-pen-to-square"></i></button>
+          paginatedData.map(item => {
+            const st = (item.statusKeanggotaan || item.status || 'Aktif');
+            
+            let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            if (st === 'Menunggu') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300 animate-pulse';
+            else if (st === 'Ditolak') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
+            else if (st === 'Alumni') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+            else if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+
+            let aksiHtml = '';
+            if (st === 'Menunggu') {
+              aksiHtml = `
+                <button onclick="window.setujuiAnggota('${item.firestoreId}', '${item.nama}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] shadow-sm transition mr-1">
+                  <i class="fa-solid fa-check mr-1"></i> ACC
+                </button>
+                <button onclick="window.tolakAnggota('${item.firestoreId}', '${item.nama}')" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] shadow-sm transition">
+                  <i class="fa-solid fa-xmark mr-1"></i> Tolak
+                </button>
+              `;
+            } else {
+              aksiHtml = `
+                <button onclick="window.editAnggota('${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 font-bold hover:bg-blue-100 mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button onclick="window.deleteRecord('anggota', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
-              </td>
-            </tr>
-          `).join('');
+              `;
+            }
+
+            return `
+              <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
+                <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
+                <td class="p-3.5">${item.kelas || '-'}</td>
+                <td class="p-3.5 text-slate-500">${item.instansi || 'SMAN 4 MANADO'}</td>
+                <td class="p-3.5 text-center">
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+                </td>
+                <td class="p-3.5 text-center">
+                  ${aksiHtml}
+                </td>
+              </tr>
+            `;
+          }).join('');
       } else if (type === 'petugas') {
         thead.innerHTML = `
           <tr>
@@ -1217,8 +1269,6 @@
 
         tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="3" class="p-6 text-center text-slate-400">Belum ada transaksi peminjaman.</td></tr>` :
           paginatedData.map(group => {
-            const formattedPhone = formatWaNumber(group.noWa);
-
             return `
               <tr class="hover:bg-slate-50 transition border-b border-slate-100 align-top">
                 <td class="p-3.5 font-bold text-slate-900 space-y-1">
@@ -1241,7 +1291,6 @@
                   <div class="space-y-2">
                     ${group.items.map(item => {
                       const itemWa = formatWaNumber(item.noWa || group.noWa);
-                      
                       let statusBadge = '';
                       let waActionBtn = '';
 
@@ -1252,7 +1301,6 @@
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                         if (diffDays < 0) {
-                          // JATUH TEMPO / TERLAMBAT
                           const daysLate = Math.abs(diffDays);
                           statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-rose-100 text-rose-700 border border-rose-200"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Terlambat ${daysLate} hari</span>`;
 
@@ -1265,7 +1313,6 @@
                             `;
                           }
                         } else if (diffDays <= 2) {
-                          // DEKAT JATUH TEMPO (0 - 2 HARI)
                           const labelText = diffDays === 0 ? 'Hari Ini Jatuh Tempo' : `Sisa ${diffDays} Hari`;
                           statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-clock mr-1"></i>${labelText}</span>`;
 
@@ -1278,7 +1325,6 @@
                             `;
                           }
                         } else {
-                          // MASIH AKTIF
                           statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-circle-check mr-1"></i>Aktif (${diffDays} hari lagi)</span>`;
                         }
                       }
@@ -1295,7 +1341,7 @@
 
                           <div class="flex items-center gap-2 sm:gap-3 text-slate-500 text-[11px] shrink-0">
                             <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
-                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali || '-'}</strong></span>${waActionBtn}
+                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali \vert{}\vert{} '-'}</strong></span>${waActionBtn}
 
                             <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" title="Hapus transaksi buku ini" class="px-2 py-1 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition">
                               <i class="fa-solid fa-trash"></i>

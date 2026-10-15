@@ -113,7 +113,7 @@
 
       <form id="formDaftarMandiri" class="space-y-3.5 text-xs">
         
-        <!-- Pilihan Kelas (Menentukan ID, NISN, & Tgl Kadaluarsa) -->
+        <!-- Pilihan Kelas -->
         <div>
           <label class="block font-bold text-slate-300 mb-1">Kelas <span class="text-amber-400">*</span></label>
           <select id="regKelas" required onchange="handleSelectKelas(this.value)" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-bold">
@@ -158,7 +158,7 @@
           <input type="text" id="regNama" required placeholder="Masukkan nama sesuai presensi" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
         </div>
 
-        <!-- Username & Password untuk Akun Siswa -->
+        <!-- Username & Password -->
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-300 mb-1">Username Login <span class="text-amber-400">*</span></label>
@@ -170,7 +170,7 @@
           </div>
         </div>
 
-        <!-- Status & Masa Berlaku Otomatis Sistem -->
+        <!-- Status & Masa Berlaku -->
         <div class="grid grid-cols-2 gap-3 text-[11px]">
           <div>
             <label class="block font-bold text-slate-400 mb-1">Tanggal Registrasi</label>
@@ -193,7 +193,7 @@
           </div>
           <div>
             <label class="block font-bold text-slate-400 mb-1">Status Keanggotaan</label>
-            <input type="text" value="Pending" readonly class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-emerald-400 font-bold">
+            <input type="text" value="Menunggu" readonly class="w-full p-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-amber-400 font-bold">
           </div>
         </div>
 
@@ -209,204 +209,216 @@
   </div>
 
   <script type="module">
-  import { db } from './js/firebase-config.js';
-  import { collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { db } from './js/firebase-config.js';
+    import { collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-  const form = document.getElementById('formLoginSiswa');
-  const alertBox = document.getElementById('alertBox');
-  const alertMsg = document.getElementById('alertMsg');
-  const submitBtn = document.getElementById('submitBtn');
-  const btnText = document.getElementById('btnText');
-  const btnIcon = document.getElementById('btnIcon');
-  const togglePass = document.getElementById('togglePass');
-  const passVal = document.getElementById('passVal');
+    const form = document.getElementById('formLoginSiswa');
+    const alertBox = document.getElementById('alertBox');
+    const alertMsg = document.getElementById('alertMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const togglePass = document.getElementById('togglePass');
+    const passVal = document.getElementById('passVal');
+    const userVal = document.getElementById('userVal');
 
-  let existingMembers = [];
+    let existingMembers = [];
 
-  // Ambil data anggota eksis untuk perhitungan penomoran ID otomatis
-  async function fetchMembersForAutoId() {
-    try {
-      const snap = await getDocs(collection(db, "anggota"));
-      existingMembers = snap.docs.map(d => d.data());
-    } catch (e) {
-      console.warn("Gagal mengambil data anggota untuk ID otomatis:", e);
-    }
-  }
-  fetchMembersForAutoId();
-
-  // Buka & Tutup Modal Pendaftaran Mandiri
-  window.openModalDaftar = function() {
-    document.getElementById('modalDaftarMandiri').classList.remove('hidden');
-    
-    // Set Tanggal Regis Realtime Hari Ini
-    const today = new Date();
-    const formattedToday = today.toISOString().split('T')[0];
-    document.getElementById('regTglRegis').value = formattedToday;
-  };
-
-  window.closeModalDaftar = function() {
-    document.getElementById('modalDaftarMandiri').classList.add('hidden');
-    document.getElementById('formDaftarMandiri').reset();
-  };
-
-  // Logika Pemilihan Kelas: Penentuan ID, Personal ID, dan Tanggal Kadaluarsa
-  window.handleSelectKelas = function(selectedKelas) {
-    if (!selectedKelas) return;
-
-    let gradeCode = '';
-    let minSeq = 1;
-    let expiryYear = 2026;
-
-    if (selectedKelas.startsWith('X-')) {
-      gradeCode = '10';
-      minSeq = 18;
-      expiryYear = 2029; // Kelas X lulus Mei 2029
-    } else if (selectedKelas.startsWith('XI-')) {
-      gradeCode = '11';
-      minSeq = 12;
-      expiryYear = 2028; // Kelas XI lulus Mei 2028
-    } else if (selectedKelas.startsWith('XII-')) {
-      gradeCode = '12';
-      minSeq = 19;
-      expiryYear = 2027; // Kelas XII lulus Mei 2027
-    }
-
-    // 1. Hitung Tanggal Kadaluarsa Kelulusan (31 Mei)
-    document.getElementById('regTglKadaluarsa').value = `${expiryYear}-05-31`;
-
-    // 2. Hitung Kode ID & Personal ID Otomatis
-    const prefix = '260' + gradeCode;
-    let maxSeq = minSeq - 1;
-
-    existingMembers.forEach(m => {
-      const rawVal = String(m.nisn || m.personalId || m.id || '');
-      const match = rawVal.match(new RegExp('260' + gradeCode + '(\\d+)'));
-      if (match && match[1]) {
-        const seq = parseInt(match[1], 10);
-        if (seq > maxSeq) maxSeq = seq;
+    // Otomatis isi Username & Password tersimpan saat halaman dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUser = localStorage.getItem('saved_siswa_username');
+      const savedPass = localStorage.getItem('saved_siswa_password');
+      if (savedUser && savedPass) {
+        if (userVal) userVal.value = savedUser;
+        if (passVal) passVal.value = savedPass;
       }
     });
 
-    const nextSeq = maxSeq + 1;
-    const seqStr = String(nextSeq).padStart(2, '0');
-    const generatedCode = prefix + seqStr;
-
-    document.getElementById('regPersonalId').value = generatedCode;
-    document.getElementById('regIdAnggota').value = 'AGT-' + generatedCode;
-  };
-
-  // Submit Formulir Pendaftaran Mandiri
-  document.getElementById('formDaftarMandiri')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btnSubmitDaftar');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
-
-    const tglKadaluarsaVal = document.getElementById('regTglKadaluarsa').value;
-    const todayStr = new Date().toISOString().split('T')[0];
-
-    // Cek Apakah tanggal kadaluarsa sudah terlewati (Otomatis Alumni jika lewat)
-    let statusKeanggotaanFinal = 'Aktif';
-    if (todayStr > tglKadaluarsaVal) {
-      statusKeanggotaanFinal = 'Alumni';
+    async function fetchMembersForAutoId() {
+      try {
+        const snap = await getDocs(collection(db, "anggota"));
+        existingMembers = snap.docs.map(d => d.data());
+      } catch (e) {
+        console.warn("Gagal mengambil data anggota:", e);
+      }
     }
+    fetchMembersForAutoId();
 
-    const payload = {
-      id: document.getElementById('regIdAnggota').value,
-      personalId: document.getElementById('regPersonalId').value,
-      nisn: document.getElementById('regPersonalId').value,
-      nama: document.getElementById('regNama').value.trim(),
-      username: document.getElementById('regUsername').value.trim(),
-      password: document.getElementById('regPassword').value.trim(),
-      kelas: document.getElementById('regKelas').value,
-      statusPerpustakaan: 'Standar',
-      status: 'Standar',
-      tglRegis: document.getElementById('regTglRegis').value,
-      tglKadaluarsa: tglKadaluarsaVal,
-      instansi: 'SMAN 4 MANADO',
-      statusKeanggotaan: statusKeanggotaanFinal
+    window.openModalDaftar = function() {
+      document.getElementById('modalDaftarMandiri').classList.remove('hidden');
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('regTglRegis').value = today;
     };
 
-    try {
-      await addDoc(collection(db, "anggota"), payload);
-      alert('Pengajuan keanggotaan berhasil dikirim! Akun Anda telah terdaftar dan aktif di sistem.');
-      closeModalDaftar();
-      fetchMembersForAutoId();
-    } catch (err) {
-      alert('Gagal mengirim pengajuan: ' + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan';
-    }
-  });
+    window.closeModalDaftar = function() {
+      document.getElementById('modalDaftarMandiri').classList.add('hidden');
+      document.getElementById('formDaftarMandiri').reset();
+    };
 
-  // Toggle Tampilkan Password Login
-  togglePass.addEventListener('click', () => {
-    const isPass = passVal.type === 'password';
-    passVal.type = isPass ? 'text' : 'password';
-    togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
-  });
+    window.handleSelectKelas = function(selectedKelas) {
+      if (!selectedKelas) return;
 
-  // Event Submit Login Siswa
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    alertBox.classList.add('hidden');
-    
-    const u = document.getElementById('userVal').value.trim();
-    const p = passVal.value.trim();
+      let gradeCode = '';
+      let minSeq = 1;
+      let expiryYear = 2026;
 
-    submitBtn.disabled = true;
-    btnText.innerText = "Memeriksa Akun...";
-    btnIcon.className = "fa-solid fa-spinner fa-spin";
+      if (selectedKelas.startsWith('X-')) {
+        gradeCode = '10'; minSeq = 18; expiryYear = 2029;
+      } else if (selectedKelas.startsWith('XI-')) {
+        gradeCode = '11'; minSeq = 12; expiryYear = 2028;
+      } else if (selectedKelas.startsWith('XII-')) {
+        gradeCode = '12'; minSeq = 19; expiryYear = 2027;
+      }
 
-    try {
-      const colRef = collection(db, "anggota");
+      document.getElementById('regTglKadaluarsa').value = `${expiryYear}-05-31`;
+
+      const prefix = '260' + gradeCode;
+      let maxSeq = minSeq - 1;
+
+      existingMembers.forEach(m => {
+        const rawVal = String(m.nisn || m.personalId || m.id || '');
+        const match = rawVal.match(new RegExp('260' + gradeCode + '(\\d+)'));
+        if (match && match[1]) {
+          const seq = parseInt(match[1], 10);
+          if (seq > maxSeq) maxSeq = seq;
+        }
+      });
+
+      const nextSeq = maxSeq + 1;
+      const seqStr = String(nextSeq).padStart(2, '0');
+      const generatedCode = prefix + seqStr;
+
+      document.getElementById('regPersonalId').value = generatedCode;
+      document.getElementById('regIdAnggota').value = 'AGT-' + generatedCode;
+    };
+
+    // Submit Pendaftaran Mandiri (Status Awal: Menunggu)
+    document.getElementById('formDaftarMandiri')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitDaftar');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+
+      const regUser = document.getElementById('regUsername').value.trim();
+      const regPass = document.getElementById('regPassword').value.trim();
+
+      const payload = {
+        id: document.getElementById('regIdAnggota').value,
+        personalId: document.getElementById('regPersonalId').value,
+        nisn: document.getElementById('regPersonalId').value,
+        nama: document.getElementById('regNama').value.trim(),
+        username: regUser,
+        password: regPass,
+        kelas: document.getElementById('regKelas').value,
+        statusPerpustakaan: 'Standar',
+        status: 'Menunggu',
+        tglRegis: document.getElementById('regTglRegis').value,
+        tglKadaluarsa: document.getElementById('regTglKadaluarsa').value,
+        instansi: 'SMAN 4 MANADO',
+        statusKeanggotaan: 'Menunggu'
+      };
+
+      try {
+        await addDoc(collection(db, "anggota"), payload);
+
+        const mauSimpan = confirm(
+          "Pengajuan keanggotaan berhasil dikirim!\n\nApakah Anda ingin menyimpan Username & Password di perangkat ini agar otomatis terisi saat login berikutnya?"
+        );
+
+        if (mauSimpan) {
+          localStorage.setItem('saved_siswa_username', regUser);
+          localStorage.setItem('saved_siswa_password', regPass);
+          if (userVal) userVal.value = regUser;
+          if (passVal) passVal.value = regPass;
+        }
+
+        alert('Pendaftaran Anda sedang MENUNGGU persetujuan dari Admin/Petugas Perpustakaan. Silakan cek secara berkala.');
+        closeModalDaftar();
+        fetchMembersForAutoId();
+      } catch (err) {
+        alert('Gagal mengirim pengajuan: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan';
+      }
+    });
+
+    togglePass.addEventListener('click', () => {
+      const isPass = passVal.type === 'password';
+      passVal.type = isPass ? 'text' : 'password';
+      togglePass.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+    });
+
+    // Validasi Login Siswa Berdasarkan Status
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.classList.add('hidden');
       
-      let q = query(colRef, where("username", "==", u), where("password", "==", p));
-      let snap = await getDocs(q);
+      const u = userVal.value.trim();
+      const p = passVal.value.trim();
 
-      if (snap.empty) {
-        q = query(colRef, where("nisn", "==", u), where("password", "==", p));
-        snap = await getDocs(q);
-      }
+      submitBtn.disabled = true;
+      btnText.innerText = "Memeriksa Akun...";
+      btnIcon.className = "fa-solid fa-spinner fa-spin";
 
-      if (snap.empty) {
-        q = query(colRef, where("id", "==", u), where("password", "==", p));
-        snap = await getDocs(q);
-      }
+      try {
+        const colRef = collection(db, "anggota");
+        
+        let q = query(colRef, where("username", "==", u), where("password", "==", p));
+        let snap = await getDocs(q);
 
-      if (!snap.empty) {
-        const docData = snap.docs[0].data();
-        const userData = { docId: snap.docs[0].id, ...docData };
-        
-        localStorage.setItem('userSession', JSON.stringify(userData));
-        
-        btnText.innerText = "Login Berhasil!";
-        btnIcon.className = "fa-solid fa-circle-check";
-        
-        setTimeout(() => {
-          window.location.href = "profil.html";
-        }, 600);
-      } else {
-        showError("Username/NISN atau Password tidak cocok!");
+        if (snap.empty) {
+          q = query(colRef, where("nisn", "==", u), where("password", "==", p));
+          snap = await getDocs(q);
+        }
+
+        if (snap.empty) {
+          q = query(colRef, where("id", "==", u), where("password", "==", p));
+          snap = await getDocs(q);
+        }
+
+        if (!snap.empty) {
+          const docData = snap.docs[0].data();
+          const st = (docData.statusKeanggotaan || docData.status || '').toLowerCase();
+
+          if (st === 'menunggu') {
+            showError("Akun Anda masih MENUNGGU persetujuan dari Admin atau Petugas Perpustakaan.");
+            return;
+          }
+
+          if (st === 'ditolak') {
+            showError("Mohon maaf, pengajuan pendaftaran akun Anda DITOLAK oleh Admin/Petugas.");
+            return;
+          }
+
+          const userData = { docId: snap.docs[0].id, ...docData };
+          localStorage.setItem('userSession', JSON.stringify(userData));
+          
+          btnText.innerText = "Login Berhasil!";
+          btnIcon.className = "fa-solid fa-circle-check";
+          
+          setTimeout(() => {
+            window.location.href = "profil.html";
+          }, 600);
+        } else {
+          showError("Username/NISN atau Password tidak cocok!");
+        }
+      } catch (err) {
+        showError("Gagal terhubung ke server. Periksa koneksi internet Anda.");
+      } finally {
+        if (!localStorage.getItem('userSession')) {
+          submitBtn.disabled = false;
+          btnText.innerText = "Masuk Beranda Siswa";
+          btnIcon.className = "fa-solid fa-right-to-bracket";
+        }
       }
-    } catch (err) {
-      console.error(err);
-      showError("Gagal terhubung ke server. Periksa koneksi internet Anda.");
-    } finally {
-      if (!localStorage.getItem('userSession')) {
-        submitBtn.disabled = false;
-        btnText.innerText = "Masuk Beranda Siswa";
-        btnIcon.className = "fa-solid fa-right-to-bracket";
-      }
+    });
+
+    function showError(msg) {
+      alertMsg.innerText = msg;
+      alertBox.classList.remove('hidden');
+      alertBox.classList.add('flex');
     }
-  });
-
-  function showError(msg) {
-    alertMsg.innerText = msg;
-    alertBox.classList.remove('hidden');
-    alertBox.classList.add('flex');
-  }
   </script>
 </body>
 </html>

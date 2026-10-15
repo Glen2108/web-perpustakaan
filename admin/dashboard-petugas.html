@@ -94,7 +94,7 @@
       </a>
     </div>
 
-    <!-- Modul Utama Petugas (Tanpa Modul Kelola Petugas) -->
+    <!-- Modul Utama Petugas -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       
       <!-- Modul 1: Anggota -->
@@ -531,7 +531,7 @@
   <!-- Script Firebase & Logika Aplikasi -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
-    import { collection, query, where, addDoc, onSnapshot, doc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     if (typeof currentPetugas !== 'undefined' && currentPetugas) {
       const namaText = document.getElementById('petugasNamaText');
@@ -757,7 +757,34 @@
       `;
     }
 
-    // TAMPILAN TABEL KHUSUS PETUGAS (TANPA TOMBOL EDIT & HAPUS)
+    // Fungsi Persetujuan & Penolakan Anggota oleh Petugas
+    window.setujuiAnggota = async function(firestoreId, nama) {
+      if (!confirm(`Setujui pendaftaran anggota untuk ${nama}?`)) return;
+      try {
+        await updateDoc(doc(db, "anggota", firestoreId), {
+          statusKeanggotaan: 'Aktif',
+          status: 'Aktif'
+        });
+        alert(`Pendaftaran ${nama} berhasil disetujui! Siswa kini dapat login.`);
+      } catch (err) {
+        alert("Gagal menyetujui: " + err.message);
+      }
+    };
+
+    window.tolakAnggota = async function(firestoreId, nama) {
+      if (!confirm(`Tolak pendaftaran anggota untuk ${nama}?`)) return;
+      try {
+        await updateDoc(doc(db, "anggota", firestoreId), {
+          statusKeanggotaan: 'Ditolak',
+          status: 'Ditolak'
+        });
+        alert(`Pendaftaran ${nama} telah ditolak.`);
+      } catch (err) {
+        alert("Gagal menolak: " + err.message);
+      }
+    };
+
+    // TAMPILAN TABEL UNTUK PETUGAS
     window.renderTableData = function() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
@@ -809,22 +836,48 @@
             ${getSortableHeaderHtml('Kelas', 'kelas')}
             ${getSortableHeaderHtml('Instansi', 'instansi')}
             ${getSortableHeaderHtml('Status', 'status', 'text-center')}
+            <th class="p-3.5 text-center">Aksi / Persetujuan</th>
           </tr>
         `;
-        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
-          paginatedData.map(item => `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-              <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
-              <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
-              <td class="p-3.5">${item.kelas || '-'}</td>
-              <td class="p-3.5 text-slate-500">${item.instansi || 'SMAN 4 MANADO'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${item.statusKeanggotaan === 'Non-aktif' ? 'bg-rose-50 text-rose-700' : 'bg-emerald-50 text-emerald-700'}">
-                  ${item.statusKeanggotaan || item.status || 'Aktif'}
-                </span>
-              </td>
-            </tr>
-          `).join('');
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
+          paginatedData.map(item => {
+            const st = (item.statusKeanggotaan || item.status || 'Aktif');
+            
+            let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            if (st === 'Menunggu') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300 animate-pulse';
+            else if (st === 'Ditolak') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
+            else if (st === 'Alumni') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+            else if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+
+            let aksiHtml = '';
+            if (st === 'Menunggu') {
+              aksiHtml = `
+                <button onclick="window.setujuiAnggota('${item.firestoreId}', '${item.nama}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] shadow-sm transition mr-1">
+                  <i class="fa-solid fa-check mr-1"></i> ACC
+                </button>
+                <button onclick="window.tolakAnggota('${item.firestoreId}', '${item.nama}')" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] shadow-sm transition">
+                  <i class="fa-solid fa-xmark mr-1"></i> Tolak
+                </button>
+              `;
+            } else {
+              aksiHtml = `<span class="text-[10px] text-slate-400 font-bold">Terverifikasi</span>`;
+            }
+
+            return `
+              <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
+                <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
+                <td class="p-3.5">${item.kelas || '-'}</td>
+                <td class="p-3.5 text-slate-500">${item.instansi || 'SMAN 4 MANADO'}</td>
+                <td class="p-3.5 text-center">
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+                </td>
+                <td class="p-3.5 text-center">
+                  ${aksiHtml}
+                </td>
+              </tr>
+            `;
+          }).join('');
       } else if (type === 'buku') {
         thead.innerHTML = `
           <tr>
