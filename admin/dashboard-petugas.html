@@ -969,7 +969,7 @@
                           const daysLate = Math.abs(diffDays);
                           statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-rose-100 text-rose-700 border border-rose-200"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Terlambat ${daysLate} hari</span>`;
                           if (itemWa) {
-                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,\n\nMengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado telah *JATUH TEMPO* pada tanggal *${item.tglKembali}* (Terlambat${daysLate} hari).\n\nMohon segera mengembalikan buku tersebut ke perpustakaan. Terima kasih!`);
+                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,\n\nMengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado telah *JATUH TEMPO* pada tanggal *${item.tglKembali}* (Terlambat ${daysLate} hari).\n\nMohon segera mengembalikan buku tersebut ke perpustakaan. Terima kasih!`);
                             waActionBtn = `<a href="https://wa.me/${itemWa}?text=${msg}" target="_blank" class="px-2.5 py-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] transition flex items-center gap-1 shadow-sm"><i class="fa-brands fa-whatsapp text-xs"></i> Ingatkan (Jatuh Tempo)</a>`;
                           }
                         } else if (diffDays <= 2) {
@@ -995,7 +995,7 @@
                           </div>
                           <div class="flex items-center gap-2 text-slate-500 text-[11px] shrink-0">
                             <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
-                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali \vert{}\vert{} '-'}</strong></span>${waActionBtn}
+                            <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali || '-'}</strong></span>${waActionBtn}
                           </div>
                         </div>
                       `;
