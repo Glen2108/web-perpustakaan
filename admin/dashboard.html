@@ -60,6 +60,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
+  <!-- Header Panel Admin -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <a href="../index.html" class="flex items-center gap-3">
@@ -110,8 +111,10 @@
       </a>
     </div>
 
-    <!-- Modul Utama -->
+    <!-- Modul-Modul Utama -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      
+      <!-- Modul Siswa / Anggota -->
       <div id="card-anggota" onclick="switchTable('anggota')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-blue-500 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-users"></i></div>
@@ -125,6 +128,7 @@
         </button>
       </div>
 
+      <!-- Modul Petugas -->
       <div id="card-petugas" onclick="switchTable('petugas')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-indigo-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-user-shield"></i></div>
@@ -138,6 +142,7 @@
         </button>
       </div>
 
+      <!-- Modul Buku -->
       <div id="card-buku" onclick="switchTable('buku')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-amber-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-book"></i></div>
@@ -151,6 +156,7 @@
         </button>
       </div>
 
+      <!-- Modul Duta Literasi -->
       <div id="card-duta" onclick="switchTable('duta')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-purple-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-award"></i></div>
@@ -169,6 +175,7 @@
         </div>
       </div>
 
+      <!-- Modul Pinjam Buku -->
       <div id="card-pinjam" onclick="switchTable('pinjam')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-emerald-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-handshake"></i></div>
@@ -181,9 +188,10 @@
           <i class="fa-solid fa-plus text-[10px]"></i> Catat Pinjam
         </button>
       </div>
+
     </div>
 
-    <!-- Section Tabel -->
+    <!-- Area Tabel Utama -->
     <section id="sectionTabelData" class="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 space-y-5">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div>
@@ -203,6 +211,7 @@
         </div>
       </div>
 
+      <!-- Filter Pencarian & Jumlah Data Per Halaman -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-2">
           <label class="font-bold text-slate-600">Tampilkan:</label>
@@ -214,7 +223,7 @@
           </select>
         </div>
         <div class="relative w-full sm:w-64">
-          <input type="text" id="searchInput" oninput="window.handleSearch(this.value)" placeholder="Cari data..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text" id="searchInput" oninput="window.handleSearch(this.value)" placeholder="Cari data siswa / buku..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs outline-none focus:ring-2 focus:ring-blue-500">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
         </div>
       </div>
@@ -226,14 +235,16 @@
         </table>
       </div>
 
+      <!-- Pagination dan Info -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 gap-3">
         <p id="tableCountInfo">Menampilkan 0 data</p>
         <div id="paginationControls" class="flex items-center gap-1.5"></div>
       </div>
     </section>
+
   </main>
 
-  <!-- Modal 1: Anggota/Siswa -->
+  <!-- Modal 1: Anggota / Siswa -->
   <div id="modalSiswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-5xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[95vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-3 sticky top-0 bg-white z-20">
@@ -257,8 +268,8 @@
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Nama Lengkap</label>
-            <input type="text" id="inpNama" required placeholder="Nama Siswa" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa</label>
+            <input type="text" id="inpNama" required placeholder="Nama Lengkap" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
           </div>
 
           <div class="grid grid-cols-2 gap-2 bg-blue-50/50 p-2.5 rounded-2xl border border-blue-100">
@@ -556,7 +567,7 @@
     </div>
   </div>
 
-  <!-- Modal 5: Catat Peminjaman -->
+  <!-- Modal 5: Transaksi Peminjaman -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -594,7 +605,7 @@
     </div>
   </div>
 
-  <!-- Modal Request Buka Akun -->
+  <!-- Modal Permohonan Buka Akun Terkunci -->
   <div id="modalRequestBukaAkun" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b pb-3 shrink-0">
@@ -615,7 +626,7 @@
     </div>
   </div>
 
-  <!-- Script Firebase & Logika Utama Aplikasi (Jalur Impor Diperbaiki ke ../js/firebase-config.js) -->
+  <!-- Script Penanganan Firebase & Logika Utama Panel Admin -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -629,21 +640,18 @@
       return cleaned;
     }
 
+    // Monitoring Request Buka Akun Siswa
     function initRequestBukaAkunListener() {
       const qReq = query(collection(db, "request_buka_akun"), where("status", "==", "Pending"));
       onSnapshot(qReq, (snapshot) => {
         const requests = [];
         snapshot.forEach(docSnap => {
-          requests.push({
-            id: docSnap.id,
-            ...docSnap.data()
-          });
+          requests.push({ id: docSnap.id, ...docSnap.data() });
         });
-
         updateRequestBadge(requests.length);
         renderRequestList(requests);
       }, (err) => {
-        console.error("Error listening to request_buka_akun:", err);
+        console.error("Gagal mendengarkan request_buka_akun:", err);
       });
     }
 
@@ -730,17 +738,13 @@
         if (username) {
           const qUser = query(collection(db, "anggota"), where("username", "==", username));
           const snapUser = await getDocs(qUser);
-          if (!snapUser.empty) {
-            studentDocId = snapUser.docs[0].id;
-          }
+          if (!snapUser.empty) studentDocId = snapUser.docs[0].id;
         }
 
         if (!studentDocId && idAnggota) {
           const qId = query(collection(db, "anggota"), where("id", "==", idAnggota));
           const snapId = await getDocs(qId);
-          if (!snapId.empty) {
-            studentDocId = snapId.docs[0].id;
-          }
+          if (!snapId.empty) studentDocId = snapId.docs[0].id;
         }
 
         if (studentDocId) {
@@ -836,9 +840,7 @@
       const selectedOption = e.target.options[e.target.selectedIndex];
       const waVal = selectedOption.getAttribute('data-wa') || '';
       const inpWa = document.getElementById('inpWaPinjam');
-      if (inpWa && waVal) {
-        inpWa.value = waVal;
-      }
+      if (inpWa && waVal) inpWa.value = waVal;
     });
 
     window.generateAutoIds = function(selectedKelas) {
@@ -1013,6 +1015,7 @@
       `;
     }
 
+    // Penanganan Rendering Tabel Data Anggota / Siswa
     window.renderTableData = function() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
@@ -1408,6 +1411,7 @@
       }
     };
 
+    // Fungsi Edit Anggota / Siswa
     window.editAnggota = function(docId) {
       const item = window.dbData.anggota.find(a => a.firestoreId === docId);
       if (!item) return;
@@ -1438,7 +1442,7 @@
       if (document.getElementById('inpStatusKeanggotaan')) document.getElementById('inpStatusKeanggotaan').value = item.statusKeanggotaan || 'Aktif';
 
       const titleEl = document.getElementById('modalSiswaTitle');
-      if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Anggota Siswa';
+      if (titleEl) titleEl.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Data Anggota Siswa';
 
       const btnEl = document.getElementById('btnSubmitSiswa');
       if (btnEl) btnEl.innerText = 'Update Data';
@@ -1457,6 +1461,7 @@
       }
     };
 
+    // Handler Submit Form Tambah / Edit Siswa
     document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
