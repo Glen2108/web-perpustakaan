@@ -74,7 +74,7 @@
       </a>
 
       <div class="flex items-center gap-3">
-        <button onclick="openModalRequestBukaAkun()" class="relative bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg transition flex items-center gap-2">
+        <button onclick="window.openModalRequestBukaAkun()" class="relative bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg transition flex items-center gap-2">
           <i class="fa-solid fa-key"></i>
           <span>Request Buka Akun</span>
           <span id="badgeRequestCount" class="bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black hidden">0</span>
@@ -115,7 +115,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       
       <!-- Modul Siswa / Anggota -->
-      <div id="card-anggota" onclick="switchTable('anggota')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-blue-500 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
+      <div id="card-anggota" onclick="window.switchTable('anggota')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-blue-500 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-users"></i></div>
           <div>
@@ -129,7 +129,7 @@
       </div>
 
       <!-- Modul Petugas -->
-      <div id="card-petugas" onclick="switchTable('petugas')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-indigo-400 transition flex flex-col justify-between space-y-4 group">
+      <div id="card-petugas" onclick="window.switchTable('petugas')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-indigo-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-user-shield"></i></div>
           <div>
@@ -137,13 +137,13 @@
             <p class="text-[11px] text-slate-500 mt-1">Tambah akun login & jabatan petugas.</p>
           </div>
         </div>
-        <button onclick="event.stopPropagation(); openModalWithTable('modalPetugas', 'petugas')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+        <button onclick="event.stopPropagation(); window.openModalWithTable('modalPetugas', 'petugas')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
           <i class="fa-solid fa-plus text-[10px]"></i> Tambah Petugas
         </button>
       </div>
 
       <!-- Modul Buku -->
-      <div id="card-buku" onclick="switchTable('buku')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-amber-400 transition flex flex-col justify-between space-y-4 group">
+      <div id="card-buku" onclick="window.switchTable('buku')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-amber-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-book"></i></div>
           <div>
@@ -151,13 +151,13 @@
             <p class="text-[11px] text-slate-500 mt-1">Tambah koleksi, penerbit, stok, & cover buku.</p>
           </div>
         </div>
-        <button onclick="event.stopPropagation(); openModalWithTable('modalBuku', 'buku')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+        <button onclick="event.stopPropagation(); window.openModalWithTable('modalBuku', 'buku')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
           <i class="fa-solid fa-plus text-[10px]"></i> Tambah Buku
         </button>
       </div>
 
       <!-- Modul Duta Literasi -->
-      <div id="card-duta" onclick="switchTable('duta')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-purple-400 transition flex flex-col justify-between space-y-4 group">
+      <div id="card-duta" onclick="window.switchTable('duta')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-purple-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-award"></i></div>
           <div>
@@ -166,17 +166,17 @@
           </div>
         </div>
         <div class="grid grid-cols-2 gap-1.5">
-          <button onclick="event.stopPropagation(); openModalWithTable('modalCalonDuta', 'duta')" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-[11px] transition flex items-center justify-center gap-1 shadow-md">
+          <button onclick="event.stopPropagation(); window.openModalWithTable('modalCalonDuta', 'duta')" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-[11px] transition flex items-center justify-center gap-1 shadow-md">
             + Calon
           </button>
-          <button onclick="event.stopPropagation(); openModalWithTable('modalDutaTerpilih', 'duta')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2 rounded-xl text-[11px] transition flex items-center justify-center gap-1 shadow-md">
+          <button onclick="event.stopPropagation(); window.openModalWithTable('modalDutaTerpilih', 'duta')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-2 rounded-xl text-[11px] transition flex items-center justify-center gap-1 shadow-md">
             + Terpilih
           </button>
         </div>
       </div>
 
       <!-- Modul Pinjam Buku -->
-      <div id="card-pinjam" onclick="switchTable('pinjam')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-emerald-400 transition flex flex-col justify-between space-y-4 group">
+      <div id="card-pinjam" onclick="window.switchTable('pinjam')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-emerald-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-handshake"></i></div>
           <div>
@@ -184,7 +184,7 @@
             <p class="text-[11px] text-slate-500 mt-1">Sirkulasi peminjaman & pengembalian.</p>
           </div>
         </div>
-        <button onclick="event.stopPropagation(); openModalWithTable('modalPinjam', 'pinjam')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+        <button onclick="event.stopPropagation(); window.openModalWithTable('modalPinjam', 'pinjam')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
           <i class="fa-solid fa-plus text-[10px]"></i> Catat Pinjam
         </button>
       </div>
@@ -203,11 +203,11 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold text-slate-600">
-          <button id="btnTabAnggota" onclick="switchTable('anggota')" class="px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition">Anggota</button>
-          <button id="btnTabPetugas" onclick="switchTable('petugas')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Petugas</button>
-          <button id="btnTabBuku" onclick="switchTable('buku')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Buku</button>
-          <button id="btnTabDuta" onclick="switchTable('duta')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Duta</button>
-          <button id="btnTabPinjam" onclick="switchTable('pinjam')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Peminjaman</button>
+          <button id="btnTabAnggota" onclick="window.switchTable('anggota')" class="px-3.5 py-2 rounded-xl bg-white text-blue-600 shadow-sm transition">Anggota</button>
+          <button id="btnTabPetugas" onclick="window.switchTable('petugas')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Petugas</button>
+          <button id="btnTabBuku" onclick="window.switchTable('buku')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Buku</button>
+          <button id="btnTabDuta" onclick="window.switchTable('duta')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Duta</button>
+          <button id="btnTabPinjam" onclick="window.switchTable('pinjam')" class="px-3.5 py-2 rounded-xl hover:text-slate-900 transition">Peminjaman</button>
         </div>
       </div>
 
@@ -251,7 +251,7 @@
         <h3 id="modalSiswaTitle" class="font-black text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-address-card text-blue-600"></i> Tambah Anggota & Akun Login Siswa
         </h3>
-        <button onclick="toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="window.toggleModal('modalSiswa', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -259,17 +259,17 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">ID Anggota</label>
-              <input type="text" id="inpIdAnggota" required placeholder="Otomatis terisi..." oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+              <input type="text" id="inpIdAnggota" required placeholder="Otomatis terisi..." oninput="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">NISN / Personal ID</label>
-              <input type="text" id="inpPersonalId" required placeholder="Otomatis terisi..." oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+              <input type="text" id="inpPersonalId" required placeholder="Otomatis terisi..." oninput="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
             </div>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa</label>
-            <input type="text" id="inpNama" required placeholder="Nama Lengkap" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" id="inpNama" required placeholder="Nama Lengkap" oninput="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
           </div>
 
           <div class="grid grid-cols-2 gap-2 bg-blue-50/50 p-2.5 rounded-2xl border border-blue-100">
@@ -317,7 +317,7 @@
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Status Perpustakaan</label>
-              <select id="inpStatus" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
+              <select id="inpStatus" onchange="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="Standar">Standar</option>
                 <option value="Istimewa">Istimewa</option>
               </select>
@@ -327,22 +327,22 @@
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Tgl Registrasi</label>
-              <input type="date" id="inpRegis" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
+              <input type="date" id="inpRegis" onchange="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Tgl Kadaluarsa</label>
-              <input type="date" id="inpKadaluarsa" onchange="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
+              <input type="date" id="inpKadaluarsa" onchange="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
             </div>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Instansi</label>
-            <input type="text" id="inpInstansi" value="SMAN 4 MANADO" oninput="updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
+            <input type="text" id="inpInstansi" value="SMAN 4 MANADO" oninput="window.updateCardPreview()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Status Keanggotaan</label>
-            <select id="inpStatusKeanggotaan" onchange="updateCardPreview(); window.handleStatusKeanggotaanChange()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
+            <select id="inpStatusKeanggotaan" onchange="window.updateCardPreview(); window.handleStatusKeanggotaanChange()" class="w-full p-2.5 rounded-xl border border-slate-200 outline-none">
               <option value="Aktif">Aktif</option>
               <option value="Alumni">Alumni</option>
               <option value="Non-aktif">Non-aktif</option>
@@ -350,7 +350,7 @@
           </div>
 
           <div class="pt-3 flex items-center justify-between gap-2">
-            <button type="button" onclick="printCardSystem()" class="w-1/2 py-2.5 rounded-xl font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-md flex items-center justify-center gap-1.5">
+            <button type="button" onclick="window.printCardSystem()" class="w-1/2 py-2.5 rounded-xl font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-md flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-print"></i> Cetak Kartu
             </button>
             <button type="submit" id="btnSubmitSiswa" class="w-1/2 py-2.5 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-md">
@@ -366,7 +366,7 @@
 
           <div id="areaCetakKartu" class="flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
             <div class="relative w-[320px] h-[200px] rounded-2xl overflow-hidden shadow-lg border border-slate-300 bg-white shrink-0">
-              <img src="assets/kartu-depan.png" onerror="this.src='https://placehold.co/320x200/1e3a8a/ffffff?text=assets/kartu-depan.png'" class="w-full h-full object-cover absolute inset-0 z-0" alt="Kartu Depan">
+              <img src="../assets/kartu-depan.png" onerror="this.src='https://placehold.co/320x200/1e3a8a/ffffff?text=kartu-depan.png'" class="w-full h-full object-cover absolute inset-0 z-0" alt="Kartu Depan">
               <div class="relative z-10 p-3 h-full flex flex-col justify-between text-slate-900 pointer-events-none">
                 <div class="text-right">
                   <span id="previewStatus" class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 font-extrabold text-[9px] rounded-md shadow">STANDAR</span>
@@ -386,7 +386,7 @@
             </div>
 
             <div class="relative w-[320px] h-[200px] rounded-2xl overflow-hidden shadow-lg border border-slate-300 bg-white shrink-0">
-              <img src="assets/kartu-belakang.png" onerror="this.src='https://placehold.co/320x200/0f172a/ffffff?text=assets/kartu-belakang.png'" class="w-full h-full object-cover absolute inset-0 z-0" alt="Kartu Belakang">
+              <img src="../assets/kartu-belakang.png" onerror="this.src='https://placehold.co/320x200/0f172a/ffffff?text=kartu-belakang.png'" class="w-full h-full object-cover absolute inset-0 z-0" alt="Kartu Belakang">
               <div class="relative z-10 p-3 h-full flex flex-col justify-between text-slate-800 pointer-events-none">
                 <div class="text-center bg-white/80 p-1.5 rounded-lg text-[9px]">
                   <p class="font-bold text-indigo-900" id="previewInstansi">PERPUSTAKAAN SMAN 4 MANADO</p>
@@ -415,7 +415,7 @@
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas</h3>
-        <button onclick="toggleModal('modalPetugas', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="window.toggleModal('modalPetugas', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahPetugas" class="space-y-3 text-xs">
         <div>
@@ -446,7 +446,7 @@
           <input type="text" id="inpJabatanPetugas" required placeholder="Staf Sirkulasi" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalPetugas', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="button" onclick="window.toggleModal('modalPetugas', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
           <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-indigo-600 text-white shadow-md">Daftarkan Petugas</button>
         </div>
       </form>
@@ -460,7 +460,7 @@
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-book-medical text-amber-500"></i> Tambah Koleksi Buku
         </h3>
-        <button onclick="toggleModal('modalBuku', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+        <button onclick="window.toggleModal('modalBuku', false)" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -496,7 +496,7 @@
           </div>
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="button" onclick="window.toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
           <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Simpan Buku</button>
         </div>
       </form>
@@ -508,7 +508,7 @@
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-clock text-purple-600"></i> Tambah Calon Duta (7 Hari)</h3>
-        <button onclick="toggleModal('modalCalonDuta', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="window.toggleModal('modalCalonDuta', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahCalonDuta" class="space-y-3 text-xs">
         <div>
@@ -528,7 +528,7 @@
           <input type="date" id="inpTglMulaiCalon" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalCalonDuta', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="button" onclick="window.toggleModal('modalCalonDuta', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
           <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-purple-600 text-white shadow-md">Simpan Calon Duta</button>
         </div>
       </form>
@@ -540,7 +540,7 @@
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-award text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)</h3>
-        <button onclick="toggleModal('modalDutaTerpilih', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="window.toggleModal('modalDutaTerpilih', false)" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form id="formTambahDutaTerpilih" class="space-y-3 text-xs">
         <div>
@@ -560,7 +560,7 @@
           <input type="date" id="inpTglMulaiTerpilih" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalDutaTerpilih', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="button" onclick="window.toggleModal('modalDutaTerpilih', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
           <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Tetapkan Duta</button>
         </div>
       </form>
@@ -574,7 +574,7 @@
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-handshake text-emerald-600"></i> Catat Transaksi Peminjaman
         </h3>
-        <button onclick="toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg">
+        <button onclick="window.toggleModal('modalPinjam', false)" class="text-slate-400 hover:text-slate-600 text-lg">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -598,7 +598,7 @@
           <input type="date" id="inpTglKembali" required class="w-full p-3 rounded-xl border border-slate-200 outline-none">
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="toggleModal('modalPinjam', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
+          <button type="button" onclick="window.toggleModal('modalPinjam', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
           <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-emerald-600 text-white shadow-md">Simpan Peminjaman</button>
         </div>
       </form>
@@ -612,22 +612,21 @@
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-key text-amber-500"></i> Permohonan Buka Akun Terkunci
         </h3>
-        <button onclick="closeModalRequestBukaAkun()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="window.closeModalRequestBukaAkun()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div id="listRequestBukaAkun" class="overflow-y-auto space-y-3 pr-1 flex-grow">
       </div>
 
       <div class="pt-3 border-t flex justify-end shrink-0">
-        <button onclick="closeModalRequestBukaAkun()" class="px-5 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition text-xs">
+        <button onclick="window.closeModalRequestBukaAkun()" class="px-5 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition text-xs">
           Tutup
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Script Penanganan Firebase & Logika Utama Panel Admin -->
-  <!-- Script Firebase & Logika Utama Panel Admin (Sudah Memperbaiki Scope Window) -->
+<!-- Script Penanganan Firebase & Logika Utama Panel Admin -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
