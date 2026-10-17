@@ -34,7 +34,6 @@
     }
   </style>
 
-  <!-- Script Verifikasi Sesi & Tampilan Dasar (Tersedia Secara Langsung) -->
   <script>
     const adminSession = localStorage.getItem('adminSession');
     if (!adminSession) {
@@ -61,7 +60,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
 
-  <!-- Header -->
   <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <a href="../index.html" class="flex items-center gap-3">
@@ -75,7 +73,6 @@
       </a>
 
       <div class="flex items-center gap-3">
-        <!-- Tombol Popup Request Buka Akun -->
         <button onclick="openModalRequestBukaAkun()" class="relative bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg transition flex items-center gap-2">
           <i class="fa-solid fa-key"></i>
           <span>Request Buka Akun</span>
@@ -99,7 +96,6 @@
   </header>
 
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-    
     <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div class="space-y-2">
         <div class="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 rounded-full text-xs font-bold">
@@ -116,8 +112,6 @@
 
     <!-- Modul Utama -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      
-      <!-- Modul 1: Anggota -->
       <div id="card-anggota" onclick="switchTable('anggota')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-blue-500 hover:shadow-2xl transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-users"></i></div>
@@ -131,7 +125,6 @@
         </button>
       </div>
 
-      <!-- Modul 2: Petugas -->
       <div id="card-petugas" onclick="switchTable('petugas')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-indigo-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-user-shield"></i></div>
@@ -145,7 +138,6 @@
         </button>
       </div>
 
-      <!-- Modul 3: Buku -->
       <div id="card-buku" onclick="switchTable('buku')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-amber-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-book"></i></div>
@@ -159,7 +151,6 @@
         </button>
       </div>
 
-      <!-- Modul 4: Duta Literasi -->
       <div id="card-duta" onclick="switchTable('duta')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-purple-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-award"></i></div>
@@ -178,7 +169,6 @@
         </div>
       </div>
 
-      <!-- Modul 5: Pinjam -->
       <div id="card-pinjam" onclick="switchTable('pinjam')" class="cursor-pointer bg-white p-5 rounded-3xl shadow-xl border-2 border-transparent hover:border-emerald-400 transition flex flex-col justify-between space-y-4 group">
         <div class="space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition"><i class="fa-solid fa-handshake"></i></div>
@@ -191,7 +181,6 @@
           <i class="fa-solid fa-plus text-[10px]"></i> Catat Pinjam
         </button>
       </div>
-
     </div>
 
     <!-- Section Tabel -->
@@ -214,7 +203,6 @@
         </div>
       </div>
 
-      <!-- Filter Pencarian & Jumlah Data Per Halaman -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-2">
           <label class="font-bold text-slate-600">Tampilkan:</label>
@@ -238,13 +226,11 @@
         </table>
       </div>
 
-      <!-- Kontrol Pagination dan Info -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 gap-3">
         <p id="tableCountInfo">Menampilkan 0 data</p>
         <div id="paginationControls" class="flex items-center gap-1.5"></div>
       </div>
     </section>
-
   </main>
 
   <!-- Modal 1: Anggota/Siswa -->
@@ -619,7 +605,6 @@
       </div>
 
       <div id="listRequestBukaAkun" class="overflow-y-auto space-y-3 pr-1 flex-grow">
-        <!-- List request di-render via JavaScript secara realtime -->
       </div>
 
       <div class="pt-3 border-t flex justify-end shrink-0">
@@ -630,12 +615,11 @@
     </div>
   </div>
 
-  <!-- Script Firebase & Logika Utama Aplikasi -->
+  <!-- Script Firebase & Logika Utama Aplikasi (Jalur Impor Diperbaiki ke ../js/firebase-config.js) -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    // Format Nomor WhatsApp ke Standar Internasional (628...)
     function formatWaNumber(phone) {
       if (!phone) return '';
       let cleaned = String(phone).replace(/\D/g, '');
@@ -645,7 +629,6 @@
       return cleaned;
     }
 
-    // Realtime Listener Permohonan Buka Akun
     function initRequestBukaAkunListener() {
       const qReq = query(collection(db, "request_buka_akun"), where("status", "==", "Pending"));
       onSnapshot(qReq, (snapshot) => {
@@ -802,7 +785,6 @@
       searchQuery: ''
     };
 
-    // Fungsi global persetujuan & penolakan pendaftaran siswa
     window.setujuiAnggota = async function(firestoreId, nama) {
       if (!confirm(`Setujui pendaftaran anggota untuk ${nama}?`)) return;
       try {
@@ -1031,7 +1013,6 @@
       `;
     }
 
-    // FUNGSI RENDER TABLE DATA
     window.renderTableData = function() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
@@ -1476,7 +1457,6 @@
       }
     };
 
-    // Form Submit Event Listeners
     document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
@@ -1627,7 +1607,6 @@
         alert('Gagal mencatat peminjaman: ' + err.message);
       }
     });
-
   </script>
 </body>
 </html>
