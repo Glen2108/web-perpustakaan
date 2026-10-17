@@ -627,6 +627,7 @@
   </div>
 
   <!-- Script Penanganan Firebase & Logika Utama Panel Admin -->
+  <!-- Script Firebase & Logika Utama Panel Admin (Sudah Memperbaiki Scope Window) -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
     import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -640,7 +641,7 @@
       return cleaned;
     }
 
-    // Monitoring Request Buka Akun Siswa
+    // Monitoring Request Buka Akun
     function initRequestBukaAkunListener() {
       const qReq = query(collection(db, "request_buka_akun"), where("status", "==", "Pending"));
       onSnapshot(qReq, (snapshot) => {
@@ -651,7 +652,7 @@
         updateRequestBadge(requests.length);
         renderRequestList(requests);
       }, (err) => {
-        console.error("Gagal mendengarkan request_buka_akun:", err);
+        console.error("Gagal listening request_buka_akun:", err);
       });
     }
 
@@ -715,17 +716,17 @@
       listEl.innerHTML = html;
     }
 
-    window.openModalRequestBukaAkun = function() {
+    function openModalRequestBukaAkun() {
       const modal = document.getElementById('modalRequestBukaAkun');
       if (modal) modal.classList.remove('hidden');
-    };
+    }
 
-    window.closeModalRequestBukaAkun = function() {
+    function closeModalRequestBukaAkun() {
       const modal = document.getElementById('modalRequestBukaAkun');
       if (modal) modal.classList.add('hidden');
-    };
+    }
 
-    window.setujuiBukaAkun = async function(reqId, username, idAnggota) {
+    async function setujuiBukaAkun(reqId, username, idAnggota) {
       if (!confirm(`Apakah Anda yakin ingin membuka kunci & mengaktifkan kembali akun ${username}?`)) return;
 
       try {
@@ -759,9 +760,9 @@
       } catch (err) {
         alert("Gagal memproses persetujuan: " + err.message);
       }
-    };
+    }
 
-    window.tolakBukaAkun = async function(reqId, username) {
+    async function tolakBukaAkun(reqId, username) {
       if (!confirm(`Tolak permohonan buka akun dari ${username}?`)) return;
 
       try {
@@ -773,7 +774,7 @@
       } catch (err) {
         alert("Gagal menolak permohonan: " + err.message);
       }
-    };
+    }
 
     initRequestBukaAkunListener();
 
@@ -789,7 +790,7 @@
       searchQuery: ''
     };
 
-    window.setujuiAnggota = async function(firestoreId, nama) {
+    async function setujuiAnggota(firestoreId, nama) {
       if (!confirm(`Setujui pendaftaran anggota untuk ${nama}?`)) return;
       try {
         await updateDoc(doc(db, "anggota", firestoreId), {
@@ -800,9 +801,9 @@
       } catch (err) {
         alert("Gagal menyetujui: " + err.message);
       }
-    };
+    }
 
-    window.tolakAnggota = async function(firestoreId, nama) {
+    async function tolakAnggota(firestoreId, nama) {
       if (!confirm(`Tolak pendaftaran anggota untuk ${nama}?`)) return;
       try {
         await updateDoc(doc(db, "anggota", firestoreId), {
@@ -813,9 +814,9 @@
       } catch (err) {
         alert("Gagal menolak: " + err.message);
       }
-    };
+    }
 
-    window.populateSelectAnggota = function() {
+    function populateSelectAnggota() {
       const selectEl = document.getElementById('inpPeminjam');
       if (!selectEl) return;
 
@@ -834,7 +835,7 @@
         });
       }
       selectEl.innerHTML = options;
-    };
+    }
 
     document.getElementById('inpPeminjam')?.addEventListener('change', (e) => {
       const selectedOption = e.target.options[e.target.selectedIndex];
@@ -843,7 +844,7 @@
       if (inpWa && waVal) inpWa.value = waVal;
     });
 
-    window.generateAutoIds = function(selectedKelas) {
+    function generateAutoIds(selectedKelas) {
       if (!selectedKelas) return;
 
       let gradeCode = '';
@@ -881,12 +882,12 @@
       if (typeof window.updateCardPreview === 'function') {
         window.updateCardPreview();
       }
-    };
+    }
 
-    window.handleKelasChange = function() {
+    function handleKelasChange() {
       const kelasVal = document.getElementById('inpKelas')?.value;
-      if (kelasVal) window.generateAutoIds(kelasVal);
-    };
+      if (kelasVal) generateAutoIds(kelasVal);
+    }
 
     const collections = ['anggota', 'petugas', 'buku', 'duta', 'pinjam'];
     collections.forEach(colName => {
@@ -896,33 +897,33 @@
           ...docSnap.data()
         }));
 
-        if (colName === 'anggota') window.populateSelectAnggota();
-        window.renderTableData();
+        if (colName === 'anggota') populateSelectAnggota();
+        renderTableData();
 
         if (window.currentActiveTable === 'anggota' && !window.editingMemberId) {
           const currentKelas = document.getElementById('inpKelas')?.value;
-          if (currentKelas) window.generateAutoIds(currentKelas);
+          if (currentKelas) generateAutoIds(currentKelas);
         }
       }, (err) => {
         console.error(`Error listening collection ${colName}:`, err);
       });
     });
 
-    window.toggleModal = function(modalId, show) {
+    function toggleModal(modalId, show) {
       const modal = document.getElementById(modalId);
       if (modal) {
         if (show) modal.classList.remove('hidden');
         else modal.classList.add('hidden');
       }
-    };
+    }
 
-    window.openModalWithTable = function(modalId, tableType) {
-      if (modalId === 'modalPinjam') window.populateSelectAnggota();
-      window.switchTable(tableType);
-      window.toggleModal(modalId, true);
-    };
+    function openModalWithTable(modalId, tableType) {
+      if (modalId === 'modalPinjam') populateSelectAnggota();
+      switchTable(tableType);
+      toggleModal(modalId, true);
+    }
 
-    window.openAddMemberModal = function() {
+    function openAddMemberModal() {
       window.editingMemberId = null;
       const form = document.getElementById('formTambahSiswa');
       if (form) form.reset();
@@ -936,11 +937,11 @@
       const btnEl = document.getElementById('btnSubmitSiswa');
       if (btnEl) btnEl.innerText = 'Simpan Data';
 
-      window.updateCardPreview();
-      window.openModalWithTable('modalSiswa', 'anggota');
-    };
+      updateCardPreview();
+      openModalWithTable('modalSiswa', 'anggota');
+    }
 
-    window.switchTable = function(type) {
+    function switchTable(type) {
       window.currentActiveTable = type;
       window.tableState.currentPage = 1;
       window.tableState.sortColumn = '';
@@ -966,35 +967,35 @@
       const titleEl = document.getElementById('tableTitle');
       if (titleEl) titleEl.innerText = titleMap[type] || 'Daftar Data';
 
-      window.renderTableData();
-    };
+      renderTableData();
+    }
 
-    window.handleSort = function(colKey) {
+    function handleSort(colKey) {
       if (window.tableState.sortColumn === colKey) {
         window.tableState.sortDirection = window.tableState.sortDirection === 'asc' ? 'desc' : 'asc';
       } else {
         window.tableState.sortColumn = colKey;
         window.tableState.sortDirection = 'asc';
       }
-      window.renderTableData();
-    };
+      renderTableData();
+    }
 
-    window.changeItemsPerPage = function(val) {
+    function changeItemsPerPage(val) {
       window.tableState.itemsPerPage = parseInt(val) || 10;
       window.tableState.currentPage = 1;
-      window.renderTableData();
-    };
+      renderTableData();
+    }
 
-    window.handleSearch = function(val) {
+    function handleSearch(val) {
       window.tableState.searchQuery = (val || '').trim().toLowerCase();
       window.tableState.currentPage = 1;
-      window.renderTableData();
-    };
+      renderTableData();
+    }
 
-    window.goToPage = function(page) {
+    function goToPage(page) {
       window.tableState.currentPage = page;
-      window.renderTableData();
-    };
+      renderTableData();
+    }
 
     function getSortableHeaderHtml(label, key, extraClass = '') {
       if (!key) return `<th class="p-3.5 ${extraClass}">${label}</th>`;
@@ -1015,8 +1016,7 @@
       `;
     }
 
-    // Penanganan Rendering Tabel Data Anggota / Siswa
-    window.renderTableData = function() {
+    function renderTableData() {
       const thead = document.getElementById('tableHead');
       const tbody = document.getElementById('tableBody');
       const countInfo = document.getElementById('tableCountInfo');
@@ -1356,9 +1356,9 @@
           pagEl.innerHTML = pagBtns;
         }
       }
-    };
+    }
 
-    window.updateCardPreview = function() {
+    function updateCardPreview() {
       const id = document.getElementById('inpIdAnggota')?.value || 'AGT-000';
       const personalId = document.getElementById('inpPersonalId')?.value || '-';
       const nama = document.getElementById('inpNama')?.value || 'NAMA ANGGOTA';
@@ -1378,13 +1378,13 @@
       if (document.getElementById('previewKadaluarsa')) document.getElementById('previewKadaluarsa').innerText = kadaluarsa;
       if (document.getElementById('previewInstansi')) document.getElementById('previewInstansi').innerText = instansi;
       if (document.getElementById('previewStatusBelakang')) document.getElementById('previewStatusBelakang').innerText = statusKeanggotaan;
-    };
+    }
 
-    window.printCardSystem = function() {
+    function printCardSystem() {
       window.print();
-    };
+    }
 
-    window.togglePasswordVisibility = function(inputId, iconId) {
+    function togglePasswordVisibility(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
       if (!input || !icon) return;
@@ -1396,9 +1396,9 @@
         input.type = 'password';
         icon.classList.replace('fa-eye-slash', 'fa-eye');
       }
-    };
+    }
 
-    window.handleStatusKeanggotaanChange = function() {
+    function handleStatusKeanggotaanChange() {
       const statusVal = document.getElementById('inpStatusKeanggotaan')?.value;
       const inpKelas = document.getElementById('inpKelas');
       if (!inpKelas) return;
@@ -1409,10 +1409,9 @@
       } else {
         inpKelas.required = true;
       }
-    };
+    }
 
-    // Fungsi Edit Anggota / Siswa
-    window.editAnggota = function(docId) {
+    function editAnggota(docId) {
       const item = window.dbData.anggota.find(a => a.firestoreId === docId);
       if (!item) return;
 
@@ -1447,11 +1446,11 @@
       const btnEl = document.getElementById('btnSubmitSiswa');
       if (btnEl) btnEl.innerText = 'Update Data';
 
-      window.updateCardPreview();
-      window.toggleModal('modalSiswa', true);
-    };
+      updateCardPreview();
+      toggleModal('modalSiswa', true);
+    }
 
-    window.deleteRecord = async function(colName, firestoreId) {
+    async function deleteRecord(colName, firestoreId) {
       if (!confirm(`Apakah Anda yakin ingin menghapus data ini dari ${colName}?`)) return;
       try {
         await deleteDoc(doc(db, colName, firestoreId));
@@ -1459,9 +1458,8 @@
       } catch (err) {
         alert('Gagal menghapus data: ' + err.message);
       }
-    };
+    }
 
-    // Handler Submit Form Tambah / Edit Siswa
     document.getElementById('formTambahSiswa')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
@@ -1488,7 +1486,7 @@
           await addDoc(collection(db, "anggota"), payload);
           alert('Anggota baru berhasil ditambahkan!');
         }
-        window.toggleModal('modalSiswa', false);
+        toggleModal('modalSiswa', false);
         document.getElementById('formTambahSiswa')?.reset();
         window.editingMemberId = null;
       } catch (err) {
@@ -1509,7 +1507,7 @@
       try {
         await addDoc(collection(db, "petugas"), payload);
         alert('Petugas baru berhasil ditambahkan!');
-        window.toggleModal('modalPetugas', false);
+        toggleModal('modalPetugas', false);
         document.getElementById('formTambahPetugas')?.reset();
       } catch (err) {
         alert('Gagal menambahkan petugas: ' + err.message);
@@ -1545,7 +1543,7 @@
       try {
         await addDoc(collection(db, "buku"), payload);
         alert('Koleksi buku berhasil ditambahkan!');
-        window.toggleModal('modalBuku', false);
+        toggleModal('modalBuku', false);
         document.getElementById('formTambahBuku')?.reset();
       } catch (err) {
         alert('Gagal menambahkan buku: ' + err.message);
@@ -1565,7 +1563,7 @@
       try {
         await addDoc(collection(db, "duta"), payload);
         alert('Calon Duta Literasi berhasil ditambahkan!');
-        window.toggleModal('modalCalonDuta', false);
+        toggleModal('modalCalonDuta', false);
         document.getElementById('formTambahCalonDuta')?.reset();
       } catch (err) {
         alert('Gagal menyimpan Calon Duta: ' + err.message);
@@ -1585,7 +1583,7 @@
       try {
         await addDoc(collection(db, "duta"), payload);
         alert('Duta Terpilih berhasil ditetapkan!');
-        window.toggleModal('modalDutaTerpilih', false);
+        toggleModal('modalDutaTerpilih', false);
         document.getElementById('formTambahDutaTerpilih')?.reset();
       } catch (err) {
         alert('Gagal menetapkan Duta Terpilih: ' + err.message);
@@ -1606,12 +1604,35 @@
       try {
         await addDoc(collection(db, "pinjam"), payload);
         alert('Transaksi peminjaman berhasil dicatat!');
-        window.toggleModal('modalPinjam', false);
+        toggleModal('modalPinjam', false);
         document.getElementById('formTambahPinjam')?.reset();
       } catch (err) {
         alert('Gagal mencatat peminjaman: ' + err.message);
       }
     });
+
+    // MEMUAT SEMUA FUNGSI KELUAR AGAR DIKENAL OLEH ATRIBUT ONCLICK DI HTML
+    window.openModalWithTable = openModalWithTable;
+    window.toggleModal = toggleModal;
+    window.switchTable = switchTable;
+    window.openAddMemberModal = openAddMemberModal;
+    window.openModalRequestBukaAkun = openModalRequestBukaAkun;
+    window.closeModalRequestBukaAkun = closeModalRequestBukaAkun;
+    window.setujuiBukaAkun = setujuiBukaAkun;
+    window.tolakBukaAkun = tolakBukaAkun;
+    window.setujuiAnggota = setujuiAnggota;
+    window.tolakAnggota = tolakAnggota;
+    window.handleKelasChange = handleKelasChange;
+    window.handleSort = handleSort;
+    window.changeItemsPerPage = changeItemsPerPage;
+    window.handleSearch = handleSearch;
+    window.goToPage = goToPage;
+    window.updateCardPreview = updateCardPreview;
+    window.printCardSystem = printCardSystem;
+    window.togglePasswordVisibility = togglePasswordVisibility;
+    window.handleStatusKeanggotaanChange = handleStatusKeanggotaanChange;
+    window.editAnggota = editAnggota;
+    window.deleteRecord = deleteRecord;
   </script>
 </body>
 </html>
