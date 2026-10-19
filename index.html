@@ -111,9 +111,9 @@
     </div>
   </div>
 
-  <!-- Hero Section -->
+  <!-- Hero Section (DIPERBARUI: items-start agar sejajar atas di desktop) -->
   <section class="bg-gradient-to-b from-brand-900 via-slate-900 to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <div class="lg:col-span-7 space-y-5">
         <div class="flex flex-wrap items-center gap-2">
@@ -839,7 +839,6 @@
       const actionEl = document.getElementById('greetingAction');
       if (!titleEl || !subEl || !actionEl) return;
 
-      // 1. Ambil Data Sesi dari LocalStorage & SessionStorage (Mencakup semua kemungkinan key)
       const userSessionData = JSON.parse(
         localStorage.getItem('userSession') || 
         sessionStorage.getItem('userSession') || 
@@ -871,22 +870,16 @@
         'null'
       );
 
-      // Prioritas Pengguna Aktif
       const currentUser = userSessionData || petugasSessionData || adminSessionData || genericUser;
 
       if (currentUser) {
-        // Ambil Nama Pengguna
         const nama = currentUser.nama || currentUser.nama_lengkap || currentUser.name || currentUser.username || 'Pengguna';
         
-        // Tentukan Role/Peran
         let role = (currentUser.role || '').toLowerCase();
         if (adminSessionData || role === 'admin' || currentUser.email === 'admin@sman4manado.sch.id') role = 'admin';
         else if (petugasSessionData || role === 'petugas') role = 'petugas';
         else role = 'siswa';
 
-        // -------------------------------------------------------------
-        // KONDISI 1: JIKA PETUGAS ATAU ADMIN TELAH LOGIN
-        // -------------------------------------------------------------
         if (role === 'admin' || role === 'petugas') {
           const roleBadge = role === 'admin' ? 'Administrator' : 'Petugas Perpustakaan';
           
@@ -901,9 +894,6 @@
             </div>
           `;
         } 
-        // -------------------------------------------------------------
-        // KONDISI 2: JIKA SISWA / ANGGOTA TELAH LOGIN
-        // -------------------------------------------------------------
         else {
           const isAlumni = (currentUser.statusKeanggotaan || currentUser.status || '').toLowerCase() === 'alumni';
           const statusText = isAlumni ? 'Alumni SMAN 4 Manado' : (currentUser.kelas ? `Kelas ${currentUser.kelas}` : 'Anggota Aktif');
@@ -925,9 +915,6 @@
           `;
         }
       } 
-      // -------------------------------------------------------------
-      // KONDISI 3: JIKA PENGGUNA BELUM LOGIN (PENGUNJUNG / TAMU)
-      // -------------------------------------------------------------
       else {
         titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
         subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
@@ -945,14 +932,12 @@
       }
     }
 
-    // Jalankan Sapaan saat Halaman Dimuat & dengarkan Perubahan Storage
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', renderDynamicGreeting);
     } else {
       renderDynamicGreeting();
     }
 
-    // Pembaruan Realtime jika status login berubah
     window.addEventListener('storage', renderDynamicGreeting);
   </script>
 </body>
