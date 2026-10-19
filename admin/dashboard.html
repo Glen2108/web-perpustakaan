@@ -789,32 +789,6 @@
       searchQuery: ''
     };
 
-    async function setujuiAnggota(firestoreId, nama) {
-      if (!confirm(`Setujui pendaftaran anggota untuk ${nama}?`)) return;
-      try {
-        await updateDoc(doc(db, "anggota", firestoreId), {
-          statusKeanggotaan: 'Aktif',
-          status: 'Aktif'
-        });
-        alert(`Pendaftaran ${nama} berhasil disetujui! Siswa kini dapat login.`);
-      } catch (err) {
-        alert("Gagal menyetujui: " + err.message);
-      }
-    }
-
-    async function tolakAnggota(firestoreId, nama) {
-      if (!confirm(`Tolak pendaftaran anggota untuk ${nama}?`)) return;
-      try {
-        await updateDoc(doc(db, "anggota", firestoreId), {
-          statusKeanggotaan: 'Ditolak',
-          status: 'Ditolak'
-        });
-        alert(`Pendaftaran ${nama} telah ditolak.`);
-      } catch (err) {
-        alert("Gagal menolak: " + err.message);
-      }
-    }
-
     function populateSelectAnggota() {
       const selectEl = document.getElementById('inpPeminjam');
       if (!selectEl) return;
@@ -1088,47 +1062,30 @@
             ${getSortableHeaderHtml('Kelas', 'kelas')}
             ${getSortableHeaderHtml('Instansi', 'instansi')}
             ${getSortableHeaderHtml('Status', 'status', 'text-center')}
-            <th class="p-3.5 text-center">Aksi / Persetujuan</th>
+            <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
         tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada data anggota.</td></tr>` :
           paginatedData.map(item => {
-            const st = (item.statusKeanggotaan || item.status || 'Aktif');
-            
-            let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-            if (st === 'Menunggu') badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300 animate-pulse';
-            else if (st === 'Ditolak') badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
-            else if (st === 'Alumni') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
-            else if (st === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
+            const idDisplay = item.id ? (item.id.startsWith('AGT-') ? item.id : 'AGT-' + item.id) : (item.memberId || item.nisn || item.personalId || '-');
+            const statusKeanggotaanDisplay = item.statusKeanggotaan || item.status || 'Aktif';
 
-            let aksiHtml = '';
-            if (st === 'Menunggu') {
-              aksiHtml = `
-                <button onclick="window.setujuiAnggota('${item.firestoreId}', '${item.nama}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] shadow-sm transition mr-1">
-                  <i class="fa-solid fa-check mr-1"></i> ACC
-                </button>
-                <button onclick="window.tolakAnggota('${item.firestoreId}', '${item.nama}')" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] shadow-sm transition">
-                  <i class="fa-solid fa-xmark mr-1"></i> Tolak
-                </button>
-              `;
-            } else {
-              aksiHtml = `
-                <button onclick="window.editAnggota('${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 font-bold hover:bg-blue-100 mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button onclick="window.deleteRecord('anggota', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
-              `;
-            }
+            let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            if (statusKeanggotaanDisplay === 'Alumni') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+            else if (statusKeanggotaanDisplay === 'Non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
 
             return `
               <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                <td class="p-3.5 font-mono text-blue-600 font-bold">${item.id || item.memberId || '-'}</td>
+                <td class="p-3.5 font-mono text-blue-600 font-bold">${idDisplay}</td>
                 <td class="p-3.5 font-bold text-slate-900">${item.nama || '-'}</td>
                 <td class="p-3.5">${item.kelas || '-'}</td>
                 <td class="p-3.5 text-slate-500">${item.instansi || 'SMAN 4 MANADO'}</td>
                 <td class="p-3.5 text-center">
-                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
+                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${statusKeanggotaanDisplay}</span>
                 </td>
                 <td class="p-3.5 text-center">
-                  ${aksiHtml}
+                  <button onclick="window.editAnggota('${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 font-bold hover:bg-blue-100 mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button onclick="window.deleteRecord('anggota', '${item.firestoreId}')" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold hover:bg-rose-100"><i class="fa-solid fa-trash"></i></button>
                 </td>
               </tr>
             `;
@@ -1619,8 +1576,6 @@
     window.closeModalRequestBukaAkun = closeModalRequestBukaAkun;
     window.setujuiBukaAkun = setujuiBukaAkun;
     window.tolakBukaAkun = tolakBukaAkun;
-    window.setujuiAnggota = setujuiAnggota;
-    window.tolakAnggota = tolakAnggota;
     window.handleKelasChange = handleKelasChange;
     window.handleSort = handleSort;
     window.changeItemsPerPage = changeItemsPerPage;
