@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Siswa - Perpustakaan SMAN 4 Manado</title>
+  <title>Login & Pendaftaran Siswa - Perpustakaan SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -86,9 +86,105 @@
         </button>
       </form>
 
-      <div class="pt-4 border-t border-slate-800/80 text-center text-[11px] text-slate-400">
-        Pendaftaran keanggotaan siswa dikelola langsung oleh Petugas Perpustakaan SMAN 4 Manado.
+      <!-- Tombol Pendaftaran Langsung ke WA Kepala Perpustakaan -->
+      <div class="pt-4 border-t border-slate-800/80 text-center space-y-2">
+        <p class="text-xs text-slate-400">Belum memiliki akun perpustakaan?</p>
+        <button onclick="openModalDaftar()" class="w-full py-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold transition flex items-center justify-center gap-2">
+          <i class="fa-brands fa-whatsapp text-sm"></i> Ajukan Pendaftaran Pendaftaran via WA Kapus
+        </button>
       </div>
+
+    </div>
+  </div>
+
+  <!-- POPUP PENGAJUAN PENDAFTARAN LANGSUNG VIA WHATSAPP KEPALA PERPUSTAKAAN -->
+  <div id="modalDaftarMandiri" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-slate-900 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/10 text-white space-y-5 my-8">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="font-extrabold text-base text-amber-400 flex items-center gap-2">
+            <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i> Pengajuan Pendaftaran Anggota Baru
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">Isi rincian data di bawah ini untuk dikirim langsung ke WhatsApp Kepala Perpustakaan.</p>
+        </div>
+        <button onclick="closeModalDaftar()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Info Kepala Perpustakaan -->
+      <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/80 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-900 font-bold flex items-center justify-center text-lg shrink-0">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div class="text-xs">
+          <p class="text-[10px] text-amber-400 font-bold uppercase">Kepala Perpustakaan SMAN 4 Manado</p>
+          <p class="font-extrabold text-white">Glendy A. Taawoeda, S.Pd</p>
+          <p class="text-[11px] text-slate-400 font-mono">0852-4291-7488</p>
+        </div>
+      </div>
+
+      <form id="formDaftarWA" onsubmit="handleKirimPendaftaranWA(event)" class="space-y-3.5 text-xs">
+        
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Nama Lengkap Siswa <span class="text-amber-400">*</span></label>
+          <input type="text" id="regNama" required placeholder="Contoh: Gabriel Mangowal" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Kelas <span class="text-amber-400">*</span></label>
+          <select id="regKelas" required class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-bold">
+            <option value="" disabled selected>-- Pilih Kelas Anda --</option>
+            <optgroup label="Kelas X (10)">
+              <option value="X-1">X-1</option>
+              <option value="X-2">X-2</option>
+              <option value="X-3">X-3</option>
+              <option value="X-4">X-4</option>
+            </optgroup>
+            <optgroup label="Kelas XI (11)">
+              <option value="XI-1">XI-1</option>
+              <option value="XI-2">XI-2</option>
+              <option value="XI-3">XI-3</option>
+              <option value="XI-4">XI-4</option>
+              <option value="XI-5">XI-5</option>
+            </optgroup>
+            <optgroup label="Kelas XII (12)">
+              <option value="XII-1">XII-1</option>
+              <option value="XII-2">XII-2</option>
+              <option value="XII-3">XII-3</option>
+              <option value="XII-4">XII-4</option>
+              <option value="XII-5">XII-5</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Alamat Lengkap Rumah <span class="text-amber-400">*</span></label>
+          <textarea id="regAlamat" required rows="2" placeholder="Contoh: Jl. Diponegoro No. 12, Manado" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Nomor Telepon / WhatsApp <span class="text-amber-400">*</span></label>
+          <input type="tel" id="regTelp" required placeholder="Contoh: 081234567890" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Tempat Lahir <span class="text-amber-400">*</span></label>
+            <input type="text" id="regTempatLahir" required placeholder="Contoh: Manado" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Tanggal Lahir <span class="text-amber-400">*</span></label>
+            <input type="date" id="regTglLahir" required class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+          </div>
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-800">
+          <button type="button" onclick="closeModalDaftar()" class="px-4 py-2.5 rounded-xl font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Batal</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl font-extrabold bg-emerald-500 hover:bg-emerald-400 text-slate-900 shadow-md transition flex items-center gap-1.5">
+            <i class="fa-brands fa-whatsapp text-base"></i> Kirim Permohonan ke WA
+          </button>
+        </div>
+      </form>
 
     </div>
   </div>
@@ -116,6 +212,35 @@
         if (passVal) passVal.value = savedPass;
       }
     });
+
+    window.openModalDaftar = function() {
+      document.getElementById('modalDaftarMandiri').classList.remove('hidden');
+    };
+
+    window.closeModalDaftar = function() {
+      document.getElementById('modalDaftarMandiri').classList.add('hidden');
+      document.getElementById('formDaftarWA').reset();
+    };
+
+    // FUNGSI PENGIRIMAN DETAIL BIODATA LANGSUNG KE WHATSAPP KEPALA PERPUSTAKAAN
+    window.handleKirimPendaftaranWA = function(e) {
+      e.preventDefault();
+      
+      const noHpKapus = "6285242917488"; // Nomor WhatsApp Kepala Perpustakaan (Glendy A. Taawoeda, S.Pd)
+      const nama = document.getElementById('regNama').value.trim();
+      const kelas = document.getElementById('regKelas').value;
+      const alamat = document.getElementById('regAlamat').value.trim();
+      const telp = document.getElementById('regTelp').value.trim();
+      const tempatLahir = document.getElementById('regTempatLahir').value.trim();
+      const tglLahir = document.getElementById('regTglLahir').value;
+
+      const formatPesan = `Halo Ibu/Bapak *Glendy A. Taawoeda, S.Pd* (Kepala Perpustakaan SMAN 4 Manado),\n\nSaya ingin mengantisipasi dan mengajukan *PENDAFTARAN ANGGOTA BARU PERPUSTAKAAN* dengan rincian data diri sebagai berikut:\n\n• *Nama Lengkap*: ${nama}\n• *Kelas*: ${kelas}\n• *Alamat*: ${alamat}\n• *Nomor Telepon*: ${telp}\n• *Tempat, Tgl Lahir*: ${tempatLahir}, ${tglLahir}\n\nMohon bantuannya untuk pembuatan akun dan verifikasi keanggotaan perpustakaan saya. Terima kasih banyak!`;
+
+      const urlWA = `https://wa.me/${noHpKapus}?text=${encodeURIComponent(formatPesan)}`;
+      
+      window.open(urlWA, '_blank');
+      closeModalDaftar();
+    };
 
     togglePass.addEventListener('click', () => {
       const isPass = passVal.type === 'password';
