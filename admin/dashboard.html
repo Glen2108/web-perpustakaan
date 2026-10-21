@@ -1419,7 +1419,7 @@
     async function deleteRecord(colName, firestoreId) {
       const setuju = await confirm(`Apakah Anda yakin ingin menghapus data ini dari ${colName}?`, "Konfirmasi Hapus");
       if (!setuju) return;
-      
+
       try {
         await deleteDoc(doc(db, colName, firestoreId));
         await alert('Data berhasil dihapus!', 'Berhasil', 'success');
@@ -1449,16 +1449,16 @@
       try {
         if (window.editingMemberId) {
           await updateDoc(doc(db, "anggota", window.editingMemberId), payload);
-          alert('Data anggota berhasil diperbarui!');
+          await alert('Data anggota berhasil diperbarui!', 'Berhasil', 'success');
         } else {
           await addDoc(collection(db, "anggota"), payload);
-          alert('Anggota baru berhasil ditambahkan!');
+          await alert('Anggota baru berhasil ditambahkan!', 'Berhasil', 'success');
         }
         toggleModal('modalSiswa', false);
         document.getElementById('formTambahSiswa')?.reset();
         window.editingMemberId = null;
       } catch (err) {
-        alert('Gagal menyimpan data anggota: ' + err.message);
+        await alert('Gagal menyimpan data anggota: ' + err.message, 'Gagal', 'error');
       }
     });
 
@@ -1474,11 +1474,11 @@
 
       try {
         await addDoc(collection(db, "petugas"), payload);
-        alert('Petugas baru berhasil ditambahkan!');
+        await alert('Petugas baru berhasil ditambahkan!', 'Berhasil', 'success');
         toggleModal('modalPetugas', false);
         document.getElementById('formTambahPetugas')?.reset();
       } catch (err) {
-        alert('Gagal menambahkan petugas: ' + err.message);
+        await alert('Gagal menambahkan petugas: ' + err.message, 'Gagal', 'error');
       }
     });
 
@@ -1510,11 +1510,11 @@
 
       try {
         await addDoc(collection(db, "buku"), payload);
-        alert('Koleksi buku berhasil ditambahkan!');
+        await alert('Koleksi buku berhasil ditambahkan!', 'Berhasil', 'success');
         toggleModal('modalBuku', false);
         document.getElementById('formTambahBuku')?.reset();
       } catch (err) {
-        alert('Gagal menambahkan buku: ' + err.message);
+        await alert('Gagal menambahkan buku: ' + err.message, 'Gagal', 'error');
       }
     });
 
@@ -1572,7 +1572,7 @@
       const totalAktif = (window.dbData.pinjam || []).filter(p => (p.peminjam || '').toLowerCase() === namaPeminjam.toLowerCase()).length;
 
       if (totalAktif >= maxBukuBoleh) {
-        alert(`Siswa/Anggota "${namaPeminjam}" telah mencapai BATAS MAKSIMAL PEMINJAMAN (${totalAktif}/${maxBukuBoleh} Buku).\n\nStatus Anggota: ${isIstimewa ? 'Istimewa (Max 4 Buku)' : 'Standar (Max 3 Buku)'}.\nMohon kembalikan buku sebelumnya terlebih dahulu.`);
+        await alert(`Siswa/Anggota "${namaPeminjam}" telah mencapai BATAS MAKSIMAL PEMINJAMAN (${totalAktif}/${maxBukuBoleh} Buku).\n\nStatus Anggota: ${isIstimewa ? 'Istimewa (Max 4 Buku)' : 'Standar (Max 3 Buku)'}.\nMohon kembalikan buku sebelumnya terlebih dahulu.`, 'Batas Peminjaman', 'warning');
         return;
       }
 
@@ -1587,11 +1587,11 @@
 
       try {
         await addDoc(collection(db, "pinjam"), payload);
-        alert(`Transaksi peminjaman berhasil dicatat! (${totalAktif + 1}/${maxBukuBoleh} Buku)`);
+        await alert(`Transaksi peminjaman berhasil dicatat! (${totalAktif + 1}/${maxBukuBoleh} Buku)`, 'Berhasil', 'success');
         toggleModal('modalPinjam', false);
         document.getElementById('formTambahPinjam')?.reset();
       } catch (err) {
-        alert('Gagal mencatat peminjaman: ' + err.message);
+        await alert('Gagal mencatat peminjaman: ' + err.message, 'Gagal', 'error');
       }
     });
 

@@ -779,11 +779,11 @@
           pesan: pesan,
           tgl: new Date().toISOString()
         });
-        alert('Pengaduan berhasil dikirim!');
+        await alert('Pengaduan berhasil dikirim!', 'Berhasil', 'success');
         window.closeModalPengaduan();
         e.target.reset();
       } catch (err) {
-        alert('Gagal mengirim pengaduan: ' + err.message);
+        await alert('Gagal mengirim pengaduan: ' + err.message, 'Gagal', 'error');
       }
     });
 
