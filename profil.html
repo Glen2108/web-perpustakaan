@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Profil Siswa - SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/dialog-engine.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
@@ -404,8 +405,9 @@
     import { collection, query, where, onSnapshot, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     // Global Handlers
-    window.handleLogout = function() {
-      if (confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?")) {
+    window.handleLogout = async function() {
+      const yakin = await confirm("Apakah Anda yakin ingin keluar dari akun siswa ini?", "Konfirmasi Keluar");
+      if (yakin) {
         localStorage.removeItem('userSession');
         window.location.href = "login-siswa.html";
       }
@@ -496,12 +498,12 @@
       const passKonf = document.getElementById('inpPassKonfirm').value.trim();
 
       if (passBaru !== passKonf) {
-        alert('Konfirmasi password tidak cocok!');
+        await alert('Konfirmasi password tidak cocok!', 'Peringatan', 'warning');
         return;
       }
 
       if (passBaru.length < 4) {
-        alert('Password minimal 4 karakter!');
+        await alert('Password minimal 4 karakter!', 'Peringatan', 'warning');
         return;
       }
 
@@ -533,14 +535,14 @@
           currentUser.password = passBaru;
           localStorage.setItem('userSession', JSON.stringify(currentUser));
 
-          alert('Password berhasil diperbarui!');
+          await alert('Password berhasil diperbarui!', 'Berhasil', 'success');
           closeModalUbahPassword();
           document.getElementById('formUbahPassword').reset();
         } else {
-          alert('Data akun siswa tidak ditemukan di database!');
+          await alert('Data akun siswa tidak ditemukan di database!', 'Gagal', 'error');
         }
       } catch (err) {
-        alert('Gagal mengubah password: ' + err.message);
+        await alert('Gagal mengubah password: ' + err.message, 'Gagal', 'error');
       } finally {
         if (btn) {
           btn.disabled = false;

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin - Perpustakaan SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/dialog-engine.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
@@ -50,8 +51,9 @@
       }
     });
 
-    function handleAdminLogout() {
-      if (confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
+    async function handleAdminLogout() {
+      const setuju = await confirm("Apakah Anda yakin ingin keluar dari panel admin?", "Konfirmasi Keluar");
+      if (setuju) {
         localStorage.removeItem('adminSession');
         window.location.href = "login.html";
       }
@@ -726,7 +728,8 @@
     }
 
     async function setujuiBukaAkun(reqId, username, idAnggota) {
-      if (!confirm(`Apakah Anda yakin ingin membuka kunci & mengaktifkan kembali akun ${username}?`)) return;
+      const setuju = await confirm(`Apakah Anda yakin ingin membuka kunci & mengaktifkan kembali akun ${username}?`, "Konfirmasi Buka Akun");
+      if (!setuju) return;
 
       try {
         await updateDoc(doc(db, "request_buka_akun", reqId), {
@@ -752,26 +755,27 @@
             statusKeanggotaan: "Aktif",
             status: "Aktif"
           });
-          alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka.`);
+          await alert(`Akun (${username}) berhasil diaktifkan kembali! Kunci profil siswa telah terbuka.`, "Berhasil", "success");
         } else {
-          alert(`Permohonan disetujui, namun data siswa tidak ditemukan pada koleksi 'anggota'.`);
+          await alert(`Permohonan disetujui, namun data siswa tidak ditemukan pada koleksi 'anggota'.`, "Peringatan", "warning");
         }
       } catch (err) {
-        alert("Gagal memproses persetujuan: " + err.message);
+        await alert("Gagal memproses persetujuan: " + err.message, "Gagal", "error");
       }
     }
 
     async function tolakBukaAkun(reqId, username) {
-      if (!confirm(`Tolak permohonan buka akun dari ${username}?`)) return;
+      const setuju = await confirm(`Tolak permohonan buka akun dari ${username}?`, "Konfirmasi Tolak");
+    if (!setuju) return;
 
       try {
         await updateDoc(doc(db, "request_buka_akun", reqId), {
           status: "Ditolak",
           tglDitolak: new Date().toISOString()
         });
-        alert("Permohonan telah ditolak.");
+        await alert("Permohonan telah ditolak.", "Info", "info");
       } catch (err) {
-        alert("Gagal menolak permohonan: " + err.message);
+        await alert("Gagal menolak permohonan: " + err.message, "Gagal", "error");
       }
     }
 
@@ -1413,12 +1417,14 @@
     }
 
     async function deleteRecord(colName, firestoreId) {
-      if (!confirm(`Apakah Anda yakin ingin menghapus data ini dari ${colName}?`)) return;
+      const setuju = await confirm(`Apakah Anda yakin ingin menghapus data ini dari ${colName}?`, "Konfirmasi Hapus");
+      if (!setuju) return;
+      
       try {
         await deleteDoc(doc(db, colName, firestoreId));
-        alert('Data berhasil dihapus!');
+        await alert('Data berhasil dihapus!', 'Berhasil', 'success');
       } catch (err) {
-        alert('Gagal menghapus data: ' + err.message);
+        await alert('Gagal menghapus data: ' + err.message, 'Gagal', 'error');
       }
     }
 

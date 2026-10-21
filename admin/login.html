@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Admin - Perpustakaan SMAN 4 Manado</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/dialog-engine.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
@@ -23,11 +24,7 @@
   <div class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
   <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
-  <script>
-    if (localStorage.getItem('adminSession')) {
-      window.location.href = "dashboard.html";
-    }
-  </script>
+  <!-- CATATAN: Pengecekan otomatis berpindah halaman dialihkan, hanya mengisi form jika kredensial tersimpan -->
 
   <div class="w-full max-w-md space-y-4 relative z-10">
     <a href="../index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-amber-400 transition">
@@ -77,6 +74,14 @@
           </div>
         </div>
 
+        <!-- Checkbox Ingat Username & Password Pada Perangkat Ini -->
+        <div class="flex items-center justify-between text-xs pt-1">
+          <label class="flex items-center gap-2 text-slate-300 cursor-pointer font-medium select-none">
+            <input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900">
+            <span>Ingat Saya di Perangkat Ini</span>
+          </label>
+        </div>
+
         <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl text-xs shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition active:scale-[0.99]">
           <span id="btnText">Masuk Dashboard Admin</span>
           <i id="btnIcon" class="fa-solid fa-right-to-bracket"></i>
@@ -92,7 +97,7 @@
 
   <script type="module">
     import { auth } from '../js/firebase-config.js';
-    import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
     const form = document.getElementById('formAdminLogin');
     const alertBox = document.getElementById('alertBox');
@@ -102,15 +107,18 @@
     const btnIcon = document.getElementById('btnIcon');
     const togglePass = document.getElementById('togglePass');
     const passVal = document.getElementById('passVal');
+    const emailVal = document.getElementById('emailVal');
+    const rememberMe = document.getElementById('rememberMe');
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        localStorage.setItem('adminSession', JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          loginTime: new Date().toISOString()
-        }));
-        window.location.href = "dashboard.html";
+    // MENGISI OTOMATIS EMAIL & PASSWORD JIKA TERSIMPAN DI PERANGKAT INI
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedEmail = localStorage.getItem('saved_admin_email');
+      const savedPass = localStorage.getItem('saved_admin_password');
+
+      if (savedEmail && savedPass) {
+        if (emailVal) emailVal.value = savedEmail;
+        if (passVal) passVal.value = savedPass;
+        if (rememberMe) rememberMe.checked = true;
       }
     });
 
@@ -124,7 +132,7 @@
       e.preventDefault();
       alertBox.classList.add('hidden');
       
-      const email = document.getElementById('emailVal').value.trim();
+      const email = emailVal.value.trim();
       const pass = passVal.value;
 
       submitBtn.disabled = true;
@@ -135,11 +143,21 @@
         const userCredential = await signInWithEmailAndPassword(auth, email, pass);
         const user = userCredential.user;
         
+        // Simpan sesi login aktif saat ini
         localStorage.setItem('adminSession', JSON.stringify({
           uid: user.uid,
           email: user.email,
           loginTime: new Date().toISOString()
         }));
+
+        // Logika Penyimpanan Kredensial (Ingat Saya) pada Perangkat Terakhir
+        if (rememberMe.checked) {
+          localStorage.setItem('saved_admin_email', email);
+          localStorage.setItem('saved_admin_password', pass);
+        } else {
+          localStorage.removeItem('saved_admin_email');
+          localStorage.removeItem('saved_admin_password');
+        }
 
         btnText.innerText = "Login Berhasil!";
         btnIcon.className = "fa-solid fa-circle-check";
