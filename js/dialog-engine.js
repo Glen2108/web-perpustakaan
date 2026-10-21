@@ -6,18 +6,24 @@
 class CustomDialogEngine {
   constructor() {
     this.container = null;
-    this.initContainer();
   }
 
   initContainer() {
-    if (document.getElementById('custom-dialog-container')) {
-      this.container = document.getElementById('custom-dialog-container');
+    if (this.container && document.body.contains(this.container)) {
       return;
     }
 
+    const existingContainer = document.getElementById('custom-dialog-container');
+    if (existingContainer) {
+      this.container = existingContainer;
+      return;
+    }
+
+    if (!document.body) return;
+
     const container = document.createElement('div');
     container.id = 'custom-dialog-container';
-    container.className = 'fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md transition-opacity duration-200 opacity-0';
+    container.className = 'fixed inset-0 z-[99999] hidden items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md transition-opacity duration-200 opacity-0';
     document.body.appendChild(container);
     this.container = container;
   }
@@ -25,6 +31,14 @@ class CustomDialogEngine {
   show({ type = 'alert', title = 'Pemberitahuan', message = '', defaultValue = '', icon = 'info', confirmText = 'OK', cancelText = 'Batal' }) {
     return new Promise((resolve) => {
       this.initContainer();
+
+      if (!this.container) {
+        // Fallback jika DOM belum siap
+        if (type === 'confirm') resolve(window.nativeConfirm ? window.nativeConfirm(message) : true);
+        else if (type === 'prompt') resolve(window.nativePrompt ? window.nativePrompt(message, defaultValue) : '');
+        else resolve(window.nativeAlert ? window.nativeAlert(message) : undefined);
+        return;
+      }
 
       const icons = {
         info: '<i class="fa-solid fa-circle-info text-blue-500 text-3xl"></i>',
@@ -83,6 +97,7 @@ class CustomDialogEngine {
       this.container.classList.add('flex');
 
       setTimeout(() => {
+        if (!this.container) return;
         this.container.classList.remove('opacity-0');
         this.container.classList.add('opacity-100');
         const card = document.getElementById('custom-dialog-card');
@@ -99,17 +114,21 @@ class CustomDialogEngine {
 
       const closeDialog = (result) => {
         const card = document.getElementById('custom-dialog-card');
-        this.container.classList.remove('opacity-100');
-        this.container.classList.add('opacity-0');
+        if (this.container) {
+          this.container.classList.remove('opacity-100');
+          this.container.classList.add('opacity-0');
+        }
         if (card) {
           card.classList.remove('scale-100');
           card.classList.add('scale-90');
         }
 
         setTimeout(() => {
-          this.container.classList.remove('flex');
-          this.container.classList.add('hidden');
-          this.container.innerHTML = '';
+          if (this.container) {
+            this.container.classList.remove('flex');
+            this.container.classList.add('hidden');
+            this.container.innerHTML = '';
+          }
           resolve(result);
         }, 200);
       };
@@ -152,6 +171,11 @@ class CustomDialogEngine {
 }
 
 const customDialog = new CustomDialogEngine();
+
+// Simpan referensi native dialog
+window.nativeAlert = window.alert;
+window.nativeConfirm = window.confirm;
+window.nativePrompt = window.prompt;
 
 // Overriding Dialog Bawaan Browser
 window.alert = function(message, title = 'Pemberitahuan', icon = 'info') {
