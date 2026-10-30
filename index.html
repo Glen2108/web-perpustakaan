@@ -106,13 +106,11 @@
           </p>
         </div>
       </div>
-      <div id="greetingAction" class="shrink-0">
-        <!-- Tombol aksi dirender secara otomatis melalui JS -->
-      </div>
+      <div id="greetingAction" class="shrink-0"></div>
     </div>
   </div>
 
-  <!-- Hero Section (DIPERBARUI: items-start agar sejajar atas di desktop) -->
+  <!-- Hero Section -->
   <section class="bg-gradient-to-b from-brand-900 via-slate-900 to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
@@ -175,9 +173,7 @@
             </li>
           </ul>
 
-          <!-- Card Informasi Kepala & Petugas Perpustakaan -->
           <div class="mt-4 pt-3 border-t border-slate-100 space-y-2.5">
-            <!-- Kepala Perpustakaan -->
             <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
               <div class="w-9 h-9 rounded-xl bg-brand-800 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0">
                 <i class="fa-solid fa-user-tie"></i>
@@ -188,7 +184,6 @@
               </div>
             </div>
 
-            <!-- Petugas Perpustakaan (SK Semester Ganjil 2026/2027) -->
             <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-2">
               <div class="flex items-center justify-between border-b border-slate-200/80 pb-1.5">
                 <p class="text-[10px] text-brand-800 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
@@ -198,29 +193,23 @@
                   SK Ganjil 2026/2027
                 </span>
               </div>
-
               <ul class="text-xs space-y-1.5 text-slate-700 font-semibold pt-0.5">
                 <li class="flex items-center gap-2">
-                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i>
-                  <span>Christofel Demas Wonte</span>
+                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i><span>Christofel Demas Wonte</span>
                 </li>
                 <li class="flex items-center gap-2">
-                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i>
-                  <span>Reydi Vridell Awawangi, S.H</span>
+                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i><span>Reydi Vridell Awawangi, S.H</span>
                 </li>
                 <li class="flex items-center gap-2">
-                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i>
-                  <span>Jexel Cr. Gagundali, S.Pd., Gr</span>
+                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i><span>Jexel Cr. Gagundali, S.Pd., Gr</span>
                 </li>
                 <li class="flex items-center gap-2">
-                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i>
-                  <span>Siska O. Tumbelaka, S.Pd</span>
+                  <i class="fa-solid fa-id-badge text-[10px] text-brand-600"></i><span>Siska O. Tumbelaka, S.Pd</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <!-- Mini Dynamic Calendar -->
           <div class="mt-4 pt-3 border-t border-slate-100">
             <div id="calendarMonth" class="text-xs font-bold text-center text-brand-800 uppercase tracking-wider mb-2">-</div>
             <div id="calendarGrid" class="grid grid-cols-7 text-center text-[11px] gap-1 font-semibold text-slate-600"></div>
@@ -230,33 +219,37 @@
     </div>
   </section>
 
-  <div class="ringkasan-buku-container bg-white p-6 rounded-3xl shadow-xl border border-slate-200" style="margin-top: 30px; margin-bottom: 30px;">
-    <h4 class="text-xl font-extrabold text-slate-900 mb-4">Ketersediaan Buku Fisik di Perpustakaan</h4>
-    <div class="overflow-x-auto rounded-2xl border border-slate-100">
-      <table class="w-full text-left text-xs text-slate-700">
-        <thead class="bg-slate-100 text-slate-800 uppercase font-bold tracking-wider">
-            <tr>
-                <th class="p-3.5">Kategori Buku</th>
-                <th class="p-3.5">Jumlah Total Buku</th>
-            </tr>
-        </thead>
-        <tbody id="tabel-kategori-buku" class="divide-y divide-slate-100 bg-white">
-            <!-- Data dari Firebase -->
-        </tbody>
-        <tfoot>
-            <tr class="bg-slate-50 font-extrabold text-slate-900 border-t border-slate-200">
-                <td class="p-3.5">Total Keseluruhan</td>
-                <td class="p-3.5" id="total-keseluruhan">Memuat...</td>
-            </tr>
-        </tfoot>
-      </table>
+  <!-- Ketersediaan Buku Fisik -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-10">
+    <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-200">
+      <h4 class="text-xl font-extrabold text-slate-900 mb-4">Ketersediaan Buku Fisik di Perpustakaan</h4>
+      <div class="overflow-x-auto rounded-2xl border border-slate-100">
+        <table class="w-full text-left text-xs text-slate-700">
+          <thead class="bg-slate-100 text-slate-800 uppercase font-bold tracking-wider">
+              <tr>
+                  <th class="p-3.5">Kategori Buku</th>
+                  <th class="p-3.5">Jumlah Total Buku</th>
+              </tr>
+          </thead>
+          <tbody id="tabel-kategori-buku" class="divide-y divide-slate-100 bg-white">
+              <tr>
+                  <td colspan="2" class="p-4 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat data buku...</td>
+              </tr>
+          </tbody>
+          <tfoot>
+              <tr class="bg-slate-50 font-extrabold text-slate-900 border-t border-slate-200">
+                  <td class="p-3.5">Total Keseluruhan</td>
+                  <td class="p-3.5" id="total-keseluruhan">Memuat...</td>
+              </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
 
   <!-- Section Leaderboard Peminjam -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
     <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200 space-y-6">
-      
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div>
           <div class="flex items-center gap-2 text-xs font-extrabold text-amber-600 uppercase tracking-wider mb-1">
@@ -270,7 +263,6 @@
             Data terintegrasi otomatis dari transaksi sirkulasi fisik perpustakaan.
           </p>
         </div>
-
         <div class="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
           <label for="filterBulanPeminjam" class="text-xs font-extrabold text-slate-700 flex items-center gap-1.5 pl-2">
             <i class="fa-solid fa-calendar-days text-blue-600"></i> Periode:
@@ -280,9 +272,7 @@
           </select>
         </div>
       </div>
-
       <div id="top3CardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-
       <div class="overflow-x-auto rounded-2xl border border-slate-100 shadow-sm">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-900 text-white font-extrabold uppercase tracking-wider">
@@ -304,14 +294,12 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </section>
 
   <!-- Seksi Direktori Anggota & Petugas -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 space-y-6">
     <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-6">
-      
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div>
           <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
@@ -321,41 +309,35 @@
             Data resmi anggota siswa dan petugas perpustakaan SMAN 4 Manado (Status: Aktif, Alumni, Non-aktif).
           </p>
         </div>
-
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <select id="pubTypeSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600">
             <option value="siswa">Daftar Siswa / Anggota</option>
             <option value="petugas">Daftar Petugas</option>
           </select>
-
           <select id="pubStatusSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600">
             <option value="semua">Semua Status</option>
             <option value="Aktif">Aktif / Standar</option>
             <option value="Alumni">Alumni</option>
             <option value="Non-aktif">Non-aktif</option>
           </select>
-
           <select id="pubSortSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600">
             <option value="nama-asc">Urut: Nama (A - Z)</option>
             <option value="nama-desc">Urut: Nama (Z - A)</option>
             <option value="id-asc">Urut: ID (Ascending)</option>
             <option value="id-desc">Urut: ID (Descending)</option>
           </select>
-
           <select id="pubLimitSelect" class="bg-slate-50 text-slate-800 font-bold px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-brand-600">
             <option value="10">10 / hal</option>
             <option value="25">25 / hal</option>
             <option value="50">50 / hal</option>
             <option value="100">100 / hal</option>
           </select>
-
           <div class="relative">
             <input type="text" id="pubSearchInput" placeholder="Cari nama / ID..." class="bg-slate-50 text-slate-800 text-xs px-3 py-2.5 pl-8 rounded-xl border border-slate-200 outline-none focus:border-brand-600 w-44 sm:w-52">
             <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3 text-slate-400 text-xs"></i>
           </div>
         </div>
       </div>
-
       <div class="overflow-x-auto rounded-2xl border border-slate-200">
         <table class="w-full text-left text-xs text-slate-700">
           <thead id="pubTableHead" class="bg-slate-100 text-slate-800 uppercase text-[11px] font-bold tracking-wider select-none">
@@ -367,266 +349,109 @@
           </tbody>
         </table>
       </div>
-
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 text-xs text-slate-500">
         <div id="pubPaginationInfo" class="font-medium">Menampilkan 0 - 0 dari 0 data</div>
         <div id="pubPaginationBtns" class="flex items-center gap-1"></div>
       </div>
-
     </div>
   </section>
 
-  <!-- Script Firestore & LocalStorage Sync -->
+  <!-- SINGLE SCRIPT TERPUSAT UNTUK SEMUA LOGIKA (JAM, KALENDER, FIREBASE, UI) -->
   <script type="module">
     import { db } from './js/firebase-config.js';
     import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    let listSiswa = [];
-    let listPetugas = [];
-    let currentPage = 1;
-
-    const pubTypeSelect = document.getElementById('pubTypeSelect');
-    const pubStatusSelect = document.getElementById('pubStatusSelect');
-    const pubSortSelect = document.getElementById('pubSortSelect');
-    const pubLimitSelect = document.getElementById('pubLimitSelect');
-    const pubSearchInput = document.getElementById('pubSearchInput');
-    const pubTableHead = document.getElementById('pubTableHead');
-    const pubTableBody = document.getElementById('pubTableBody');
-    const pubPaginationInfo = document.getElementById('pubPaginationInfo');
-    const pubPaginationBtns = document.getElementById('pubPaginationBtns');
-
-    function loadFromLocalStorage() {
-      try {
-        const localSiswa = localStorage.getItem('anggotaData') || localStorage.getItem('siswaData') || localStorage.getItem('perpustakaan_anggota');
-        const localPetugas = localStorage.getItem('petugasData') || localStorage.getItem('perpustakaan_petugas');
-        const localPerpustakaan = localStorage.getItem('perpustakaanData');
-
-        if (localPerpustakaan) {
-          const parsed = JSON.parse(localPerpustakaan);
-          if (parsed.anggota) listSiswa = parsed.anggota;
-          else if (parsed.siswa) listSiswa = parsed.siswa;
-          if (parsed.petugas) listPetugas = parsed.petugas;
-        } else {
-          if (localSiswa) listSiswa = JSON.parse(localSiswa);
-          if (localPetugas) listPetugas = JSON.parse(localPetugas);
-        }
-        renderPublicTable();
-      } catch (e) {
-        console.warn("Gagal memuat data dari localStorage:", e);
-      }
+    // =========================================================================
+    // 1. LOGIKA SISI KLIEN (MOBILE MENU & SAPAAN DINAMIS)
+    // =========================================================================
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     }
 
-    loadFromLocalStorage();
+    function renderDynamicGreeting() {
+      const titleEl = document.getElementById('greetingTitle');
+      const subEl = document.getElementById('greetingSub');
+      const actionEl = document.getElementById('greetingAction');
+      if (!titleEl || !subEl || !actionEl) return;
 
-    window.addEventListener('storage', (e) => {
-      if (['perpustakaanData', 'anggotaData', 'siswaData', 'petugasData'].includes(e.key)) {
-        loadFromLocalStorage();
-      }
-    });
+      const userSessionData = JSON.parse(
+        localStorage.getItem('userSession') || sessionStorage.getItem('userSession') || 
+        localStorage.getItem('siswa_login') || sessionStorage.getItem('siswa_login') || 'null'
+      );
+      const adminSessionData = JSON.parse(
+        localStorage.getItem('adminSession') || sessionStorage.getItem('adminSession') || 
+        localStorage.getItem('admin_login') || sessionStorage.getItem('admin_login') || 'null'
+      );
+      const petugasSessionData = JSON.parse(
+        localStorage.getItem('petugasSession') || sessionStorage.getItem('petugasSession') || 
+        localStorage.getItem('petugas_login') || sessionStorage.getItem('petugas_login') || 'null'
+      );
+      const genericUser = JSON.parse(
+        localStorage.getItem('user') || sessionStorage.getItem('user') || 
+        localStorage.getItem('currentUser') || 'null'
+      );
 
-    if (db) {
-      onSnapshot(collection(db, "anggota"), (snap) => {
-        if (!snap.empty) {
-          listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-          renderPublicTable();
-        }
-      }, (err) => {
-        onSnapshot(collection(db, "siswa"), (snapSiswa) => {
-          if (!snapSiswa.empty) {
-            listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
-            renderPublicTable();
-          }
-        });
-      });
+      const currentUser = userSessionData || petugasSessionData || adminSessionData || genericUser;
 
-      onSnapshot(collection(db, "petugas"), (snap) => {
-        if (!snap.empty) {
-          listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
-          renderPublicTable();
-        }
-      });
-    }
+      if (currentUser) {
+        const nama = currentUser.nama || currentUser.nama_lengkap || currentUser.name || currentUser.username || 'Pengguna';
+        let role = (currentUser.role || '').toLowerCase();
+        if (adminSessionData || role === 'admin' || currentUser.email === 'admin@sman4manado.sch.id') role = 'admin';
+        else if (petugasSessionData || role === 'petugas') role = 'petugas';
+        else role = 'siswa';
 
-    function renderPublicTable() {
-      if (!pubTypeSelect || !pubTableHead || !pubTableBody) return;
-
-      const tipe = pubTypeSelect.value;
-      const statusFilter = pubStatusSelect ? pubStatusSelect.value : 'semua';
-      const sortMode = pubSortSelect ? pubSortSelect.value : 'nama-asc';
-      const pageSize = pubLimitSelect ? (parseInt(pubLimitSelect.value) || 10) : 10;
-      const keyword = (pubSearchInput?.value || '').toLowerCase().trim();
-
-      const rawData = (tipe === 'siswa') ? listSiswa : listPetugas;
-
-      let filtered = rawData.filter(item => {
-        if (tipe === 'siswa') {
-          const statusKeanggotaanVal = (item.statusKeanggotaan || item.status || 'Aktif').toString();
-          const matchStatus = (statusFilter === 'semua') || (statusKeanggotaanVal.toLowerCase() === statusFilter.toLowerCase());
-          const idAnggota = (item.id || item.memberId || '').toString().toLowerCase();
-          const namaSiswa = (item.nama || '').toLowerCase();
-          const nisnSiswa = (item.nisn || '').toString().toLowerCase();
-          return matchStatus && (namaSiswa.includes(keyword) || idAnggota.includes(keyword) || nisnSiswa.includes(keyword));
+        if (role === 'admin' || role === 'petugas') {
+          const roleBadge = role === 'admin' ? 'Administrator' : 'Petugas Perpustakaan';
+          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400 font-black">${nama}</span> (${roleBadge})! 👋`;
+          subEl.innerText = 'Semangat melayani sirkulasi buku, kelola anggota, dan pendataan literasi sekolah.';
+          actionEl.innerHTML = `<a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md"><i class="fa-solid fa-gauge-high"></i> Dashboard Panel</a>`;
         } else {
-          const statusVal = (item.status || 'Aktif').toString();
-          const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
-          const namaPetugas = (item.nama || '').toLowerCase();
-          const usernamePetugas = (item.username || item.id || '').toLowerCase();
-          return matchStatus && (namaPetugas.includes(keyword) || usernamePetugas.includes(keyword));
-        }
-      });
-
-      filtered.sort((a, b) => {
-        const namaA = (a.nama || '').toString();
-        const namaB = (b.nama || '').toString();
-        const idA = (a.id || a.memberId || a.username || '').toString();
-        const idB = (b.id || b.memberId || b.username || '').toString();
-
-        if (sortMode === 'nama-asc') return namaA.localeCompare(namaB, 'id', { sensitivity: 'base' });
-        if (sortMode === 'nama-desc') return namaB.localeCompare(namaA, 'id', { sensitivity: 'base' });
-        if (sortMode === 'id-asc') return idA.localeCompare(idB, 'id', { numeric: true });
-        if (sortMode === 'id-desc') return idB.localeCompare(idA, 'id', { numeric: true });
-        return 0;
-      });
-
-      const totalItems = filtered.length;
-      const totalPages = Math.ceil(totalItems / pageSize) || 1;
-
-      if (currentPage > totalPages) currentPage = totalPages;
-      if (currentPage < 1) currentPage = 1;
-
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = Math.min(startIndex + pageSize, totalItems);
-      const pageData = filtered.slice(startIndex, endIndex);
-
-      if (tipe === 'siswa') {
-        pubTableHead.innerHTML = `
-          <tr>
-            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('id')">ID Anggota <i class="fa-solid fa-sort ml-1 text-slate-400"></i></th>
-            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('nama')">Nama Lengkap <i class="fa-solid fa-sort ml-1 text-slate-400"></i></th>
-            <th class="p-3.5">Kelas</th>
-            <th class="p-3.5">Instansi</th>
-            <th class="p-3.5 text-center">Status Keanggotaan</th>
-          </tr>
-        `;
-
-        if (totalItems === 0) {
-          pubTableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Tidak ada data anggota siswa yang ditemukan.</td></tr>`;
-        } else {
-          pubTableBody.innerHTML = pageData.map(item => {
-            const st = item.statusKeanggotaan || item.status || 'Aktif';
-            let badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-            if (st.toLowerCase() === 'alumni') badgeStyle = 'bg-amber-50 text-amber-700 border-amber-200';
-            else if (st.toLowerCase() === 'non-aktif') badgeStyle = 'bg-rose-50 text-rose-700 border-rose-200';
-
-            return `
-              <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                <td class="p-3.5 font-mono text-brand-600 font-bold">${item.id || item.memberId || '-'}</td>
-                <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
-                <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
-                <td class="p-3.5 text-slate-500">${item.instansi || 'SMA Negeri 4 Manado'}</td>
-                <td class="p-3.5 text-center">
-                  <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badgeStyle}">${st}</span>
-                </td>
-              </tr>
-            `;
-          }).join('');
-        }
-      } else {
-        pubTableHead.innerHTML = `
-          <tr>
-            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('nama')">Nama Petugas <i class="fa-solid fa-sort ml-1 text-slate-400"></i></th>
-            <th class="p-3.5">Jabatan</th>
-            <th class="p-3.5 cursor-pointer hover:bg-slate-200 transition" onclick="window.toggleSort('id')">Username / ID <i class="fa-solid fa-sort ml-1 text-slate-400"></i></th>
-            <th class="p-3.5 text-center">Status</th>
-          </tr>
-        `;
-
-        if (totalItems === 0) {
-          pubTableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Tidak ada data petugas yang ditemukan.</td></tr>`;
-        } else {
-          pubTableBody.innerHTML = pageData.map(item => `
-            <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-              <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
-              <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
-              <td class="p-3.5 font-mono text-slate-500">${item.username || item.id || '-'}</td>
-              <td class="p-3.5 text-center">
-                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border bg-blue-50 text-blue-700 border-blue-200">${item.status || 'Aktif'}</span>
-              </td>
-            </tr>
-          `).join('');
-        }
-      }
-
-      if (pubPaginationInfo) {
-        const from = totalItems === 0 ? 0 : startIndex + 1;
-        pubPaginationInfo.innerText = `Menampilkan ${from} - ${endIndex} dari ${totalItems} data`;
-      }
-
-      if (pubPaginationBtns) {
-        let btnsHtml = `
-          <button onclick="window.changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 font-bold hover:bg-slate-100 disabled:opacity-40 transition">
-            <i class="fa-solid fa-chevron-left text-[10px]"></i>
-          </button>
-        `;
-
-        for (let p = 1; p <= totalPages; p++) {
-          btnsHtml += `
-            <button onclick="window.changePage(${p})" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition ${p === currentPage ? 'bg-brand-600 text-white border-brand-600' : 'border-slate-200 hover:bg-slate-100 text-slate-700'}">
-              ${p}
-            </button>
+          const isAlumni = (currentUser.statusKeanggotaan || currentUser.status || '').toLowerCase() === 'alumni';
+          const statusText = isAlumni ? 'Alumni SMAN 4 Manado' : (currentUser.kelas ? `Kelas ${currentUser.kelas}` : 'Anggota Aktif');
+          titleEl.innerHTML = `Halo <span class="text-amber-400 font-black">${nama}</span> (${statusText}), selamat datang kembali! 👋`;
+          subEl.innerText = isAlumni ? 'Senang melihat Anda berkunjung kembali! Sapa Kepala Perpustakaan atau jelajahi koleksi buku terbaru.' : 'Yuk, sempatkan membaca hari ini dan manfaatkan layanan sirkulasi Perpustakaan Sekolah!';
+          actionEl.innerHTML = `
+            <div class="flex items-center gap-2">
+              <a href="profil.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md"><i class="fa-solid fa-circle-user"></i> Profil Saya</a>
+              <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition"><i class="fa-solid fa-book"></i> Katalog Buku</a>
+            </div>
           `;
         }
-
-        btnsHtml += `
-          <button onclick="window.changePage(${currentPage + 1})" ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg border border-slate-200 font-bold hover:bg-slate-100 disabled:opacity-40 transition">
-            <i class="fa-solid fa-chevron-right text-[10px]"></i>
-          </button>
+      } else {
+        titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
+        subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
+        actionEl.innerHTML = `
+          <div class="flex items-center gap-2">
+            <a href="login-siswa.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md"><i class="fa-solid fa-right-to-bracket"></i> Ayo Mendaftar / Login</a>
+            <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition"><i class="fa-solid fa-book"></i> Katalog Buku</a>
+          </div>
         `;
-
-        pubPaginationBtns.innerHTML = btnsHtml;
       }
     }
+    renderDynamicGreeting();
+    window.addEventListener('storage', renderDynamicGreeting);
 
-    window.changePage = function(page) { currentPage = page; renderPublicTable(); };
-    window.toggleSort = function(field) {
-      if (!pubSortSelect) return;
-      if (field === 'nama') pubSortSelect.value = pubSortSelect.value === 'nama-asc' ? 'nama-desc' : 'nama-asc';
-      else if (field === 'id') pubSortSelect.value = pubSortSelect.value === 'id-asc' ? 'id-desc' : 'id-asc';
-      currentPage = 1;
-      renderPublicTable();
-    };
-
-    if (pubTypeSelect) pubTypeSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
-    if (pubStatusSelect) pubStatusSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
-    if (pubSortSelect) pubSortSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
-    if (pubLimitSelect) pubLimitSelect.addEventListener('change', () => { currentPage = 1; renderPublicTable(); });
-    if (pubSearchInput) pubSearchInput.addEventListener('input', () => { currentPage = 1; renderPublicTable(); });
-  </script>
-
-  <!-- Script Jam & Kalender Realtime -->
-  <script>
+    // =========================================================================
+    // 2. JAM REALTIME & KALENDER
+    // =========================================================================
     function getWitaTimeComponents() {
       const now = new Date();
       const formatter = new Intl.DateTimeFormat('en-US', {
         timeZone: 'Asia/Makassar',
         year: 'numeric', month: 'numeric', day: 'numeric',
         hour: 'numeric', minute: 'numeric', second: 'numeric',
-        weekday: 'short',
-        hour12: false
+        weekday: 'short', hour12: false
       });
       const parts = formatter.formatToParts(now);
       const res = {};
       parts.forEach(p => res[p.type] = p.value);
-      
       const dayMap = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
       return {
-        year: parseInt(res.year),
-        month: parseInt(res.month) - 1,
-        day: parseInt(res.day),
-        hours: parseInt(res.hour === '24' ? 0 : res.hour),
-        minutes: parseInt(res.minute),
-        seconds: parseInt(res.second),
-        weekday: dayMap[res.weekday] ?? now.getDay()
+        year: parseInt(res.year), month: parseInt(res.month) - 1, day: parseInt(res.day),
+        hours: parseInt(res.hour === '24' ? 0 : res.hour), minutes: parseInt(res.minute),
+        seconds: parseInt(res.second), weekday: dayMap[res.weekday] ?? now.getDay()
       };
     }
 
@@ -636,74 +461,29 @@
       const dateEl = document.getElementById('realtimeDate');
       const calMonthEl = document.getElementById('calendarMonth');
 
-      if (clockEl) {
-        clockEl.innerText = now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar' }) + " WITA";
-      }
-      if (dateEl) {
-        dateEl.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' });
-      }
-      if (calMonthEl) {
-        calMonthEl.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
-      }
+      if (clockEl) clockEl.innerText = now.toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar' }) + " WITA";
+      if (dateEl) dateEl.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Makassar' });
+      if (calMonthEl) calMonthEl.innerText = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Makassar' });
 
       const wita = getWitaTimeComponents();
       const day = wita.weekday;
       const timeNum = wita.hours * 100 + wita.minutes;
-
       const badge = document.getElementById('statusBadge');
-      if (!badge) return;
-      let isOpen = false;
-
-      if (day >= 1 && day <= 4) { 
-        if (timeNum >= 715 && timeNum <= 1400) isOpen = true; 
-      } else if (day === 5) { 
-        if (timeNum >= 755 && timeNum <= 1130) isOpen = true; 
-      }
-
-      if (isOpen) {
-        badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/40";
-        badge.innerHTML = "• BUKA SEKARANG";
-      } else {
-        badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-rose-400/20 text-rose-300 border border-rose-400/40";
-        badge.innerHTML = "• SEDANG TUTUP";
+      
+      if (badge) {
+        let isOpen = false;
+        if (day >= 1 && day <= 4 && timeNum >= 715 && timeNum <= 1400) isOpen = true;
+        else if (day === 5 && timeNum >= 755 && timeNum <= 1130) isOpen = true;
+        
+        if (isOpen) {
+          badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/40";
+          badge.innerHTML = "• BUKA SEKARANG";
+        } else {
+          badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-rose-400/20 text-rose-300 border border-rose-400/40";
+          badge.innerHTML = "• SEDANG TUTUP";
+        }
       }
     }
-
-    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
-    // Tambahkan di dalam blok if (db) { ... }
-    onSnapshot(collection(db, "buku"), (snapshot) => {
-        let kategoriCount = {};
-        let totalBuku = 0;
-
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const kategori = data.kategori || 'Tanpa Kategori';
-            
-            if(kategoriCount[kategori]) {
-                kategoriCount[kategori]++;
-            } else {
-                kategoriCount[kategori] = 1;
-            }
-            totalBuku++;
-        });
-
-        const tbody = document.getElementById("tabel-kategori-buku");
-        if(tbody) {
-            tbody.innerHTML = "";
-            for (const [kategori, jumlah] of Object.entries(kategoriCount)) {
-                tbody.innerHTML += `
-                    <tr class="border-b border-slate-200">
-                        <td class="p-3">${kategori}</td>
-                        <td class="p-3">${jumlah}</td>
-                    </tr>
-                `;
-            }
-        }
-
-        const totalEl = document.getElementById("total-keseluruhan");
-        if(totalEl) totalEl.innerText = `${totalBuku} Buku Fisik`;
-    });
 
     function generateCalendar() {
       const grid = document.getElementById('calendarGrid');
@@ -721,7 +501,7 @@
 
       for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
       for (let d = 1; d <= totalDays; d++) {
-        grid.innerHTML += `<div class="py-1 rounded-lg ${d === todayDate ? 'bg-brand-600 text-white font-bold' : 'hover:bg-slate-100'}">${d}</div>`;
+        grid.innerHTML += `<div class="py-1 rounded-lg ${d === todayDate ? 'bg-brand-600 text-white font-bold shadow-md' : 'hover:bg-slate-100'}">${d}</div>`;
       }
     }
 
@@ -729,63 +509,209 @@
     updateClock();
     generateCalendar();
 
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenuBtn && mobileMenu) {
-      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    }
-  </script>
-
-  <!-- Script Firestore Leaderboard Peminjam -->
-  <script type="module">
-    import { db } from './js/firebase-config.js';
-    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
+    // =========================================================================
+    // 3. FIREBASE: DATA BUKU, PEMINJAM, & DIREKTORI
+    // =========================================================================
+    let listSiswa = [];
+    let listPetugas = [];
     let rawPinjamData = [];
     let rawAnggotaData = [];
     let selectedMonth = 'all';
+    let currentPage = 1;
+
+    const pubTypeSelect = document.getElementById('pubTypeSelect');
+    const pubStatusSelect = document.getElementById('pubStatusSelect');
+    const pubSortSelect = document.getElementById('pubSortSelect');
+    const pubLimitSelect = document.getElementById('pubLimitSelect');
+    const pubSearchInput = document.getElementById('pubSearchInput');
+    const pubTableHead = document.getElementById('pubTableHead');
+    const pubTableBody = document.getElementById('pubTableBody');
+    const pubPaginationInfo = document.getElementById('pubPaginationInfo');
+    const pubPaginationBtns = document.getElementById('pubPaginationBtns');
 
     if (db) {
+      // Data Tabel Buku
+      onSnapshot(collection(db, "buku"), (snapshot) => {
+        let kategoriCount = {};
+        let totalBuku = 0;
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const kategori = data.kategori || 'Tanpa Kategori';
+            if(kategoriCount[kategori]) kategoriCount[kategori]++;
+            else kategoriCount[kategori] = 1;
+            totalBuku++;
+        });
+
+        const tbody = document.getElementById("tabel-kategori-buku");
+        if(tbody) {
+            tbody.innerHTML = "";
+            if (Object.keys(kategoriCount).length === 0) {
+              tbody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-slate-400">Belum ada data buku fisik.</td></tr>`;
+            } else {
+              for (const [kategori, jumlah] of Object.entries(kategoriCount)) {
+                  tbody.innerHTML += `
+                      <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                          <td class="p-3.5 font-bold">${kategori}</td>
+                          <td class="p-3.5"><span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-lg border border-blue-100 font-bold">${jumlah} Judul</span></td>
+                      </tr>
+                  `;
+              }
+            }
+        }
+        const totalEl = document.getElementById("total-keseluruhan");
+        if(totalEl) totalEl.innerText = `${totalBuku} Buku Fisik Terdata`;
+      });
+
+      // Data Leaderboard Peminjam
       onSnapshot(collection(db, 'pinjam'), (snapshot) => {
         rawPinjamData = snapshot.docs.map(doc => doc.data());
         populateMonthOptions();
         renderLeaderboard();
       });
 
-      onSnapshot(collection(db, 'anggota'), (snapshot) => {
-        rawAnggotaData = snapshot.docs.map(doc => doc.data());
-        renderLeaderboard();
+      // Data Direktori Anggota
+      onSnapshot(collection(db, "anggota"), (snap) => {
+        if (!snap.empty) {
+          listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+          rawAnggotaData = [...listSiswa];
+          renderPublicTable();
+          renderLeaderboard();
+        }
+      }, (err) => {
+        onSnapshot(collection(db, "siswa"), (snapSiswa) => {
+          if (!snapSiswa.empty) {
+            listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
+            rawAnggotaData = [...listSiswa];
+            renderPublicTable();
+            renderLeaderboard();
+          }
+        });
+      });
+
+      // Data Petugas
+      onSnapshot(collection(db, "petugas"), (snap) => {
+        if (!snap.empty) {
+          listPetugas = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+          renderPublicTable();
+        }
       });
     }
 
-    function populateMonthOptions() {
-      const selectEl = document.getElementById('filterBulanPeminjam');
-      if (!selectEl) return;
+    // Fungsi Render Direktori Anggota & Petugas
+    function renderPublicTable() {
+      if (!pubTypeSelect || !pubTableHead || !pubTableBody) return;
+      const tipe = pubTypeSelect.value;
+      const statusFilter = pubStatusSelect ? pubStatusSelect.value : 'semua';
+      const sortMode = pubSortSelect ? pubSortSelect.value : 'nama-asc';
+      const pageSize = pubLimitSelect ? (parseInt(pubLimitSelect.value) || 10) : 10;
+      const keyword = (pubSearchInput?.value || '').toLowerCase().trim();
 
-      const monthsSet = new Set();
-      rawPinjamData.forEach(item => {
-        if (item.tglPinjam && item.tglPinjam.length >= 7) {
-          monthsSet.add(item.tglPinjam.substring(0, 7));
+      const rawData = (tipe === 'siswa') ? listSiswa : listPetugas;
+      let filtered = rawData.filter(item => {
+        if (tipe === 'siswa') {
+          const statusKeanggotaanVal = (item.statusKeanggotaan || item.status || 'Aktif').toString();
+          const matchStatus = (statusFilter === 'semua') || (statusKeanggotaanVal.toLowerCase() === statusFilter.toLowerCase());
+          const idAnggota = (item.id || item.memberId || '').toString().toLowerCase();
+          const namaSiswa = (item.nama || '').toLowerCase();
+          return matchStatus && (namaSiswa.includes(keyword) || idAnggota.includes(keyword));
+        } else {
+          const statusVal = (item.status || 'Aktif').toString();
+          const matchStatus = (statusFilter === 'semua') || (statusVal.toLowerCase() === statusFilter.toLowerCase());
+          const namaPetugas = (item.nama || '').toLowerCase();
+          return matchStatus && namaPetugas.includes(keyword);
         }
       });
 
-      const sortedMonths = Array.from(monthsSet).sort().reverse();
-      let html = '<option value="all">Semua Periode (Total)</option>';
-
-      sortedMonths.forEach(m => {
-        const [year, month] = m.split('-');
-        const dateObj = new Date(year, parseInt(month) - 1, 1);
-        const label = dateObj.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-        html += `<option value="${m}">${label}</option>`;
+      filtered.sort((a, b) => {
+        const namaA = (a.nama || '').toString();
+        const namaB = (b.nama || '').toString();
+        const idA = (a.id || a.memberId || a.username || '').toString();
+        const idB = (b.id || b.memberId || b.username || '').toString();
+        if (sortMode === 'nama-asc') return namaA.localeCompare(namaB, 'id', { sensitivity: 'base' });
+        if (sortMode === 'nama-desc') return namaB.localeCompare(namaA, 'id', { sensitivity: 'base' });
+        if (sortMode === 'id-asc') return idA.localeCompare(idB, 'id', { numeric: true });
+        return idB.localeCompare(idA, 'id', { numeric: true });
       });
 
+      const totalItems = filtered.length;
+      const totalPages = Math.ceil(totalItems / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      const startIndex = (currentPage - 1) * pageSize;
+      const pageData = filtered.slice(startIndex, Math.min(startIndex + pageSize, totalItems));
+
+      if (tipe === 'siswa') {
+        pubTableHead.innerHTML = `<tr>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200" onclick="window.toggleSort('id')">ID Anggota</th>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200" onclick="window.toggleSort('nama')">Nama Lengkap</th>
+            <th class="p-3.5">Kelas</th>
+            <th class="p-3.5 text-center">Status</th>
+          </tr>`;
+        pubTableBody.innerHTML = totalItems === 0 ? `<tr><td colspan="4" class="p-6 text-center text-slate-400">Data tidak ditemukan.</td></tr>` : 
+          pageData.map(item => {
+            const st = item.statusKeanggotaan || item.status || 'Aktif';
+            let badge = 'bg-emerald-50 text-emerald-700';
+            if (st.toLowerCase() === 'alumni') badge = 'bg-amber-50 text-amber-700';
+            else if (st.toLowerCase() === 'non-aktif') badge = 'bg-rose-50 text-rose-700';
+            return `<tr class="hover:bg-slate-50 border-b border-slate-100">
+              <td class="p-3.5 font-mono text-brand-600 font-bold">${item.id || item.memberId || '-'}</td>
+              <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+              <td class="p-3.5 font-medium">${item.kelas || '-'}</td>
+              <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${badge}">${st}</span></td>
+            </tr>`;
+          }).join('');
+      } else {
+        pubTableHead.innerHTML = `<tr>
+            <th class="p-3.5 cursor-pointer hover:bg-slate-200" onclick="window.toggleSort('nama')">Nama Petugas</th>
+            <th class="p-3.5">Jabatan</th>
+            <th class="p-3.5 text-center">Status</th>
+          </tr>`;
+        pubTableBody.innerHTML = totalItems === 0 ? `<tr><td colspan="3" class="p-6 text-center text-slate-400">Data tidak ditemukan.</td></tr>` : 
+          pageData.map(item => `<tr class="hover:bg-slate-50 border-b border-slate-100">
+            <td class="p-3.5 font-bold text-slate-800">${item.nama || '-'}</td>
+            <td class="p-3.5 font-medium">${item.jabatan || '-'}</td>
+            <td class="p-3.5 text-center"><span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border bg-blue-50 text-blue-700">${item.status || 'Aktif'}</span></td>
+          </tr>`).join('');
+      }
+
+      if (pubPaginationInfo) pubPaginationInfo.innerText = `Menampilkan ${totalItems === 0 ? 0 : startIndex + 1} - ${Math.min(startIndex + pageSize, totalItems)} dari ${totalItems} data`;
+      if (pubPaginationBtns) {
+        let btns = `<button onclick="window.changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 border rounded-lg hover:bg-slate-100 disabled:opacity-40"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>`;
+        for (let p = 1; p <= totalPages; p++) btns += `<button onclick="window.changePage(${p})" class="px-3 py-1.5 rounded-lg border text-xs font-bold ${p === currentPage ? 'bg-brand-600 text-white' : 'hover:bg-slate-100'}">${p}</button>`;
+        btns += `<button onclick="window.changePage(${currentPage + 1})" ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''} class="px-3 py-1.5 border rounded-lg hover:bg-slate-100 disabled:opacity-40"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>`;
+        pubPaginationBtns.innerHTML = btns;
+      }
+    }
+
+    window.changePage = (page) => { currentPage = page; renderPublicTable(); };
+    window.toggleSort = (field) => {
+      if (!pubSortSelect) return;
+      if (field === 'nama') pubSortSelect.value = pubSortSelect.value === 'nama-asc' ? 'nama-desc' : 'nama-asc';
+      else if (field === 'id') pubSortSelect.value = pubSortSelect.value === 'id-asc' ? 'id-desc' : 'id-asc';
+      currentPage = 1; renderPublicTable();
+    };
+
+    [pubTypeSelect, pubStatusSelect, pubSortSelect, pubLimitSelect].forEach(el => el?.addEventListener('change', () => { currentPage = 1; renderPublicTable(); }));
+    pubSearchInput?.addEventListener('input', () => { currentPage = 1; renderPublicTable(); });
+
+    // Fungsi Render Leaderboard
+    function populateMonthOptions() {
+      const selectEl = document.getElementById('filterBulanPeminjam');
+      if (!selectEl) return;
+      const monthsSet = new Set();
+      rawPinjamData.forEach(item => { if (item.tglPinjam && item.tglPinjam.length >= 7) monthsSet.add(item.tglPinjam.substring(0, 7)); });
+      const sortedMonths = Array.from(monthsSet).sort().reverse();
+      let html = '<option value="all">Semua Periode (Total)</option>';
+      sortedMonths.forEach(m => {
+        const [year, month] = m.split('-');
+        html += `<option value="${m}">${new Date(year, parseInt(month) - 1, 1).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}</option>`;
+      });
       selectEl.innerHTML = html;
       selectEl.value = selectedMonth;
     }
 
     document.getElementById('filterBulanPeminjam')?.addEventListener('change', (e) => {
-      selectedMonth = e.target.value;
-      renderLeaderboard();
+      selectedMonth = e.target.value; renderLeaderboard();
     });
 
     function renderLeaderboard() {
@@ -800,24 +726,14 @@
       });
 
       const summaryMap = {};
-
       filteredPinjam.forEach(item => {
         const nameKey = (item.peminjam || 'Siswa').trim();
         if (!nameKey) return;
-
         if (!summaryMap[nameKey]) {
           const member = rawAnggotaData.find(a => (a.nama || '').toLowerCase() === nameKey.toLowerCase());
-          summaryMap[nameKey] = {
-            nama: nameKey,
-            kelas: member?.kelas || 'Anggota',
-            totalPinjam: 0,
-            bukuTerakhir: item.buku || '-',
-            tglTerakhir: item.tglPinjam || '-'
-          };
+          summaryMap[nameKey] = { nama: nameKey, kelas: member?.kelas || 'Anggota', totalPinjam: 0, bukuTerakhir: item.buku || '-', tglTerakhir: item.tglPinjam || '-' };
         }
-
         summaryMap[nameKey].totalPinjam += 1;
-
         if (item.tglPinjam && item.tglPinjam >= summaryMap[nameKey].tglTerakhir) {
           summaryMap[nameKey].tglTerakhir = item.tglPinjam;
           summaryMap[nameKey].bukuTerakhir = item.buku || '-';
@@ -825,15 +741,8 @@
       });
 
       const leaderboardList = Object.values(summaryMap).sort((a, b) => b.totalPinjam - a.totalPinjam);
-
       if (leaderboardList.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" class="text-center py-8 text-slate-400 italic">
-              Belum ada catatan peminjaman buku pada periode ini.
-            </td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400 italic">Belum ada catatan peminjaman buku pada periode ini.</td></tr>`;
         if (cardsContainer) cardsContainer.innerHTML = '';
         return;
       }
@@ -845,23 +754,11 @@
           { title: 'PEMINJAM TERBANYAK #2', bg: 'from-slate-700 to-slate-800', badge: 'bg-slate-300 text-slate-900', icon: 'fa-medal text-slate-300' },
           { title: 'PEMINJAM TERBANYAK #3', bg: 'from-amber-800 to-amber-900', badge: 'bg-amber-700 text-white', icon: 'fa-award text-amber-400' }
         ];
-
         cardsContainer.innerHTML = top3.map((item, idx) => `
-          <div class="bg-gradient-to-br ${badges[idx].bg} text-white p-5 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-              <span class="px-2.5 py-1 ${badges[idx].badge} text-[10px] font-black rounded-lg uppercase tracking-wider">
-                ${badges[idx].title}
-              </span>
-              <i class="fa-solid ${badges[idx].icon} text-2xl"></i>
-            </div>
-            <div>
-              <h4 class="font-black text-lg truncate">${item.nama}</h4>
-              <p class="text-xs text-slate-200 mt-0.5">Kelas: ${item.kelas}</p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-white/20 flex items-center justify-between">
-              <span class="text-xs text-slate-200 font-medium">Total Fisik Dipinjam</span>
-              <span class="text-xl font-black text-amber-300">${item.totalPinjam} Buku</span>
-            </div>
+          <div class="bg-gradient-to-br ${badges[idx].bg} text-white p-5 rounded-2xl shadow-lg relative flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3"><span class="px-2.5 py-1 ${badges[idx].badge} text-[10px] font-black rounded-lg uppercase tracking-wider">${badges[idx].title}</span><i class="fa-solid ${badges[idx].icon} text-2xl"></i></div>
+            <div><h4 class="font-black text-lg truncate">${item.nama}</h4><p class="text-xs text-slate-200 mt-0.5">Kelas: ${item.kelas}</p></div>
+            <div class="mt-4 pt-3 border-t border-white/20 flex items-center justify-between"><span class="text-xs text-slate-200 font-medium">Total Fisik Dipinjam</span><span class="text-xl font-black text-amber-300">${item.totalPinjam} Buku</span></div>
           </div>
         `).join('');
       }
@@ -871,133 +768,16 @@
         if (index === 0) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-400 text-slate-900 font-black shadow"><i class="fa-solid fa-crown text-xs"></i></span>`;
         else if (index === 1) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-300 text-slate-900 font-black shadow">2</span>`;
         else if (index === 2) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-700 text-white font-black shadow">3</span>`;
-
-        return `
-          <tr class="hover:bg-slate-50 transition">
+        return `<tr class="hover:bg-slate-50 transition">
             <td class="px-4 py-3.5 text-center">${rankBadge}</td>
             <td class="px-4 py-3.5 font-extrabold text-slate-900">${item.nama}</td>
             <td class="px-4 py-3.5 font-semibold text-slate-600">${item.kelas}</td>
-            <td class="px-4 py-3.5 text-center font-black text-blue-600 text-sm">
-              <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-xl border border-blue-100 shadow-sm">
-                ${item.totalPinjam} Buku
-              </span>
-            </td>
+            <td class="px-4 py-3.5 text-center font-black text-blue-600 text-sm"><span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-xl border border-blue-100 shadow-sm">${item.totalPinjam} Buku</span></td>
             <td class="px-4 py-3.5 font-medium text-slate-700 max-w-xs truncate" title="${item.bukuTerakhir}">${item.bukuTerakhir}</td>
             <td class="px-4 py-3.5 text-center text-slate-500 text-[11px] font-mono">${item.tglTerakhir}</td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
     }
-  </script>
-
-  <!-- Skrip Deteksi & Sapaan Dinamis (Pengunjung / Siswa / Petugas / Admin) -->
-  <script>
-    function renderDynamicGreeting() {
-      const titleEl = document.getElementById('greetingTitle');
-      const subEl = document.getElementById('greetingSub');
-      const actionEl = document.getElementById('greetingAction');
-      if (!titleEl || !subEl || !actionEl) return;
-
-      const userSessionData = JSON.parse(
-        localStorage.getItem('userSession') || 
-        sessionStorage.getItem('userSession') || 
-        localStorage.getItem('siswa_login') || 
-        sessionStorage.getItem('siswa_login') || 
-        'null'
-      );
-
-      const adminSessionData = JSON.parse(
-        localStorage.getItem('adminSession') || 
-        sessionStorage.getItem('adminSession') || 
-        localStorage.getItem('admin_login') || 
-        sessionStorage.getItem('admin_login') || 
-        'null'
-      );
-
-      const petugasSessionData = JSON.parse(
-        localStorage.getItem('petugasSession') || 
-        sessionStorage.getItem('petugasSession') || 
-        localStorage.getItem('petugas_login') || 
-        sessionStorage.getItem('petugas_login') || 
-        'null'
-      );
-
-      const genericUser = JSON.parse(
-        localStorage.getItem('user') || 
-        sessionStorage.getItem('user') || 
-        localStorage.getItem('currentUser') || 
-        'null'
-      );
-
-      const currentUser = userSessionData || petugasSessionData || adminSessionData || genericUser;
-
-      if (currentUser) {
-        const nama = currentUser.nama || currentUser.nama_lengkap || currentUser.name || currentUser.username || 'Pengguna';
-        
-        let role = (currentUser.role || '').toLowerCase();
-        if (adminSessionData || role === 'admin' || currentUser.email === 'admin@sman4manado.sch.id') role = 'admin';
-        else if (petugasSessionData || role === 'petugas') role = 'petugas';
-        else role = 'siswa';
-
-        if (role === 'admin' || role === 'petugas') {
-          const roleBadge = role === 'admin' ? 'Administrator' : 'Petugas Perpustakaan';
-          
-          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400 font-black">${nama}</span> (${roleBadge})! 👋`;
-          subEl.innerText = 'Semangat melayani sirkulasi buku, kelola anggota, dan pendataan literasi sekolah.';
-          
-          actionEl.innerHTML = `
-            <div class="flex items-center gap-2">
-              <a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-                <i class="fa-solid fa-gauge-high"></i> Dashboard Panel
-              </a>
-            </div>
-          `;
-        } 
-        else {
-          const isAlumni = (currentUser.statusKeanggotaan || currentUser.status || '').toLowerCase() === 'alumni';
-          const statusText = isAlumni ? 'Alumni SMAN 4 Manado' : (currentUser.kelas ? `Kelas ${currentUser.kelas}` : 'Anggota Aktif');
-
-          titleEl.innerHTML = `Halo <span class="text-amber-400 font-black">${nama}</span> (${statusText}), selamat datang kembali! 👋`;
-          subEl.innerText = isAlumni 
-            ? 'Senang melihat Anda berkunjung kembali! Sapa Kepala Perpustakaan atau jelajahi koleksi buku terbaru.'
-            : 'Yuk, sempatkan membaca hari ini dan manfaatkan layanan sirkulasi Perpustakaan Sekolah!';
-
-          actionEl.innerHTML = `
-            <div class="flex items-center gap-2">
-              <a href="profil.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-                <i class="fa-solid fa-circle-user"></i> Profil Saya
-              </a>
-              <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition">
-                <i class="fa-solid fa-book"></i> Katalog Buku
-              </a>
-            </div>
-          `;
-        }
-      } 
-      else {
-        titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
-        subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
-        
-        actionEl.innerHTML = `
-          <div class="flex items-center gap-2">
-            <a href="login-siswa.html" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md">
-              <i class="fa-solid fa-right-to-bracket"></i> Ayo Mendaftar / Login
-            </a>
-            <a href="katalog.html" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 transition">
-              <i class="fa-solid fa-book"></i> Katalog Buku
-            </a>
-          </div>
-        `;
-      }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', renderDynamicGreeting);
-    } else {
-      renderDynamicGreeting();
-    }
-
-    window.addEventListener('storage', renderDynamicGreeting);
   </script>
 </body>
 </html>
