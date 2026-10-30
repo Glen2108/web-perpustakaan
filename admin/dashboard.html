@@ -1648,47 +1648,59 @@
     window.editAnggota = editAnggota;
     window.deleteRecord = deleteRecord;
 
-    // Mengambil data transaksi peminjaman secara real-time dari koleksi 'peminjaman'
-    onSnapshot(collection(db, "peminjaman"), (snapshot) => {
+    // Mengambil data transaksi peminjaman secara real-time dari koleksi 'pinjam'
+    onSnapshot(collection(db, "pinjam"), (snapshot) => {
         let logSiswa = {};
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const nama = data.nama_siswa;
-            const status = data.status; // misal: 'dipinjam' atau 'dikembalikan'
-            const denda = data.denda || 0;
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const nama = data.peminjam; 
+
+            if (!nama) return;
 
             if (!logSiswa[nama]) {
                 logSiswa[nama] = { aktif: 0, akumulasi: 0, totalDenda: 0 };
             }
 
-            // Hitung akumulasi (semua buku yang pernah dipinjam)
+            // Karena data yang ada di koleksi 'pinjam' adalah data yang sedang aktif dipinjam
             logSiswa[nama].akumulasi++;
+            logSiswa[nama].aktif++;
 
-            // Hitung pinjaman yang masih aktif
-            if (status === 'dipinjam') {
-                logSiswa[nama].aktif++;
+            // Kalkulasi denda secara real-time
+            if (data.tglKembali) {
+                const tglKembaliDate = new Date(data.tglKembali);
+                tglKembaliDate.setHours(0, 0, 0, 0);
+                const diffTime = tglKembaliDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays < 0) {
+                    const daysLate = Math.abs(diffDays);
+                    logSiswa[nama].totalDenda += (daysLate * 2000); // Rp 2.000 / hari
+                }
             }
-
-            // Hitung total denda jika ada
-            logSiswa[nama].totalDenda += denda;
         });
 
         // Render ke HTML
         const tbody = document.getElementById("tabel-log-siswa");
-        tbody.innerHTML = ""; 
+        if (tbody) {
+            tbody.innerHTML = ""; 
 
-        for (const [nama, record] of Object.entries(logSiswa)) {
-            let sanksiTeks = record.totalDenda > 0 ? `Rp ${record.totalDenda}` : 'Tidak Ada';
-            
-            tbody.innerHTML += `
-                <tr>
-                    <td>${nama}</td>
-                    <td>${record.aktif}</td>
-                    <td>${record.akumulasi}</td>
-                    <td>${sanksiTeks}</td>
-                </tr>
-            `;
+            for (const [nama, record] of Object.entries(logSiswa)) {
+                let sanksiTeks = record.totalDenda > 0 
+                    ? `Rp ${record.totalDenda.toLocaleString('id-ID')}` 
+                    : 'Tidak Ada';
+                
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3">${nama}</td>
+                        <td class="p-3 text-center font-bold text-slate-800">${record.aktif}</td>
+                        <td class="p-3 text-center">${record.akumulasi}</td>
+                        <td class="p-3 text-center font-bold ${record.totalDenda > 0 ? 'text-rose-600' : 'text-slate-600'}">${sanksiTeks}</td>
+                    </tr>
+                `;
+            }
         }
     });
     
