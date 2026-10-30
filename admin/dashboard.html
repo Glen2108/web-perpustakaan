@@ -281,6 +281,7 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <form id="formTambahSiswa" class="lg:col-span-5 space-y-3 text-xs">
+          <!-- Form Fields omitted for brevity but remain identical to original source -->
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">ID Anggota</label>
@@ -437,6 +438,7 @@
 
   <!-- Modal 2: Petugas -->
   <div id="modalPetugas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas</h3>
@@ -480,6 +482,7 @@
 
   <!-- Modal 3: Buku -->
   <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
@@ -530,6 +533,7 @@
 
   <!-- Modal 4A: Calon Duta -->
   <div id="modalCalonDuta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-clock text-purple-600"></i> Tambah Calon Duta (7 Hari)</h3>
@@ -562,6 +566,7 @@
 
   <!-- Modal 4B: Duta Terpilih -->
   <div id="modalDutaTerpilih" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-award text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)</h3>
@@ -594,6 +599,7 @@
 
   <!-- Modal 5: Transaksi Peminjaman (Aturan Batas Maksimal & Denda Terintegrasi) -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
@@ -628,10 +634,15 @@
         </div>
       </form>
     </div>
+
+    <a href="riwayat_peminjaman.html" class="px-3.5 py-2 rounded-xl bg-emerald-100 text-emerald-700 hover:bg-emerald-200 shadow-sm transition text-xs font-bold flex items-center gap-1.5 ml-auto">
+      <i class="fa-solid fa-box-archive"></i> Buka Arsip Riwayat Selesai
+    </a>
   </div>
 
   <!-- Modal Permohonan Buka Akun Terkunci -->
   <div id="modalRequestBukaAkun" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <!-- Same as original -->
     <div class="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b pb-3 shrink-0">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
@@ -654,7 +665,7 @@
   <!-- Script Penanganan Firebase & Logika Utama Panel Admin -->
   <script type="module">
     import { auth, db } from '../js/firebase-config.js';
-    import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { collection, query, where, addDoc, updateDoc, onSnapshot, doc, deleteDoc, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
     function formatWaNumber(phone) {
       if (!phone) return '';
@@ -844,6 +855,81 @@
       if (inpWa && waVal) inpWa.value = waVal;
     });
 
+    window.kembalikanBuku = async function(docId) {
+        const konfirmasi = confirm("Buku sudah diterima fisik dan akan dipindahkan ke riwayat selesai?");
+        if (!konfirmasi) return;
+
+        try {
+            const docRefPinjam = doc(db, "pinjam", docId);
+            const docSnap = await getDoc(docRefPinjam);
+
+            if (!docSnap.exists()) {
+                alert("Data peminjaman tidak ditemukan atau sudah dihapus!");
+                return;
+            }
+
+            const dataPeminjaman = docSnap.data();
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const tglDikembalikanAktual = `${year}-${month}-${day}`;
+
+            const dataRiwayat = {
+                ...dataPeminjaman,
+                tgl_dikembalikan_aktual: tglDikembalikanAktual,
+                status: "Selesai"
+            };
+
+            const docRefRiwayat = doc(db, "riwayat_selesai", docId);
+            await setDoc(docRefRiwayat, dataRiwayat);
+
+            await deleteDoc(docRefPinjam);
+
+            alert("Proses berhasil! Data telah dipindahkan ke arsip Riwayat Selesai.");
+
+        } catch (error) {
+            console.error("Error saat memindahkan data ke riwayat:", error);
+            alert("Terjadi kesalahan sistem. Gagal memproses pengembalian buku.");
+        }
+    };
+
+    window.perpanjangBuku = async function(docId, tglKembaliLama, kaliPerpanjangLama) {
+        const BATAS_MAKSIMAL_PERPANJANG = 2; 
+        const TAMBAHAN_HARI = 7; 
+
+        if (kaliPerpanjangLama >= BATAS_MAKSIMAL_PERPANJANG) {
+            alert("Batas perpanjangan sudah habis. Buku harus segera dikembalikan!");
+            return;
+        }
+
+        const konfirmasi = confirm("Apakah Anda yakin ingin memperpanjang buku ini selama 7 hari ke depan?");
+        if (!konfirmasi) return;
+
+        try {
+            let dateObj = new Date(tglKembaliLama);
+            dateObj.setDate(dateObj.getDate() + TAMBAHAN_HARI);
+
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const tglKembaliBaru = `${year}-${month}-${day}`;
+
+            const docRef = doc(db, "pinjam", docId);
+            await updateDoc(docRef, {
+                tglKembali: tglKembaliBaru,
+                kali_perpanjang: kaliPerpanjangLama + 1
+            });
+
+            alert(`Perpanjangan berhasil! Tenggat waktu baru: ${tglKembaliBaru}. Sisa kuota perpanjangan: ${BATAS_MAKSIMAL_PERPANJANG - (kaliPerpanjangLama + 1)} kali lagi.`);
+            
+        } catch (error) {
+            console.error("Error saat memperpanjang buku:", error);
+            alert("Terjadi kesalahan. Gagal memperpanjang buku.");
+        }
+    };
+
     function generateAutoIds(selectedKelas) {
       if (!selectedKelas) return;
 
@@ -967,7 +1053,6 @@
       const titleEl = document.getElementById('tableTitle');
       if (titleEl) titleEl.innerText = titleMap[type] || 'Daftar Data';
 
-      // Tambahkan logika Log Peminjaman di sini:
       const logContainer = document.getElementById('logPeminjamanContainer');
       if (logContainer) {
           if (type === 'pinjam') {
@@ -1240,6 +1325,7 @@
                       let statusBadge = '';
                       let waActionBtn = '';
                       let dendaInfo = '';
+                      const kaliPerpanjang = item.kali_perpanjang || 0;
 
                       if (item.tglKembali) {
                         const tglKembaliDate = new Date(item.tglKembali);
@@ -1249,7 +1335,6 @@
 
                         if (diffDays < 0) {
                           const daysLate = Math.abs(diffDays);
-                          // ATURAN LOGIKA BARU: HITUNG DENDA OTOMATIS RP 2.000 PER BUKU / HARI
                           const hitungDenda = daysLate * 2000;
                           const dendaFormatted = "Rp " + hitungDenda.toLocaleString('id-ID');
 
@@ -1295,6 +1380,13 @@
                             <span class="bg-white px-2 py-1 rounded-lg border border-slate-200"><i class="fa-solid fa-calendar-day text-blue-500 mr-1"></i>Pinjam: <strong>${item.tglPinjam || '-'}</strong></span>
                             <span class="bg-white px-2 py-1 rounded-lg border border-slate-200 text-emerald-700"><i class="fa-solid fa-calendar-check mr-1"></i>Kembali: <strong>${item.tglKembali || '-'}</strong></span>${waActionBtn}
 
+                            <!-- Action Buttons -->
+                            <button onclick="window.perpanjangBuku('${item.firestoreId}', '${item.tglKembali}', ${kaliPerpanjang})" title="Perpanjang 7 Hari" class="px-2 py-1 rounded-xl bg-blue-50 text-blue-600 font-bold hover:bg-blue-100 transition disabled:opacity-50 disabled:cursor-not-allowed" ${kaliPerpanjang >= 2 ? 'disabled' : ''}>
+                              <i class="fa-solid fa-clock-rotate-left"></i>
+                            </button>
+                            <button onclick="window.kembalikanBuku('${item.firestoreId}')" title="Selesai / Kembalikan" class="px-2 py-1 rounded-xl bg-emerald-50 text-emerald-600 font-bold hover:bg-emerald-100 transition">
+                              <i class="fa-solid fa-check"></i>
+                            </button>
                             <button onclick="window.deleteRecord('pinjam', '${item.firestoreId}')" title="Hapus transaksi buku ini" class="px-2 py-1 rounded-xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition">
                               <i class="fa-solid fa-trash"></i>
                             </button>
@@ -1591,17 +1683,14 @@
       }
     });
 
-    // LOGIKA PENAMBAHAN BUKU DIPINJAM DENGAN VALIDASI MAKSIMAL BUKU (3-4 BUKU MAKSIMAL)
     document.getElementById('formTambahPinjam')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const namaPeminjam = document.getElementById('inpPeminjam')?.value || '';
       
-      // Ambil status keanggotaan peminjam
       const peminjamProfile = (window.dbData.anggota || []).find(a => (a.nama || '').toLowerCase() === namaPeminjam.toLowerCase());
       const isIstimewa = (peminjamProfile?.statusPerpustakaan || peminjamProfile?.status || '').toLowerCase() === 'istimewa';
       const maxBukuBoleh = isIstimewa ? 4 : 3;
 
-      // Hitung buku yang sedang dipinjam peminjam ini saat ini
       const totalAktif = (window.dbData.pinjam || []).filter(p => (p.peminjam || '').toLowerCase() === namaPeminjam.toLowerCase()).length;
 
       if (totalAktif >= maxBukuBoleh) {
@@ -1648,7 +1737,6 @@
     window.editAnggota = editAnggota;
     window.deleteRecord = deleteRecord;
 
-    // Mengambil data transaksi peminjaman secara real-time dari koleksi 'pinjam'
     onSnapshot(collection(db, "pinjam"), (snapshot) => {
         let logSiswa = {};
         const today = new Date();
@@ -1664,11 +1752,9 @@
                 logSiswa[nama] = { aktif: 0, akumulasi: 0, totalDenda: 0 };
             }
 
-            // Karena data yang ada di koleksi 'pinjam' adalah data yang sedang aktif dipinjam
             logSiswa[nama].akumulasi++;
             logSiswa[nama].aktif++;
 
-            // Kalkulasi denda secara real-time
             if (data.tglKembali) {
                 const tglKembaliDate = new Date(data.tglKembali);
                 tglKembaliDate.setHours(0, 0, 0, 0);
@@ -1682,7 +1768,6 @@
             }
         });
 
-        // Render ke HTML
         const tbody = document.getElementById("tabel-log-siswa");
         if (tbody) {
             tbody.innerHTML = ""; 
@@ -1703,7 +1788,7 @@
             }
         }
     });
-    
+
   </script>
   
 </body>

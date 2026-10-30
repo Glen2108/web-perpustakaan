@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Selesai - Panel Admin</title>
+
+  <!-- Skrip Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: { brand: { 800: '#1e3a8a', 900: '#0f172a', 600: '#2563eb', 500: '#3b82f6' } }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body * { visibility: hidden !important; }
+      #areaCetakTabel, #areaCetakTabel * { visibility: visible !important; }
+      #areaCetakTabel {
+        position: absolute !important;
+        left: 0 !important; top: 0 !important;
+        width: 100% !important;
+      }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
+
+  <!-- Header Panel Admin -->
+  <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 backdrop-blur-md bg-slate-900/95 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="dashboard.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 text-white flex items-center justify-center font-black text-xl shadow-lg group-hover:bg-indigo-600 transition">
+          <i class="fa-solid fa-arrow-left"></i>
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-none">ARSIP RIWAYAT</h1>
+          <p class="text-[11px] text-indigo-300 font-medium tracking-wider">Kembali ke Dashboard Utama</p>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-md">
+          <i class="fa-solid fa-print"></i>
+          <span class="hidden sm:inline">Cetak Laporan</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8" id="areaCetakTabel">
+    
+    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/80 space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-extrabold text-emerald-600 uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Data Peminjaman Selesai</span>
+          </div>
+          <h3 class="text-2xl font-black text-slate-900 tracking-tight">
+            Log Riwayat Pengembalian Buku
+          </h3>
+          <p class="text-xs text-slate-500 mt-1">
+            Seluruh data di bawah ini adalah transaksi yang sudah tuntas (buku telah dikembalikan).
+          </p>
+        </div>
+
+        <div class="relative w-full md:w-72 no-print">
+          <input type="text" id="searchInput" placeholder="Cari nama siswa atau buku..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 font-medium">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-900 text-white font-extrabold uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-4 w-10 text-center">No</th>
+              <th class="px-4 py-4">Nama Peminjam & Kontak</th>
+              <th class="px-4 py-4">Judul Buku</th>
+              <th class="px-4 py-4 text-center">Rencana Kembali</th>
+              <th class="px-4 py-4 text-center">Dikembalikan Aktual</th>
+              <th class="px-4 py-4 text-center">Status Akhir</th>
+            </tr>
+          </thead>
+          <tbody id="tableRiwayatBody" class="divide-y divide-slate-100 font-medium text-slate-700 bg-white">
+            <tr>
+              <td colspan="6" class="text-center py-10 text-slate-400 italic">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>Memuat data riwayat dari database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-slate-500 font-bold">
+        <p id="infoTotalData">Total Riwayat: 0 transaksi</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Script Penanganan Firebase -->
+  <script type="module">
+    import { db } from '../js/firebase-config.js';
+    import { collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    let rawDataRiwayat = [];
+
+    // Fungsi untuk me-render tabel
+    function renderTableRiwayat(searchQuery = "") {
+      const tbody = document.getElementById('tableRiwayatBody');
+      const infoTotal = document.getElementById('infoTotalData');
+      if (!tbody) return;
+
+      // Filter pencarian
+      const filteredData = rawDataRiwayat.filter(item => {
+        const keyword = searchQuery.toLowerCase();
+        const nama = (item.peminjam || '').toLowerCase();
+        const buku = (item.buku || '').toLowerCase();
+        return nama.includes(keyword) || buku.includes(keyword);
+      });
+
+      if (filteredData.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-8 text-slate-400 font-bold">
+              Tidak ada data riwayat yang ditemukan.
+            </td>
+          </tr>
+        `;
+        infoTotal.innerText = `Total Riwayat: 0 transaksi`;
+        return;
+      }
+
+      infoTotal.innerText = `Total Riwayat: ${filteredData.length} transaksi`;
+
+      // Render Baris
+      tbody.innerHTML = filteredData.map((item, index) => {
+        // Hitung status keterlambatan saat dikembalikan
+        let statusBadge = `<span class="bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 py-1 rounded-lg font-bold text-[10px]"><i class="fa-solid fa-check mr-1"></i> Tepat Waktu</span>`;
+        
+        if (item.tglKembali && item.tgl_dikembalikan_aktual) {
+          const targetDate = new Date(item.tglKembali);
+          const actualDate = new Date(item.tgl_dikembalikan_aktual);
+          targetDate.setHours(0,0,0,0);
+          actualDate.setHours(0,0,0,0);
+          
+          if (actualDate > targetDate) {
+            const diffTime = actualDate - targetDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const totalDenda = (diffDays * 2000).toLocaleString('id-ID');
+            statusBadge = `<span class="bg-rose-100 text-rose-700 border border-rose-200 px-2 py-1 rounded-lg font-bold text-[10px]"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Telat ${diffDays} Hari (Denda Rp ${totalDenda})</span>`;
+          }
+        }
+
+        return `
+          <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+            <td class="px-4 py-4 text-center font-bold text-slate-400">${index + 1}</td>
+            <td class="px-4 py-4">
+              <div class="font-extrabold text-slate-900">${item.peminjam || '-'}</div>
+              <div class="text-[10px] text-slate-500 mt-0.5"><i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i>${item.noWa || 'Tidak ada nomor'}</div>
+            </td>
+            <td class="px-4 py-4 font-bold text-blue-700">${item.buku || '-'}</td>
+            <td class="px-4 py-4 text-center text-slate-500 font-mono text-[11px]">${item.tglKembali || '-'}</td>
+            <td class="px-4 py-4 text-center font-black text-slate-900 font-mono text-[11px] bg-slate-50/50">${item.tgl_dikembalikan_aktual || '-'}</td>
+            <td class="px-4 py-4 text-center">${statusBadge}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Listener Real-time ke koleksi riwayat_selesai (diurutkan berdasarkan tanggal terbaru jika memungkinkan)
+    const qRiwayat = query(collection(db, "riwayat_selesai"));
+    
+    onSnapshot(qRiwayat, (snapshot) => {
+      rawDataRiwayat = [];
+      snapshot.forEach(doc => {
+        rawDataRiwayat.push({ id: doc.id, ...doc.data() });
+      });
+
+      // Urutkan secara lokal dari tanggal aktual terbaru ke terlama
+      rawDataRiwayat.sort((a, b) => {
+        const dateA = new Date(a.tgl_dikembalikan_aktual || 0);
+        const dateB = new Date(b.tgl_dikembalikan_aktual || 0);
+        return dateB - dateA;
+      });
+
+      const searchVal = document.getElementById('searchInput')?.value || '';
+      renderTableRiwayat(searchVal);
+    }, (error) => {
+      console.error("Gagal mengambil data riwayat:", error);
+      const tbody = document.getElementById('tableRiwayatBody');
+      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-rose-500 font-bold">Gagal memuat data. Periksa koneksi atau aturan Firebase Anda.</td></tr>`;
+    });
+
+    // Event Listener Pencarian
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
+      renderTableRiwayat(e.target.value);
+    });
+
+  </script>
+</body>
+</html>
