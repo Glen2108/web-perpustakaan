@@ -242,20 +242,11 @@
         </table>
       </div>
 
-      <div class="log-peminjaman-container" style="margin-top: 20px;">
+      <!-- Ubah bagian ini -->
+      <div id="logPeminjamanContainer" class="log-peminjaman-container hidden" style="margin-top: 20px;">
           <h3>Log Riwayat Peminjam</h3>
           <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>Nama Siswa</th>
-                      <th>Jumlah Pinjaman Aktif</th>
-                      <th>Total Buku Dipinjam (Akumulasi)</th>
-                      <th>Sanksi / Denda</th>
-                  </tr>
-              </thead>
-              <tbody id="tabel-log-siswa">
-                  <!-- Data akan dimuat dari Firebase secara real-time -->
-              </tbody>
+              <!-- isi tabel -->
           </table>
       </div>
 
@@ -966,6 +957,16 @@
       const titleEl = document.getElementById('tableTitle');
       if (titleEl) titleEl.innerText = titleMap[type] || 'Daftar Data';
 
+      // Tambahkan logika Log Peminjaman di sini:
+      const logContainer = document.getElementById('logPeminjamanContainer');
+      if (logContainer) {
+          if (type === 'pinjam') {
+              logContainer.classList.remove('hidden');
+          } else {
+              logContainer.classList.add('hidden');
+          }
+      }
+
       renderTableData();
     }
 
@@ -1638,7 +1639,7 @@
     window.deleteRecord = deleteRecord;
 
     // Mengambil data transaksi peminjaman secara real-time dari koleksi 'peminjaman'
-    db.collection("peminjaman").onSnapshot((snapshot) => {
+    onSnapshot(collection(db, "peminjaman"), (snapshot) => {
         let logSiswa = {};
 
         snapshot.forEach((doc) => {
@@ -1680,6 +1681,19 @@
             `;
         }
     });
+    window.switchTable = function(tabName) {
+    // ... [Kode Anda yang sudah ada untuk mengganti data tabel] ...
+
+        // Tambahkan logika ini untuk mengatur visibilitas Log Peminjaman
+        const logContainer = document.getElementById('logPeminjamanContainer');
+        if (logContainer) {
+            if (tabName === 'pinjam') {
+                logContainer.classList.remove('hidden');
+            } else {
+                logContainer.classList.add('hidden');
+            }
+        }
+    };
   </script>
   
 </body>
