@@ -242,6 +242,23 @@
         </table>
       </div>
 
+      <div class="log-peminjaman-container" style="margin-top: 20px;">
+          <h3>Log Riwayat Peminjam</h3>
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Nama Siswa</th>
+                      <th>Jumlah Pinjaman Aktif</th>
+                      <th>Total Buku Dipinjam (Akumulasi)</th>
+                      <th>Sanksi / Denda</th>
+                  </tr>
+              </thead>
+              <tbody id="tabel-log-siswa">
+                  <!-- Data akan dimuat dari Firebase secara real-time -->
+              </tbody>
+          </table>
+      </div>
+
       <!-- Pagination dan Info -->
       <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 gap-3">
         <p id="tableCountInfo">Menampilkan 0 data</p>
@@ -1619,6 +1636,53 @@
     window.handleStatusKeanggotaanChange = handleStatusKeanggotaanChange;
     window.editAnggota = editAnggota;
     window.deleteRecord = deleteRecord;
+
+    // Pastikan firebase-config.js sudah dipanggil sebelumnya
+    const db = firebase.firestore();
+
+    // Mengambil data transaksi peminjaman secara real-time dari koleksi 'peminjaman'
+    db.collection("peminjaman").onSnapshot((snapshot) => {
+        let logSiswa = {};
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const nama = data.nama_siswa;
+            const status = data.status; // misal: 'dipinjam' atau 'dikembalikan'
+            const denda = data.denda || 0;
+
+            if (!logSiswa[nama]) {
+                logSiswa[nama] = { aktif: 0, akumulasi: 0, totalDenda: 0 };
+            }
+
+            // Hitung akumulasi (semua buku yang pernah dipinjam)
+            logSiswa[nama].akumulasi++;
+
+            // Hitung pinjaman yang masih aktif
+            if (status === 'dipinjam') {
+                logSiswa[nama].aktif++;
+            }
+
+            // Hitung total denda jika ada
+            logSiswa[nama].totalDenda += denda;
+        });
+
+        // Render ke HTML
+        const tbody = document.getElementById("tabel-log-siswa");
+        tbody.innerHTML = ""; 
+
+        for (const [nama, record] of Object.entries(logSiswa)) {
+            let sanksiTeks = record.totalDenda > 0 ? `Rp ${record.totalDenda}` : 'Tidak Ada';
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td>${nama}</td>
+                    <td>${record.aktif}</td>
+                    <td>${record.akumulasi}</td>
+                    <td>${sanksiTeks}</td>
+                </tr>
+            `;
+        }
+    });
   </script>
   
 </body>
