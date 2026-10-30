@@ -1637,9 +1637,6 @@
     window.editAnggota = editAnggota;
     window.deleteRecord = deleteRecord;
 
-    // Pastikan firebase-config.js sudah dipanggil sebelumnya
-    const db = firebase.firestore();
-
     // Mengambil data transaksi peminjaman secara real-time dari koleksi 'peminjaman'
     db.collection("peminjaman").onSnapshot((snapshot) => {
         let logSiswa = {};

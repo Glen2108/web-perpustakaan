@@ -227,29 +227,30 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
-  <div class="ringkasan-buku-container" style="margin-top: 30px; margin-bottom: 30px;">
-    <h4>Ketersediaan Buku Fisik di Perpustakaan</h4>
-    <table class="table table-striped">
-        <thead>
+  <div class="ringkasan-buku-container bg-white p-6 rounded-3xl shadow-xl border border-slate-200" style="margin-top: 30px; margin-bottom: 30px;">
+    <h4 class="text-xl font-extrabold text-slate-900 mb-4">Ketersediaan Buku Fisik di Perpustakaan</h4>
+    <div class="overflow-x-auto rounded-2xl border border-slate-100">
+      <table class="w-full text-left text-xs text-slate-700">
+        <thead class="bg-slate-100 text-slate-800 uppercase font-bold tracking-wider">
             <tr>
-                <th>Kategori Buku</th>
-                <th>Jumlah Total Buku</th>
+                <th class="p-3.5">Kategori Buku</th>
+                <th class="p-3.5">Jumlah Total Buku</th>
             </tr>
         </thead>
-        <tbody id="tabel-kategori-buku">
-            <!-- Data akan dimuat dari Firebase secara real-time -->
+        <tbody id="tabel-kategori-buku" class="divide-y divide-slate-100 bg-white">
+            <!-- Data dari Firebase -->
         </tbody>
         <tfoot>
-            <tr style="font-weight: bold;">
-                <td>Total Keseluruhan</td>
-                <td id="total-keseluruhan">Memuat...</td>
+            <tr class="bg-slate-50 font-extrabold text-slate-900 border-t border-slate-200">
+                <td class="p-3.5">Total Keseluruhan</td>
+                <td class="p-3.5" id="total-keseluruhan">Memuat...</td>
             </tr>
         </tfoot>
       </table>
+    </div>
   </div>
 
   <!-- Section Leaderboard Peminjam -->
@@ -668,11 +669,10 @@
       }
     }
 
-    // Pastikan firebase-config.js sudah dipanggil sebelumnya
-    const db = firebase.firestore();
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    // Mengambil data buku secara real-time dari koleksi 'buku'
-    db.collection("buku").onSnapshot((snapshot) => {
+    // Tambahkan di dalam blok if (db) { ... }
+    onSnapshot(collection(db, "buku"), (snapshot) => {
         let kategoriCount = {};
         let totalBuku = 0;
 
@@ -680,30 +680,29 @@
             const data = doc.data();
             const kategori = data.kategori || 'Tanpa Kategori';
             
-            // Menghitung jumlah per kategori
             if(kategoriCount[kategori]) {
                 kategoriCount[kategori]++;
             } else {
                 kategoriCount[kategori] = 1;
             }
-            totalBuku++; // Menghitung total keseluruhan
+            totalBuku++;
         });
 
-        // Render ke HTML
         const tbody = document.getElementById("tabel-kategori-buku");
-        tbody.innerHTML = ""; // Kosongkan tabel sebelum render ulang
-
-        for (const [kategori, jumlah] of Object.entries(kategoriCount)) {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${kategori}</td>
-                    <td>${jumlah}</td>
-                </tr>
-            `;
+        if(tbody) {
+            tbody.innerHTML = "";
+            for (const [kategori, jumlah] of Object.entries(kategoriCount)) {
+                tbody.innerHTML += `
+                    <tr class="border-b border-slate-200">
+                        <td class="p-3">${kategori}</td>
+                        <td class="p-3">${jumlah}</td>
+                    </tr>
+                `;
+            }
         }
 
-        // Update total keseluruhan
-        document.getElementById("total-keseluruhan").innerText = `${totalBuku} Buku Fisik`;
+        const totalEl = document.getElementById("total-keseluruhan");
+        if(totalEl) totalEl.innerText = `${totalBuku} Buku Fisik`;
     });
 
     function generateCalendar() {
