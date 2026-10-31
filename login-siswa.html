@@ -79,6 +79,12 @@
               <i class="fa-solid fa-eye"></i>
             </button>
           </div>
+          <!-- TOMBOL LUPA KATA SANDI -->
+          <div class="flex justify-end mt-2">
+            <button type="button" onclick="openModalLupaSandi()" class="text-[11px] text-amber-400 hover:text-amber-300 font-bold transition">
+              Lupa Kata Sandi?
+            </button>
+          </div>
         </div>
 
         <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl text-xs shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition active:scale-[0.99]">
@@ -97,6 +103,26 @@
 
     </div>
   </div>
+
+  <div>
+    <label class="block text-xs font-extrabold text-slate-300 mb-1.5 uppercase tracking-wider">
+      Password
+      </label>
+        <div class="relative">
+          <input type="password" id="passVal" required placeholder="••••••••" 
+             class="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-700/60 bg-slate-900/60 text-white placeholder-slate-500 text-xs font-semibold focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 outline-none transition">
+            <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+            <button type="button" id="togglePass" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 text-xs">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+        </div>
+        <!-- TOMBOL LUPA KATA SANDI -->
+        <div class="flex justify-end mt-2">
+            <button type="button" onclick="openModalLupaSandi()" class="text-[11px] text-amber-400 hover:text-amber-300 font-bold transition">
+              Lupa Kata Sandi?
+            </button>
+          </div>
+        </div>
 
   <!-- POPUP PENGAJUAN PENDAFTARAN LANGSUNG VIA WHATSAPP KEPALA PERPUSTAKAAN -->
   <div id="modalDaftarMandiri" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
@@ -190,6 +216,57 @@
     </div>
   </div>
 
+  <!-- POPUP LUPA KATA SANDI VIA WHATSAPP -->
+  <div id="modalLupaSandi" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-slate-900 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/10 text-white space-y-5 my-8">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="font-extrabold text-base text-amber-400 flex items-center gap-2">
+            <i class="fa-solid fa-key text-rose-400 text-lg"></i> Lupa Kata Sandi
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">Minta reset password ke WA Kepala Perpustakaan.</p>
+        </div>
+        <button onclick="closeModalLupaSandi()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Info Kepala Perpustakaan -->
+      <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/80 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-900 font-bold flex items-center justify-center text-lg shrink-0">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div class="text-xs">
+          <p class="text-[10px] text-amber-400 font-bold uppercase">Kepala Perpustakaan SMAN 4 Manado</p>
+          <p class="font-extrabold text-white">Glendy A. Taawoeda, S.Pd</p>
+          <p class="text-[11px] text-slate-400 font-mono">0852-4291-7488</p>
+        </div>
+      </div>
+
+      <form id="formLupaSandiWA" onsubmit="handleKirimLupaSandiWA(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Username / NISN <span class="text-amber-400">*</span></label>
+          <input type="text" id="resetUsername" required placeholder="Contoh: 2601201" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Nama Lengkap <span class="text-amber-400">*</span></label>
+          <input type="text" id="resetNama" required placeholder="Contoh: Gabriel Mangowal" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Kelas <span class="text-amber-400">*</span></label>
+          <input type="text" id="resetKelas" required placeholder="Contoh: XII-1" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-800 text-white outline-none focus:border-amber-400 font-semibold">
+        </div>
+
+        <div class="pt-3 flex items-center justify-end gap-2 border-t border-slate-800">
+          <button type="button" onclick="closeModalLupaSandi()" class="px-4 py-2.5 rounded-xl font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Batal</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl font-extrabold bg-rose-500 hover:bg-rose-400 text-white shadow-md transition flex items-center gap-1.5">
+            <i class="fa-brands fa-whatsapp text-base"></i> Minta Reset Sandi
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
   <script type="module">
     import { db } from './js/firebase-config.js';
     import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -221,6 +298,33 @@
     window.closeModalDaftar = function() {
       document.getElementById('modalDaftarMandiri').classList.add('hidden');
       document.getElementById('formDaftarWA').reset();
+    };
+
+    // FUNGSI MEMBUKA & MENUTUP MODAL LUPA KATA SANDI
+    window.openModalLupaSandi = function() {
+      document.getElementById('modalLupaSandi').classList.remove('hidden');
+    };
+
+    window.closeModalLupaSandi = function() {
+      document.getElementById('modalLupaSandi').classList.add('hidden');
+      document.getElementById('formLupaSandiWA').reset();
+    };
+
+    // FUNGSI PENGIRIMAN RESET SANDI KE WA KEPALA PERPUSTAKAAN
+    window.handleKirimLupaSandiWA = function(e) {
+      e.preventDefault();
+      
+      const noHpKapus = "6285242917488"; // Nomor WhatsApp Kepala Perpustakaan
+      const username = document.getElementById('resetUsername').value.trim();
+      const nama = document.getElementById('resetNama').value.trim();
+      const kelas = document.getElementById('resetKelas').value.trim();
+
+      const formatPesan = `Halo Ibu/Bapak *Glendy A. Taawoeda, S.Pd* (Kepala Perpustakaan SMAN 4 Manado),\n\nSaya ingin meminta bantuan untuk *RESET KATA SANDI* akun portal perpustakaan saya melalui dashboard admin. Berikut adalah data diri saya:\n\n• *Username / NISN*: ${username}\n• *Nama Lengkap*: ${nama}\n• *Kelas*: ${kelas}\n\nMohon bantuannya untuk mereset kata sandi saya. Terima kasih banyak!`;
+
+      const urlWA = `https://wa.me/${noHpKapus}?text=${encodeURIComponent(formatPesan)}`;
+      
+      window.open(urlWA, '_blank');
+      closeModalLupaSandi();
     };
 
     // FUNGSI PENGIRIMAN DETAIL BIODATA LANGSUNG KE WHATSAPP KEPALA PERPUSTAKAAN
