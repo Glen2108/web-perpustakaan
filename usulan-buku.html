@@ -212,7 +212,6 @@
       </div>
   </footer>
 
-  <!-- Script Kirim ke WhatsApp dengan SweetAlert2 -->
   <!-- Script Kirim ke WhatsApp dengan SweetAlert2 (Fitur Konfirmasi) -->
   <script>
     document.getElementById('formUsulan').addEventListener('submit', function(e) {
@@ -265,6 +264,44 @@
         }
       });
       
+    });
+  </script>
+  <!-- Script Pengisian Otomatis Data Anggota (Jika Sudah Login) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Cek apakah ada sesi login di localStorage (di-set saat login berhasil)
+      const sessionData = localStorage.getItem('userSession');
+      
+      if (sessionData) {
+        try {
+          const user = JSON.parse(sessionData);
+          
+          const inputNama = document.getElementById('nama');
+          const inputKelas = document.getElementById('kelas');
+          
+          // Ambil nama dari database (sesuaikan dengan field di Firestore Anda, biasanya 'namaLengkap' atau 'nama')
+          const namaAnggota = user.namaLengkap || user.nama || '';
+          // Ambil kelas atau jabatan
+          const kelasAnggota = user.kelas || user.jabatan || '';
+          
+          if (namaAnggota) {
+            inputNama.value = namaAnggota;
+            // Opsional: Kunci input agar tidak bisa diubah jika sudah otomatis terisi
+            inputNama.readOnly = true;
+            inputNama.classList.replace('bg-slate-50', 'bg-slate-200'); 
+            inputNama.classList.add('cursor-not-allowed', 'text-slate-500');
+          }
+          
+          if (kelasAnggota) {
+            inputKelas.value = kelasAnggota;
+            inputKelas.readOnly = true;
+            inputKelas.classList.replace('bg-slate-50', 'bg-slate-200');
+            inputKelas.classList.add('cursor-not-allowed', 'text-slate-500');
+          }
+        } catch (error) {
+          console.error("Gagal memproses data sesi:", error);
+        }
+      }
     });
   </script>
 
