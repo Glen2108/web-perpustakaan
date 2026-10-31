@@ -8,6 +8,7 @@
   <script src="js/dialog-engine.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <script>
     tailwind.config = {
       theme: {
@@ -28,6 +29,153 @@
       }
     }
   </script>
+  <style>
+    /* Container Utama */
+    .katalog-container {
+        background-color: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        font-family: inherit;
+        /* Tambahkan margin agar tidak terlalu menempel dengan elemen di atas/bawahnya */
+        margin: 24px auto;
+        max-width: 80rem; /* Menyesuaikan max-w-7xl tailwind */
+    }
+
+    .katalog-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 24px;
+    }
+
+    /* Layout Grid Responsif */
+    .katalog-grid {
+        display: grid;
+        /* Kolom menyesuaikan ukuran layar secara otomatis */
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    /* Desain Kartu */
+    .katalog-card {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Efek Hover */
+    .katalog-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        border-color: #cbd5e1;
+    }
+
+    /* Header Kartu (Ikon & Judul) */
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .ikon-kategori {
+        font-size: 1.5rem;
+        line-height: 1;
+        color: #3b82f6; /* Memberikan warna biru pada ikon */
+    }
+
+    .kategori-judul {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #334155;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    /* Lencana (Badge) Biru Gelap */
+    .badge-jumlah {
+        background-color: #0f172a; /* Menyesuaikan warna navbar */
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 16px;
+    }
+
+    /* Progress Bar */
+    .progress-bg {
+        background-color: #e2e8f0;
+        height: 6px;
+        border-radius: 4px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .progress-fill {
+        background-color: #3b82f6; /* Aksen biru terang */
+        height: 100%;
+        border-radius: 4px;
+    }
+
+    /* Footer Total Keseluruhan */
+    .katalog-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f1f5f9;
+        padding: 16px 20px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .teks-total {
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .badge-total {
+        background-color: #0f172a;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 0.9rem;
+    }
+
+    /* Custom CSS untuk Widget Total Data */
+    .card-dashboard-custom {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      height: 100%;
+    }
+    .judul-kartu {
+      font-size: 0.75rem;
+      color: #bfdbfe; /* blue-200 */
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .angka-teks {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fcd34d; /* amber-300 */
+      font-family: monospace;
+      margin-top: 4px;
+    }
+  </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans">
 
@@ -95,7 +243,7 @@
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
       <div class="flex items-center gap-3">
         <div class="text-3xl shrink-0 animate-waving-hand origin-bottom-right select-none">
-          👋
+          窓
         </div>
         <div>
           <p id="greetingTitle" class="font-extrabold text-sm text-amber-300">
@@ -131,16 +279,27 @@
           Temukan koleksi buku fisik terlengkap, rencanakan peminjaman mandiri, dan ikuti ajang Duta Literasi Sekolah untuk membangun budaya membaca yang tangguh.
         </p>
 
-        <!-- Dynamic Clock Widget -->
+        <!-- Dynamic Clock Widget & Total Data -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
           <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10">
             <p class="text-xs text-blue-200 font-semibold uppercase">Waktu Realtime WITA</p>
             <div id="realtimeClock" class="text-2xl font-black text-amber-300 font-mono mt-1">00:00:00 WITA</div>
             <p id="realtimeDate" class="text-xs text-slate-300 mt-0.5">-</p>
           </div>
+          
           <div id="statusOperasional" class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
             <p class="text-xs text-blue-200 font-semibold uppercase">Status Perpustakaan</p>
             <div id="statusBadge" class="inline-block font-extrabold text-sm px-3 py-1 rounded-full w-fit mt-1">Checking...</div>
+          </div>
+          
+          <!-- Widget Total Data (Sesuai Screenshot Anda) -->
+          <div class="card-dashboard-custom"> 
+              <p class="judul-kartu">TOTAL ANGGOTA</p>
+              <h3 id="total-anggota" class="angka-teks">0</h3>
+          </div>
+          <div class="card-dashboard-custom">
+              <p class="judul-kartu">TOTAL STOK BUKU</p>
+              <h3 id="total-buku" class="angka-teks">0</h3>
           </div>
         </div>
       </div>
@@ -220,29 +379,18 @@
   </section>
 
   <!-- Ketersediaan Buku Fisik -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 mb-10">
-    <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-200">
-      <h4 class="text-xl font-extrabold text-slate-900 mb-4">Ketersediaan Buku Fisik di Perpustakaan</h4>
-      <div class="overflow-x-auto rounded-2xl border border-slate-100">
-        <table class="w-full text-left text-xs text-slate-700">
-          <thead class="bg-slate-100 text-slate-800 uppercase font-bold tracking-wider">
-              <tr>
-                  <th class="p-3.5">Kategori Buku</th>
-                  <th class="p-3.5">Jumlah Total Buku</th>
-              </tr>
-          </thead>
-          <tbody id="tabel-kategori-buku" class="divide-y divide-slate-100 bg-white">
-              <tr>
-                  <td colspan="2" class="p-4 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat data buku...</td>
-              </tr>
-          </tbody>
-          <tfoot>
-              <tr class="bg-slate-50 font-extrabold text-slate-900 border-t border-slate-200">
-                  <td class="p-3.5">Total Keseluruhan</td>
-                  <td class="p-3.5" id="total-keseluruhan">Memuat...</td>
-              </tr>
-          </tfoot>
-        </table>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="katalog-container">
+      <h2 class="katalog-title">Ketersediaan Buku Fisik di Perpustakaan</h2>
+
+      <!-- Container ini dibiarkan kosong, JavaScript yang akan mengisinya -->
+      <div class="katalog-grid" id="katalog-grid-container">
+          <p class="text-slate-500 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Memuat data katalog...</p>
+      </div>
+
+      <div class="katalog-footer">
+          <span class="teks-total">Total Keseluruhan</span>
+          <span class="badge-total" id="total-semua-buku">0 Buku Fisik Terdata</span>
       </div>
     </div>
   </div>
@@ -404,13 +552,13 @@
 
         if (role === 'admin' || role === 'petugas') {
           const roleBadge = role === 'admin' ? 'Administrator' : 'Petugas Perpustakaan';
-          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400 font-black">${nama}</span> (${roleBadge})! 👋`;
+          titleEl.innerHTML = `Selamat bertugas, <span class="text-amber-400 font-black">${nama}</span> (${roleBadge})! 窓`;
           subEl.innerText = 'Semangat melayani sirkulasi buku, kelola anggota, dan pendataan literasi sekolah.';
           actionEl.innerHTML = `<a href="admin/dashboard.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-md"><i class="fa-solid fa-gauge-high"></i> Dashboard Panel</a>`;
         } else {
           const isAlumni = (currentUser.statusKeanggotaan || currentUser.status || '').toLowerCase() === 'alumni';
           const statusText = isAlumni ? 'Alumni SMAN 4 Manado' : (currentUser.kelas ? `Kelas ${currentUser.kelas}` : 'Anggota Aktif');
-          titleEl.innerHTML = `Halo <span class="text-amber-400 font-black">${nama}</span> (${statusText}), selamat datang kembali! 👋`;
+          titleEl.innerHTML = `Halo <span class="text-amber-400 font-black">${nama}</span> (${statusText}), selamat datang kembali! 窓`;
           subEl.innerText = isAlumni ? 'Senang melihat Anda berkunjung kembali! Sapa Kepala Perpustakaan atau jelajahi koleksi buku terbaru.' : 'Yuk, sempatkan membaca hari ini dan manfaatkan layanan sirkulasi Perpustakaan Sekolah!';
           actionEl.innerHTML = `
             <div class="flex items-center gap-2">
@@ -420,7 +568,7 @@
           `;
         }
       } else {
-        titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 👋`;
+        titleEl.innerHTML = `Halo Pengunjung, Selamat Datang di Perpustakaan Sekolah! 窓`;
         subEl.innerText = 'Belum mendaftar sebagai anggota? Ayo mendaftar sekarang atau kunjungi Gedung Perpustakaan Sekolah untuk membaca buku!';
         actionEl.innerHTML = `
           <div class="flex items-center gap-2">
@@ -477,10 +625,10 @@
         
         if (isOpen) {
           badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/40";
-          badge.innerHTML = "• BUKA SEKARANG";
+          badge.innerHTML = "窶｢ BUKA SEKARANG";
         } else {
           badge.className = "inline-block font-extrabold text-xs px-3 py-1 rounded-full bg-rose-400/20 text-rose-300 border border-rose-400/40";
-          badge.innerHTML = "• SEDANG TUTUP";
+          badge.innerHTML = "窶｢ SEDANG TUTUP";
         }
       }
     }
@@ -529,37 +677,82 @@
     const pubPaginationInfo = document.getElementById('pubPaginationInfo');
     const pubPaginationBtns = document.getElementById('pubPaginationBtns');
 
+    // Fungsi Penolong untuk Mendapatkan Ikon Kategori
+    function dapatkanIkon(namaKategori) {
+        const ikonMap = {
+            "Non-Fiksi": "bi-book",
+            "Sejarah, Sosial-Ekonomi, dan Kebudayaan": "bi-bank",
+            "Novel": "bi-journal-text",
+            "Referensi": "bi-collection",
+            "Sains": "bi-lightbulb",
+            "Fiksi": "bi-emoji-smile",
+            "Umum": "bi-globe",
+            "Lingkungan Hidup": "bi-tree"
+        };
+        return ikonMap[namaKategori] || "bi-journal-bookmark-fill";
+    }
+
     if (db) {
-      // Data Tabel Buku
+      // Data Tabel Buku (Untuk Update Card Grid dan Total Buku)
       onSnapshot(collection(db, "buku"), (snapshot) => {
-        let kategoriCount = {};
-        let totalBuku = 0;
+        let kelompokKategori = {};
+        let totalBukuFisik = 0; // Total stok buku
+        let totalKategori = 0; // Total dokumen judul buku unik
+        
         snapshot.forEach((doc) => {
             const data = doc.data();
             const kategori = data.kategori || 'Tanpa Kategori';
-            if(kategoriCount[kategori]) kategoriCount[kategori]++;
-            else kategoriCount[kategori] = 1;
-            totalBuku++;
+            const stok = parseInt(data.stok || 1, 10); // Menghitung stok
+            
+            if(kelompokKategori[kategori]) kelompokKategori[kategori]++;
+            else kelompokKategori[kategori] = 1;
+            
+            totalKategori++; // Hitung judul unik
+            totalBukuFisik += stok; // Hitung akumulasi fisik (stok)
         });
 
-        const tbody = document.getElementById("tabel-kategori-buku");
-        if(tbody) {
-            tbody.innerHTML = "";
-            if (Object.keys(kategoriCount).length === 0) {
-              tbody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-slate-400">Belum ada data buku fisik.</td></tr>`;
+        // 1. Update Widget "TOTAL STOK BUKU" di atas
+        const totalBukuEl = document.getElementById('total-buku');
+        if (totalBukuEl) totalBukuEl.innerText = totalBukuFisik;
+
+        // 2. Update Card Grid Kategori Buku di bawah
+        const containerGrid = document.getElementById('katalog-grid-container');
+        const totalSemuaBukuElement = document.getElementById('total-semua-buku');
+        
+        if (containerGrid) {
+            containerGrid.innerHTML = ''; 
+            
+            if (Object.keys(kelompokKategori).length === 0) {
+               containerGrid.innerHTML = '<p class="text-slate-500 italic p-4">Belum ada data katalog buku.</p>';
             } else {
-              for (const [kategori, jumlah] of Object.entries(kategoriCount)) {
-                  tbody.innerHTML += `
-                      <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
-                          <td class="p-3.5 font-bold">${kategori}</td>
-                          <td class="p-3.5"><span class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-lg border border-blue-100 font-bold">${jumlah} Judul</span></td>
-                      </tr>
-                  `;
-              }
+                // Mengurutkan Kategori Secara Abjad
+                const kategoriTerurut = Object.entries(kelompokKategori).sort((a, b) => a[0].localeCompare(b[0]));
+
+                for (const [kategori, jumlah] of kategoriTerurut) {
+                    const persentase = totalKategori > 0 ? ((jumlah / totalKategori) * 100).toFixed(1) : 0;
+                    const ikonClass = dapatkanIkon(kategori);
+
+                    const htmlKartu = `
+                        <div class="katalog-card">
+                            <div class="card-header">
+                                <i class="bi ${ikonClass} ikon-kategori"></i>
+                                <h3 class="kategori-judul">${kategori}</h3>
+                            </div>
+                            <div>
+                                <span class="badge-jumlah">${jumlah} Judul</span>
+                                <div class="progress-bg">
+                                    <div class="progress-fill" style="width: ${persentase}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    containerGrid.insertAdjacentHTML('beforeend', htmlKartu);
+                }
             }
         }
-        const totalEl = document.getElementById("total-keseluruhan");
-        if(totalEl) totalEl.innerText = `${totalBuku} Buku Fisik Terdata`;
+        if (totalSemuaBukuElement) {
+            totalSemuaBukuElement.innerText = `${totalKategori} Judul Buku Terdata`;
+        }
       });
 
       // Data Leaderboard Peminjam
@@ -571,6 +764,9 @@
 
       // Data Direktori Anggota
       onSnapshot(collection(db, "anggota"), (snap) => {
+        const totalAnggotaEl = document.getElementById('total-anggota');
+        if (totalAnggotaEl) totalAnggotaEl.innerText = snap.empty ? 0 : snap.size;
+
         if (!snap.empty) {
           listSiswa = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
           rawAnggotaData = [...listSiswa];
@@ -578,7 +774,11 @@
           renderLeaderboard();
         }
       }, (err) => {
+        // Fallback jika menggunakan collection 'siswa'
         onSnapshot(collection(db, "siswa"), (snapSiswa) => {
+          const totalAnggotaEl = document.getElementById('total-anggota');
+          if (totalAnggotaEl) totalAnggotaEl.innerText = snapSiswa.empty ? 0 : snapSiswa.size;
+
           if (!snapSiswa.empty) {
             listSiswa = snapSiswa.docs.map(d => ({ docId: d.id, ...d.data() }));
             rawAnggotaData = [...listSiswa];
