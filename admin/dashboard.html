@@ -69,6 +69,15 @@
         window.location.href = "login.html";
       }
     }
+
+    // Fungsi global untuk membuat ISBN / Barcode Acak bagi buku tanpa barcode fisik
+    window.generateRandomIsbn = function() {
+      const randomCode = 'BUKU-' + Math.floor(100000 + Math.random() * 900000);
+      const inputIsbn = document.getElementById('inpIsbnBuku');
+      if (inputIsbn) {
+        inputIsbn.value = randomCode;
+      }
+    };
   </script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col">
@@ -124,7 +133,7 @@
       </a>
     </div>
 
-    <!-- FITUR BARU: Dashboard Analitik Ringkas -->
+    <!-- Dashboard Analitik Ringkas -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-200 flex flex-col justify-center gap-2">
         <div class="flex items-center gap-3">
@@ -311,7 +320,6 @@
 
   <!-- Modal 1: Anggota / Siswa -->
   <div id="modalSiswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <!-- Kode form Modal Siswa Sama Seperti Sebelumnya -->
     <div class="bg-white w-full max-w-5xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[95vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-3 sticky top-0 bg-white z-20">
         <h3 id="modalSiswaTitle" class="font-black text-slate-900 text-base flex items-center gap-2">
@@ -322,7 +330,6 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <form id="formTambahSiswa" class="lg:col-span-5 space-y-3 text-xs">
-          <!-- Form Fields omitted for brevity but remain identical to original source -->
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-700 mb-1">ID Anggota</label>
@@ -478,7 +485,6 @@
 
   <!-- Modal 2: Petugas -->
   <div id="modalPetugas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-shield text-indigo-600"></i> Tambah Akun Petugas</h3>
@@ -520,9 +526,8 @@
     </div>
   </div>
 
-  <!-- Modal 3: Buku -->
+  <!-- Modal 3: Buku (Sudah Diperbaiki Menggunakan Tailwind CSS & ID inpIsbnBuku) -->
   <div id="modalBuku" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
@@ -535,20 +540,31 @@
       <form id="formTambahBuku" class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-slate-700 mb-1">Judul Buku</label>
-          <input type="text" id="inpJudulBuku" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="text" id="inpJudulBuku" required placeholder="Judul buku" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-400">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Pengarang</label>
-          <input type="text" id="inpPengarangBuku" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="text" id="inpPengarangBuku" required placeholder="Nama penulis" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-400">
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Penerbit</label>
-          <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="text" id="inpPenerbitBuku" required placeholder="Nama penerbit" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <!-- PERBAIKAN: Input ISBN & Barcode dengan Tampilan Tailwind CSS -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">ISBN / Kode Barcode</label>
+          <div class="flex gap-2">
+            <input type="text" id="inpIsbnBuku" placeholder="Scan barcode atau ketik manual..." class="flex-grow p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-400 font-mono text-slate-800">
+            <button type="button" onclick="window.generateRandomIsbn()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold px-3 py-2 rounded-xl text-[11px] transition shrink-0 flex items-center gap-1 shadow-sm">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Acak Kode
+            </button>
+          </div>
         </div>
 
         <div class="space-y-1.5">
           <label class="block font-bold text-slate-700">Cover Buku</label>
-          <input type="url" id="inpCoverBuku" placeholder="Link URL Gambar (https://...)" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+          <input type="url" id="inpCoverBuku" placeholder="Link URL Gambar (https://...)" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-400">
           <div class="text-center text-[10px] text-slate-400 font-bold uppercase my-1">- ATAU UPLOAD FILE -</div>
           <input type="file" id="inpCoverFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200 cursor-pointer border border-slate-200 rounded-xl p-1 bg-slate-50">
         </div>
@@ -556,16 +572,16 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Kategori</label>
-            <input type="text" id="inpKategoriBuku" placeholder="Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 outline-none">
+            <input type="text" id="inpKategoriBuku" placeholder="Pelajaran" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-amber-400">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">Stok</label>
-            <input type="number" id="inpStokBuku" value="1" min="1" class="w-full p-3 rounded-xl border border-slate-200 outline-none font-bold text-slate-800">
+            <input type="number" id="inpStokBuku" value="1" min="1" class="w-full p-3 rounded-xl border border-slate-200 outline-none font-bold text-slate-800 focus:ring-2 focus:ring-amber-400">
           </div>
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="window.toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600">Batal</button>
-          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 shadow-md">Simpan Buku</button>
+          <button type="button" onclick="window.toggleModal('modalBuku', false)" class="px-4 py-2.5 rounded-xl font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl font-bold bg-amber-500 text-slate-900 hover:bg-amber-400 shadow-md">Simpan Buku</button>
         </div>
       </form>
     </div>
@@ -573,7 +589,6 @@
 
   <!-- Modal 4A: Calon Duta -->
   <div id="modalCalonDuta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-user-clock text-purple-600"></i> Tambah Calon Duta (7 Hari)</h3>
@@ -606,7 +621,6 @@
 
   <!-- Modal 4B: Duta Terpilih -->
   <div id="modalDutaTerpilih" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <!-- Same as original -->
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2"><i class="fa-solid fa-award text-amber-500"></i> Tetapkan Duta Terpilih (2 Bulan)</h3>
@@ -637,7 +651,7 @@
     </div>
   </div>
 
-  <!-- Modal 5: Transaksi Peminjaman (Ditambah Fitur Scanner Barcode) -->
+  <!-- Modal 5: Transaksi Peminjaman (Fitur Scanner Barcode) -->
   <div id="modalPinjam" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5">
       <div class="flex items-center justify-between border-b pb-3">
@@ -670,7 +684,7 @@
             </button>
           </label>
           
-          <!-- Area Scanner HTML5 (Tersembunyi by default) -->
+          <!-- Area Scanner HTML5 -->
           <div id="scanner-container" class="hidden rounded-xl border border-indigo-200 overflow-hidden bg-slate-50 p-2 shadow-inner">
              <div id="reader"></div>
              <button type="button" onclick="stopScanner()" class="w-full mt-2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold py-1.5 rounded-lg text-[10px] transition">
@@ -699,7 +713,6 @@
 
   <!-- Modal Permohonan Buka Akun Terkunci -->
   <div id="modalRequestBukaAkun" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <!-- Same as original -->
     <div class="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 space-y-5 max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b pb-3 shrink-0">
         <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
@@ -821,12 +834,10 @@
 
     // UPDATE STATISTIK ANALITIK DASHBOARD
     function updateAnalytics() {
-      // 1. Total Anggota
       const totalAnggota = window.dbData.anggota ? window.dbData.anggota.length : 0;
       const elTotalAnggota = document.getElementById('statTotalAnggota');
       if (elTotalAnggota) elTotalAnggota.innerText = totalAnggota;
 
-      // 2. Total Buku (Berdasarkan akumulasi nilai 'stok')
       let totalBuku = 0;
       if (window.dbData.buku) {
         window.dbData.buku.forEach(b => {
@@ -836,14 +847,13 @@
       const elTotalBuku = document.getElementById('statTotalBuku');
       if (elTotalBuku) elTotalBuku.innerText = totalBuku;
 
-      // 3. Buku Sedang Dipinjam & 4. Buku Terlambat
       let totalPinjam = 0;
       let totalTerlambat = 0;
       const today = new Date();
       today.setHours(0,0,0,0);
 
       if (window.dbData.pinjam) {
-        totalPinjam = window.dbData.pinjam.length; // 1 dokumen pinjam = 1 transaksi/buku yang sedang dipinjam
+        totalPinjam = window.dbData.pinjam.length;
         
         window.dbData.pinjam.forEach(p => {
           if (p.tglKembali) {
@@ -888,14 +898,13 @@
     };
 
     function onScanSuccess(decodedText, decodedResult) {
-      // Masukkan teks/angka yang di-scan ke dalam form input buku
       document.getElementById('inpBukuPinjam').value = decodedText;
       
-      // Auto-pencocokan ke katalog buku jika yang di-scan adalah judul atau pengkodean lain
+      // Auto-pencocokan ke katalog buku berdasarkan ISBN/Barcode atau Judul
       if(window.dbData.buku) {
         const matchingBook = window.dbData.buku.find(b => 
-            (b.judul && b.judul.toLowerCase() === decodedText.toLowerCase()) || 
-            (b.isbn && b.isbn === decodedText) // Jika Anda menggunakan field 'isbn' nanti
+            (b.isbn && String(b.isbn).toLowerCase() === decodedText.toLowerCase()) ||
+            (b.judul && b.judul.toLowerCase() === decodedText.toLowerCase())
         );
         if(matchingBook) {
             document.getElementById('inpBukuPinjam').value = matchingBook.judul;
@@ -907,7 +916,7 @@
     }
 
     function onScanFailure(error) {
-      // Biasa dipanggil terus menerus saat kamera mencari barcode, abaikan saja log errornya
+      // Abaikan error konstan dari loop scanner kamera
     }
 
     // Monitoring Request Buka Akun
@@ -1034,7 +1043,7 @@
 
     async function tolakBukaAkun(reqId, username) {
       const setuju = await confirm(`Tolak permohonan buka akun dari ${username}?`, "Konfirmasi Tolak");
-    if (!setuju) return;
+      if (!setuju) return;
 
       try {
         await updateDoc(doc(db, "request_buka_akun", reqId), {
@@ -1219,7 +1228,7 @@
 
         if (colName === 'anggota') populateSelectAnggota();
         renderTableData();
-        updateAnalytics(); // PERBARUI ANALITIK SETIAP ADA DATA YANG BERUBAH
+        updateAnalytics();
 
         if (window.currentActiveTable === 'anggota' && !window.editingMemberId) {
           const currentKelas = document.getElementById('inpKelas')?.value;
@@ -1471,6 +1480,7 @@
         thead.innerHTML = `
           <tr>
             <th class="p-3.5 text-center w-12">Cover</th>
+            ${getSortableHeaderHtml('ISBN / Barcode', 'isbn')}
             ${getSortableHeaderHtml('Judul Buku', 'judul')}
             ${getSortableHeaderHtml('Pengarang', 'pengarang')}
             ${getSortableHeaderHtml('Penerbit', 'penerbit')}
@@ -1479,12 +1489,13 @@
             <th class="p-3.5 text-center">Aksi</th>
           </tr>
         `;
-        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="7" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
+        tbody.innerHTML = totalItems === 0 ? `<tr><td colspan="8" class="p-6 text-center text-slate-400">Belum ada koleksi buku.</td></tr>` :
           paginatedData.map(item => `
             <tr class="hover:bg-slate-50 transition border-b border-slate-100">
               <td class="p-2 text-center">
                 <img src="${item.cover || item.coverUrl || 'https://via.placeholder.com/60x80?text=No+Cover'}" class="w-8 h-11 object-cover rounded shadow-sm border mx-auto">
               </td>
+              <td class="p-3.5 font-mono font-bold text-slate-600">${item.isbn || '-'}</td>
               <td class="p-3.5 font-bold text-slate-900">${item.judul || '-'}</td>
               <td class="p-3.5 text-slate-600">${item.pengarang || '-'}</td>
               <td class="p-3.5 text-slate-500">${item.penerbit || '-'}</td>
@@ -1577,7 +1588,12 @@
                           dendaInfo = `<span class="px-2 py-0.5 rounded-md font-extrabold text-[10px] bg-amber-500 text-slate-900 border border-amber-600"><i class="fa-solid fa-money-bill-wave mr-1"></i>Denda: ${dendaFormatted}</span>`;
 
                           if (itemWa) {
-                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,\n\nMengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado telah *JATUH TEMPO* pada tanggal *${item.tglKembali}* (Terlambat ${daysLate} hari).\n\nTotal Denda Keterlambatan: *${dendaFormatted}* (Tarif Rp 2.000,- / hari).\nMohon segera mengembalikan buku ke perpustakaan. Terima kasih!`);
+                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,
+
+Mengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado telah *JATUH TEMPO* pada tanggal *${item.tglKembali}* (Terlambat ${daysLate} hari).
+
+Total Denda Keterlambatan: *${dendaFormatted}* (Tarif Rp 2.000,- / hari).
+Mohon segera mengembalikan buku ke perpustakaan. Terima kasih!`);
                             waActionBtn = `
                               <a href="https://wa.me/${itemWa}?text=${msg}" target="_blank" title="Kirim Pengingat Jatuh Tempo via WA" class="px-2.5 py-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[10px] transition flex items-center gap-1 shadow-sm">
                                 <i class="fa-brands fa-whatsapp text-xs"></i> Ingatkan (Denda ${dendaFormatted})
@@ -1589,7 +1605,11 @@
                           statusBadge = `<span class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-clock mr-1"></i>${labelText}</span>`;
 
                           if (itemWa) {
-                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,\n\nMengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado *SUDAH DEKAT JATUH TEMPO* pada tanggal *${item.tglKembali}*.\n\nMohon untuk bersiap mengembalikan buku tepat waktu agar tidak terkena denda Rp 2.000,- / hari. Terima kasih!`);
+                            const msg = encodeURIComponent(`Halo *${group.peminjam}*,
+
+Mengingatkan bahwa peminjaman buku "*${item.buku}*" di Perpustakaan SMAN 4 Manado *SUDAH DEKAT JATUH TEMPO* pada tanggal *${item.tglKembali}*.
+
+Mohon untuk bersiap mengembalikan buku tepat waktu agar tidak terkena denda Rp 2.000,- / hari. Terima kasih!`);
                             waActionBtn = `
                               <a href="https://wa.me/${itemWa}?text=${msg}" target="_blank" title="Kirim Pengingat Dekat Jatuh Tempo via WA" class="px-2.5 py-1 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold text-[10px] transition flex items-center gap-1 shadow-sm">
                                 <i class="fa-brands fa-whatsapp text-xs"></i> Ingatkan (Mendekati)
@@ -1842,11 +1862,13 @@
       }
     });
 
+    // PERBAIKAN: Form Simpan Buku Menggunakan Nilai ISBN & ID yang Benar
     document.getElementById('formTambahBuku')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       let coverUrl = document.getElementById('inpCoverBuku')?.value || '';
       const fileInput = document.getElementById('inpCoverFile');
+      const isbnVal = document.getElementById('inpIsbnBuku')?.value || '';
 
       if (fileInput && fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
@@ -1862,6 +1884,7 @@
         judul: document.getElementById('inpJudulBuku')?.value || '',
         pengarang: document.getElementById('inpPengarangBuku')?.value || '',
         penerbit: document.getElementById('inpPenerbitBuku')?.value || '',
+        isbn: isbnVal,
         cover: coverUrl,
         coverUrl: coverUrl,
         kategori: document.getElementById('inpKategoriBuku')?.value || 'Pelajaran',
@@ -1998,7 +2021,7 @@
 
                 if (diffDays < 0) {
                     const daysLate = Math.abs(diffDays);
-                    logSiswa[nama].totalDenda += (daysLate * 2000); // Rp 2.000 / hari
+                    logSiswa[nama].totalDenda += (daysLate * 2000);
                 }
             }
         });
@@ -2023,8 +2046,6 @@
             }
         }
     });
-
   </script>
-  
 </body>
 </html>
